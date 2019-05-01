@@ -14,6 +14,7 @@
 		284E39792215C67C0048D44C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 284E39772215C67C0048D44C /* LaunchScreen.storyboard */; };
 		284E39842215C67C0048D44C /* AwayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284E39832215C67C0048D44C /* AwayTests.swift */; };
 		284E398F2215C67C0048D44C /* AwayUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284E398E2215C67C0048D44C /* AwayUITests.swift */; };
+		287A7B0C2279D24E00CCD4B3 /* RegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287A7B0B2279D24E00CCD4B3 /* RegisterController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		284E398A2215C67C0048D44C /* AwayUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AwayUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		284E398E2215C67C0048D44C /* AwayUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwayUITests.swift; sourceTree = "<group>"; };
 		284E39902215C67C0048D44C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		287A7B0B2279D24E00CCD4B3 /* RegisterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,12 +99,10 @@
 		284E396D2215C67C0048D44C /* Away */ = {
 			isa = PBXGroup;
 			children = (
-				284E396E2215C67C0048D44C /* AppDelegate.swift */,
-				284E39702215C67C0048D44C /* ViewController.swift */,
-				284E39722215C67C0048D44C /* Main.storyboard */,
-				284E39752215C67C0048D44C /* Assets.xcassets */,
-				284E39772215C67C0048D44C /* LaunchScreen.storyboard */,
-				284E397A2215C67C0048D44C /* Info.plist */,
+				287A7B0D227A164F00CCD4B3 /* Controller */,
+				287A7B0F227A167D00CCD4B3 /* Model */,
+				287A7B10227A168D00CCD4B3 /* Supporting Files */,
+				287A7B0E227A166700CCD4B3 /* View */,
 			);
 			path = Away;
 			sourceTree = "<group>";
@@ -123,6 +123,41 @@
 				284E39902215C67C0048D44C /* Info.plist */,
 			);
 			path = AwayUITests;
+			sourceTree = "<group>";
+		};
+		287A7B0D227A164F00CCD4B3 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				287A7B0B2279D24E00CCD4B3 /* RegisterController.swift */,
+				284E396E2215C67C0048D44C /* AppDelegate.swift */,
+				284E39702215C67C0048D44C /* ViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		287A7B0E227A166700CCD4B3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				284E39722215C67C0048D44C /* Main.storyboard */,
+				284E39752215C67C0048D44C /* Assets.xcassets */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		287A7B0F227A167D00CCD4B3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		287A7B10227A168D00CCD4B3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				284E39772215C67C0048D44C /* LaunchScreen.storyboard */,
+				284E397A2215C67C0048D44C /* Info.plist */,
+			);
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -261,6 +296,7 @@
 			files = (
 				284E39712215C67C0048D44C /* ViewController.swift in Sources */,
 				284E396F2215C67C0048D44C /* AppDelegate.swift in Sources */,
+				287A7B0C2279D24E00CCD4B3 /* RegisterController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -427,6 +463,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7MZGK8T7N4;
 				INFOPLIST_FILE = Away/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = fr.candice.guitton.Away;
@@ -441,6 +478,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7MZGK8T7N4;
 				INFOPLIST_FILE = Away/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = fr.candice.guitton.Away;

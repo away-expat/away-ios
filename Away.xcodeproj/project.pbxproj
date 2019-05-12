@@ -13,7 +13,6 @@
 		284E39842215C67C0048D44C /* AwayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284E39832215C67C0048D44C /* AwayTests.swift */; };
 		284E398F2215C67C0048D44C /* AwayUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284E398E2215C67C0048D44C /* AwayUITests.swift */; };
 		287C3CA8228717C000406834 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287C3CA6228717C000406834 /* HomeViewController.swift */; };
-		287C3CA9228717C000406834 /* HomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287C3CA7228717C000406834 /* HomeViewController.xib */; };
 		287C3CB222871D2E00406834 /* TagScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287C3CB022871D2E00406834 /* TagScreenViewController.swift */; };
 		287C3CB322871D2E00406834 /* TagScreenViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287C3CB122871D2E00406834 /* TagScreenViewController.xib */; };
 		287C3CB722871D6D00406834 /* AddActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287C3CB522871D6D00406834 /* AddActivityViewController.swift */; };
@@ -25,6 +24,11 @@
 		287C3CCB228788C000406834 /* UserProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287C3CC9228788C000406834 /* UserProfileViewController.xib */; };
 		287C3CCF2287894300406834 /* ChangeCountryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287C3CCD2287894300406834 /* ChangeCountryViewController.swift */; };
 		287C3CD02287894300406834 /* ChangeCountryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287C3CCE2287894300406834 /* ChangeCountryViewController.xib */; };
+		289866282288324300CE97E8 /* HomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 289866272288324300CE97E8 /* HomeViewController.xib */; };
+		2898662C22886AE100CE97E8 /* CustomActivityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2898662A22886AE100CE97E8 /* CustomActivityCell.swift */; };
+		2898662D22886AE100CE97E8 /* CustomActivityCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2898662B22886AE100CE97E8 /* CustomActivityCell.xib */; };
+		2898663222887AB300CE97E8 /* CustomCountryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2898663022887AB300CE97E8 /* CustomCountryCell.swift */; };
+		2898663322887AB300CE97E8 /* CustomCountryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2898663122887AB300CE97E8 /* CustomCountryCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,7 +61,6 @@
 		284E398E2215C67C0048D44C /* AwayUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwayUITests.swift; sourceTree = "<group>"; };
 		284E39902215C67C0048D44C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		287C3CA6228717C000406834 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
-		287C3CA7228717C000406834 /* HomeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeViewController.xib; sourceTree = "<group>"; };
 		287C3CB022871D2E00406834 /* TagScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagScreenViewController.swift; sourceTree = "<group>"; };
 		287C3CB122871D2E00406834 /* TagScreenViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TagScreenViewController.xib; sourceTree = "<group>"; };
 		287C3CB522871D6D00406834 /* AddActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddActivityViewController.swift; sourceTree = "<group>"; };
@@ -69,6 +72,11 @@
 		287C3CC9228788C000406834 /* UserProfileViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserProfileViewController.xib; sourceTree = "<group>"; };
 		287C3CCD2287894300406834 /* ChangeCountryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeCountryViewController.swift; sourceTree = "<group>"; };
 		287C3CCE2287894300406834 /* ChangeCountryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChangeCountryViewController.xib; sourceTree = "<group>"; };
+		289866272288324300CE97E8 /* HomeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeViewController.xib; sourceTree = "<group>"; };
+		2898662A22886AE100CE97E8 /* CustomActivityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomActivityCell.swift; sourceTree = "<group>"; };
+		2898662B22886AE100CE97E8 /* CustomActivityCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomActivityCell.xib; sourceTree = "<group>"; };
+		2898663022887AB300CE97E8 /* CustomCountryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCountryCell.swift; sourceTree = "<group>"; };
+		2898663122887AB300CE97E8 /* CustomCountryCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCountryCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +127,8 @@
 		284E396D2215C67C0048D44C /* Away */ = {
 			isa = PBXGroup;
 			children = (
+				2898662F22887A9A00CE97E8 /* CustomCountryCell */,
+				2898662922886AB500CE97E8 /* CustomActivityCell */,
 				287C3CCC2287892500406834 /* ChangeCountryViewController */,
 				287C3CC7228788A600406834 /* UserProfileViewController */,
 				287C3CBC228724C600406834 /* LoginViewController */,
@@ -164,7 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				287C3CA6228717C000406834 /* HomeViewController.swift */,
-				287C3CA7228717C000406834 /* HomeViewController.xib */,
+				289866272288324300CE97E8 /* HomeViewController.xib */,
 			);
 			path = HomeViewController;
 			sourceTree = "<group>";
@@ -220,6 +230,24 @@
 				287C3CCE2287894300406834 /* ChangeCountryViewController.xib */,
 			);
 			path = ChangeCountryViewController;
+			sourceTree = "<group>";
+		};
+		2898662922886AB500CE97E8 /* CustomActivityCell */ = {
+			isa = PBXGroup;
+			children = (
+				2898662A22886AE100CE97E8 /* CustomActivityCell.swift */,
+				2898662B22886AE100CE97E8 /* CustomActivityCell.xib */,
+			);
+			path = CustomActivityCell;
+			sourceTree = "<group>";
+		};
+		2898662F22887A9A00CE97E8 /* CustomCountryCell */ = {
+			isa = PBXGroup;
+			children = (
+				2898663022887AB300CE97E8 /* CustomCountryCell.swift */,
+				2898663122887AB300CE97E8 /* CustomCountryCell.xib */,
+			);
+			path = CustomCountryCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -330,13 +358,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				284E39792215C67C0048D44C /* LaunchScreen.storyboard in Resources */,
+				2898663322887AB300CE97E8 /* CustomCountryCell.xib in Resources */,
 				287C3CD02287894300406834 /* ChangeCountryViewController.xib in Resources */,
 				284E39762215C67C0048D44C /* Assets.xcassets in Resources */,
 				287C3CC0228724DB00406834 /* LoginViewController.xib in Resources */,
 				287C3CB822871D6D00406834 /* AddActivityViewController.xib in Resources */,
-				287C3CA9228717C000406834 /* HomeViewController.xib in Resources */,
 				287C3CCB228788C000406834 /* UserProfileViewController.xib in Resources */,
 				287C3CB322871D2E00406834 /* TagScreenViewController.xib in Resources */,
+				289866282288324300CE97E8 /* HomeViewController.xib in Resources */,
+				2898662D22886AE100CE97E8 /* CustomActivityCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -367,8 +397,10 @@
 				287C3CA8228717C000406834 /* HomeViewController.swift in Sources */,
 				287C3CCA228788C000406834 /* UserProfileViewController.swift in Sources */,
 				287C3CBB22871F1300406834 /* TabBar.swift in Sources */,
+				2898662C22886AE100CE97E8 /* CustomActivityCell.swift in Sources */,
 				287C3CB222871D2E00406834 /* TagScreenViewController.swift in Sources */,
 				287C3CBF228724DB00406834 /* LoginViewController.swift in Sources */,
+				2898663222887AB300CE97E8 /* CustomCountryCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

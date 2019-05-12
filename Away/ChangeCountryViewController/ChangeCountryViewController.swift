@@ -8,23 +8,32 @@
 
 import UIKit
 
-class ChangeCountryViewController: UIViewController {
-
+class ChangeCountryViewController: UIViewController , UITableViewDelegate, UITableViewDataSource{
+    
+ @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        navigationItem.title = "Country List"
+        
+        tableView.register(UINib(nibName: "CustomCountryCell", bundle: nil), forCellReuseIdentifier: "customCountryCell")
     }
 
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 3
     }
-    */
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "customCountryCell", for: indexPath) as! CustomCountryCell
+        let countryInLabel = ["France", "Japan", "England"]
+        cell.customLabel.text = countryInLabel[indexPath.row]
+        return cell
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 40.0
+    }
 
 }

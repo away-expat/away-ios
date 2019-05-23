@@ -18,9 +18,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         let window = UIWindow(frame: UIScreen.main.bounds)
+        window.backgroundColor = .white
         let navigationController = UINavigationController(rootViewController:LoginViewController())
+        
         window.rootViewController = navigationController
         navigationController.isNavigationBarHidden = true
+        UINavigationBar.appearance().barTintColor = UIColor(named: "AppPeach")
         window.makeKeyAndVisible()
         self.window = window
         

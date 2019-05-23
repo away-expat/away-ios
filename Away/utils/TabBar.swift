@@ -32,21 +32,32 @@ class TabBar: NSObject {
         
         tabBarController.viewControllers = [firstTabNavigationController, secondTabNavigationController, thirdTabNavigationController, fourthTabNavigationController, fifthTabNavigationController]
         
-        let item1 = UITabBarItem(title: "Home", image: UIImage(named: "home"), tag: 0)
-        let item2 = UITabBarItem(title: "Search", image: UIImage(named: "search"), tag: 1)
-        let item3 = UITabBarItem(title: "Add", image: UIImage(named: "add"), tag: 2)
-        let item4 = UITabBarItem(title: "Countries", image: UIImage(named: "earth"), tag: 3)
-        let item5 = UITabBarItem(title: "Profile", image: UIImage(named: "user"), tag: 4)
+        let item1 = UITabBarItem(title: nil, image: UIImage(named: "home"), tag: 0)
+        let item2 = UITabBarItem(title: nil, image: UIImage(named: "search"), tag: 1)
+        let item3 = UITabBarItem(title: nil, image: UIImage(named: "add"), tag: 2)
+        let item4 = UITabBarItem(title: nil, image: UIImage(named: "earth"), tag: 3)
+        let item5 = UITabBarItem(title: nil, image: UIImage(named: "user"), tag: 4)
+        
+        item1.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
+        item2.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
+        item3.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
+        item4.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
+        item5.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
         
         firstTabNavigationController.tabBarItem = item1
         secondTabNavigationController.tabBarItem = item2
         thirdTabNavigationController.tabBarItem = item3
         fourthTabNavigationController.tabBarItem = item4
         fifthTabNavigationController.tabBarItem = item5
+       
+        self.tabBarController.tabBar.shadowImage = UIImage()
+        self.tabBarController.tabBar.backgroundImage = UIImage()
+        self.tabBarController.tabBar.clipsToBounds = true
         
-        UITabBar.appearance().tintColor = .orange
-        UITabBar.appearance().backgroundColor = .white
-        
+        UITabBar.appearance().tintColor = UIColor(named: "AppOrange")
+        UITabBar.appearance().unselectedItemTintColor = UIColor(named: "AppLightOrange")
+        UITabBar.appearance().backgroundColor = UIColor(named: "AppPeach")
+    
         appDelegate?.window??.rootViewController = tabBarController
         appDelegate?.window??.makeKeyAndVisible()
     }
@@ -60,5 +71,6 @@ extension TabBar : UITabBarControllerDelegate {
         }
         
         navigationController.popToRootViewController(animated: false)
+       
     }
 }

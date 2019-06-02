@@ -22,6 +22,8 @@
 		28986643228F435A00CE97E8 /* ChangeCountryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28986642228F435A00CE97E8 /* ChangeCountryViewController.swift */; };
 		28986645228F442100CE97E8 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28986644228F442100CE97E8 /* LoginViewController.swift */; };
 		28D992D52296AF3A00ACE00C /* ActivityDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D992D42296AF3A00ACE00C /* ActivityDetailsController.swift */; };
+		28D992D92297FF7D00ACE00C /* SubscribeLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D992D82297FF7D00ACE00C /* SubscribeLauncher.swift */; };
+		28D992DB22A4818100ACE00C /* ConvenientInformationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D992DA22A4818100ACE00C /* ConvenientInformationController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +65,8 @@
 		28986642228F435A00CE97E8 /* ChangeCountryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeCountryViewController.swift; sourceTree = "<group>"; };
 		28986644228F442100CE97E8 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		28D992D42296AF3A00ACE00C /* ActivityDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityDetailsController.swift; sourceTree = "<group>"; };
+		28D992D82297FF7D00ACE00C /* SubscribeLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscribeLauncher.swift; sourceTree = "<group>"; };
+		28D992DA22A4818100ACE00C /* ConvenientInformationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvenientInformationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +117,7 @@
 		284E396D2215C67C0048D44C /* Away */ = {
 			isa = PBXGroup;
 			children = (
+				28D992D72297DE8D00ACE00C /* Model */,
 				28D992D32294266700ACE00C /* CustomCells */,
 				28D992D22294264F00ACE00C /* Controllers */,
 				287C3CB922871F0200406834 /* utils */,
@@ -168,6 +173,8 @@
 				2898663E228F42A300CE97E8 /* TagScreenViewController.swift */,
 				28986634228DA5C300CE97E8 /* HomeViewController.swift */,
 				28D992D42296AF3A00ACE00C /* ActivityDetailsController.swift */,
+				28D992D82297FF7D00ACE00C /* SubscribeLauncher.swift */,
+				28D992DA22A4818100ACE00C /* ConvenientInformationController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -179,6 +186,13 @@
 				2898663022887AB300CE97E8 /* CustomCountryCell.swift */,
 			);
 			path = CustomCells;
+			sourceTree = "<group>";
+		};
+		28D992D72297DE8D00ACE00C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -316,12 +330,14 @@
 			files = (
 				28986645228F442100CE97E8 /* LoginViewController.swift in Sources */,
 				2898663D228F417F00CE97E8 /* UserProfileViewController.swift in Sources */,
+				28D992D92297FF7D00ACE00C /* SubscribeLauncher.swift in Sources */,
 				284E396F2215C67C0048D44C /* AppDelegate.swift in Sources */,
 				28986641228F42E500CE97E8 /* AddActivityViewController.swift in Sources */,
 				2898663A228DAE3300CE97E8 /* CustomActivityCell.swift in Sources */,
 				287C3CBB22871F1300406834 /* TabBar.swift in Sources */,
 				28986635228DA5C300CE97E8 /* HomeViewController.swift in Sources */,
 				2898663F228F42A300CE97E8 /* TagScreenViewController.swift in Sources */,
+				28D992DB22A4818100ACE00C /* ConvenientInformationController.swift in Sources */,
 				28986643228F435A00CE97E8 /* ChangeCountryViewController.swift in Sources */,
 				28D992D52296AF3A00ACE00C /* ActivityDetailsController.swift in Sources */,
 				2898663222887AB300CE97E8 /* CustomCountryCell.swift in Sources */,

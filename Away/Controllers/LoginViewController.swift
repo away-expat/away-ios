@@ -6,39 +6,63 @@
 //  Copyright © 2019 Candice Guitton. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 class LoginViewController: UIViewController {
-    
+    let logoImageView: UIImageView = {
+        let logo = UIImageView()
+        logo.translatesAutoresizingMaskIntoConstraints = false
+
+        logo.image = UIImage(named: "logo")
+        return logo
+    }()
     let loginTextField: UITextField = {
-        let login = UITextField();
+        let login = UITextField()
         login.translatesAutoresizingMaskIntoConstraints = false
-        login.backgroundColor = .white
-        login.textColor = UIColor(named: "AppLightGrey")
-        login.heightAnchor.constraint(equalToConstant: 40)
-        login.layer.cornerRadius = 6.0
-        login.layer.borderColor = UIColor(named: "AppOrange")?.cgColor
-        login.layer.borderWidth = 3.0
+        login.backgroundColor = UIColor(named: "AppLightGrey")
+        login.placeholder = "Login"
         return login
     }()
-    
+    let bottomLoginLine: UIView = {
+        let line = UIView()
+        line.translatesAutoresizingMaskIntoConstraints = false
+        line.backgroundColor = UIColor(named: "AppPeach")
+        return line
+    }()
     let passwordTextField: UITextField = {
-        let password = UITextField(frame: CGRect(x: 0, y: 0, width: 300, height: 30));
+        let password = UITextField()
         password.translatesAutoresizingMaskIntoConstraints = false
-        
+        password.placeholder = "Password"
         return password
     }()
+    
+    let bottomPasswordLine: UIView = {
+        let line = UIView()
+        line.translatesAutoresizingMaskIntoConstraints = false
+        line.backgroundColor = UIColor(named: "AppPeach")
+        return line
+    }()
+    
     let loginButton: UIButton = {
         let loginButton = UIButton()
         loginButton.translatesAutoresizingMaskIntoConstraints = false
-        loginButton.backgroundColor = .blue
+        loginButton.backgroundColor = UIColor(named: "AppPeach")
+        loginButton.layer.cornerRadius = 4.0
+        loginButton.layer.shadowOpacity = 1.0
+        loginButton.layer.shadowColor = UIColor(named: "AppLightGrey")?.cgColor
+        loginButton.setTitle("Sign In", for: .normal)
         loginButton.addTarget(self, action: #selector(loginButtonClicked), for: .touchUpInside)
-        loginButton.frame = CGRect(x: 150, y: 150, width: 100, height: 50)
-        
         return loginButton;
     }()
     
+    let signUpButton: UIButton = {
+        let signUp = UIButton()
+        signUp.translatesAutoresizingMaskIntoConstraints = false
+        signUp.setTitle("Sign Up", for: .normal)
+        signUp.setTitleColor(UIColor(named: "AppOrange"), for: .normal)
+        signUp.addTarget(self, action: #selector(signUpButtonClicked), for: .touchUpInside)
+        return signUp;
+    }()
     let loginStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = UILayoutConstraintAxis.vertical
@@ -53,39 +77,53 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         navigationItem.title = "Login"
         view.addSubview(loginStackView)
-        view.backgroundColor = UIColor(named: "AppPeach")
-        loginStackView.backgroundColor = .white
-        loginTextField.center = view.center
-        loginTextField.placeholder = "Place holder text"
-        loginTextField.borderStyle = UITextBorderStyle.line
-        loginTextField.backgroundColor = UIColor.white
-        loginTextField.textColor = UIColor.blue
+        view.backgroundColor = .white
         
-        passwordTextField.center = view.center
-        passwordTextField.placeholder = "Place holder text"
-        passwordTextField.borderStyle = UITextBorderStyle.line
-        passwordTextField.backgroundColor = UIColor.white
-        passwordTextField.textColor = UIColor.blue
+        let safeAreaView = UIView(frame: CGRect(x: 0,y: 0, width: UIScreen.main.bounds.width, height: 20))
+        safeAreaView.backgroundColor = UIColor(named: "AppPeach")
+        view.addSubview(safeAreaView)
         
-        loginStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        loginStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-
-    
+        loginStackView.addArrangedSubview(logoImageView)
         loginStackView.addArrangedSubview(loginTextField)
+        loginStackView.addArrangedSubview(bottomLoginLine)
         loginStackView.addArrangedSubview(passwordTextField)
+        loginStackView.addArrangedSubview(bottomPasswordLine)
+        
+        logoImageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        logoImageView.widthAnchor.constraint(equalToConstant: 200).isActive = true
+
+        loginTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        loginTextField.widthAnchor.constraint(equalTo: loginStackView.widthAnchor).isActive = true
+        
+        bottomLoginLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        bottomLoginLine.widthAnchor.constraint(equalTo: loginStackView.widthAnchor).isActive = true
+        
+        bottomPasswordLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        bottomPasswordLine.widthAnchor.constraint(equalTo: loginStackView.widthAnchor).isActive = true
+        
         loginStackView.addArrangedSubview(loginButton)
 
+        loginButton.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        loginButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
 
+        loginStackView.addArrangedSubview(signUpButton)
+
+        loginStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        loginStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        loginStackView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        
     }
-    @objc func loginButtonClicked(_ sender: UIButton) {
+    @objc func loginButtonClicked() {
         self.navigationController?.pushViewController(HomeViewController(), animated: true)
         let tabBar = TabBar()
         tabBar.createTabBar()
         
-        print(loginTextField.text)
-        print(passwordTextField.text)
         
     }
-    
+    let subscribeLauncher = SubscribeLauncher()
+    @objc func signUpButtonClicked(_ sender: UIButton) {
+        subscribeLauncher.showSignUp()
+    }
+   
 }
 

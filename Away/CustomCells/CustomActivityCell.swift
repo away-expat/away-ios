@@ -49,16 +49,6 @@ class CustomActivityCell: UITableViewCell {
         card.addSubview(cardImage)
         cardImage.addSubview(label)
         
-        //card.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        //card.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        //card.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
-        //card.heightAnchor.constraint(equalToConstant: 140).isActive = true
-//        card.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8).isActive = true
-//        card.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -8).isActive = true
-//        card.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8).isActive = true
-//        card.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
-        
-        
         card.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8).isActive = true
         card.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -8).isActive = true
         card.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8).isActive = true

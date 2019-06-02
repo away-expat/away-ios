@@ -32,6 +32,7 @@ class ChangeCountryViewController: UIViewController, UICollectionViewDataSource,
         let countryCollectionView:UICollectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
         countryCollectionView.dataSource = self
         countryCollectionView.delegate = self
+        
         let searchBar = UISearchBar(frame:CGRect(x:0, y:0, width: Int(UIScreen.main.bounds.width), height: 40))
         view.addSubview(searchBar)
         searchBar.backgroundColor = .blue

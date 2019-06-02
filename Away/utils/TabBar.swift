@@ -27,7 +27,7 @@ class TabBar: NSObject {
         firstTabNavigationController = UINavigationController.init(rootViewController: HomeViewController())
         secondTabNavigationController = UINavigationController.init(rootViewController: TagScreenViewController())
         thirdTabNavigationController = UINavigationController.init(rootViewController: AddActivityViewController())
-        fourthTabNavigationController = UINavigationController.init(rootViewController: ChangeCountryViewController())
+        fourthTabNavigationController = UINavigationController.init(rootViewController: ConvenientInformationController())
         fifthTabNavigationController = UINavigationController.init(rootViewController: UserProfileViewController())
         
         tabBarController.viewControllers = [firstTabNavigationController, secondTabNavigationController, thirdTabNavigationController, fourthTabNavigationController, fifthTabNavigationController]
@@ -35,7 +35,7 @@ class TabBar: NSObject {
         let item1 = UITabBarItem(title: nil, image: UIImage(named: "home"), tag: 0)
         let item2 = UITabBarItem(title: nil, image: UIImage(named: "search"), tag: 1)
         let item3 = UITabBarItem(title: nil, image: UIImage(named: "add"), tag: 2)
-        let item4 = UITabBarItem(title: nil, image: UIImage(named: "earth"), tag: 3)
+        let item4 = UITabBarItem(title: nil, image: UIImage(named: "info"), tag: 3)
         let item5 = UITabBarItem(title: nil, image: UIImage(named: "user"), tag: 4)
         
         item1.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)

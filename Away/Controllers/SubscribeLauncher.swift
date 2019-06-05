@@ -8,11 +8,7 @@
 
 import UIKit
 
-class SubscribeLauncher: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
-   
-    
-    
-    
+class SubscribeLauncher: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     let whiteView = UIView()
     
     let redView: UIView = {
@@ -137,85 +133,86 @@ class SubscribeLauncher: NSObject, UIPickerViewDataSource, UIPickerViewDelegate 
     }
     
     
-    @objc func showSignUp() {
-        
-        if let view = UIApplication.shared.keyWindow {
-            
-            whiteView.backgroundColor = UIColor(white: 0, alpha: 0.5)
-            whiteView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
-            view.addSubview(whiteView)
-            view.addSubview(redView)
-            
-            let height: CGFloat = view.frame.height - 50
-            let y = view.frame.height - height
-            redView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: height)
-            redView.addSubview(stackView)
-            stackView.frame = redView.frame
-            stackView.addArrangedSubview(emailTextField)
-            stackView.addArrangedSubview(bottomEmailLine)
-            stackView.addArrangedSubview(passwordTextField)
-            stackView.addArrangedSubview(bottomPasswordLine)
-            stackView.addArrangedSubview(firstNameTextField)
-            stackView.addArrangedSubview(bottomFirstnameLine)
-            stackView.addArrangedSubview(lastNameTextField)
-            stackView.addArrangedSubview(bottomLastnameLine)
-            stackView.addArrangedSubview(countryTextField)
-            stackView.addArrangedSubview(signUpButton)
-            createToolBar()
-            countryPickerView.delegate = self
-            countryTextField.inputView = countryPickerView
-            
-            
-            stackView.centerXAnchor.constraint(equalTo: redView.centerXAnchor).isActive = true
-            stackView.centerYAnchor.constraint(equalTo: redView.centerYAnchor).isActive = true
-            stackView.widthAnchor.constraint(equalTo: redView.widthAnchor).isActive = true
-            
-            bottomEmailLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
-            bottomEmailLine.widthAnchor.constraint(equalTo: redView.widthAnchor).isActive = true
-            
-            bottomPasswordLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
-            bottomPasswordLine.widthAnchor.constraint(equalTo: redView.widthAnchor).isActive = true
-            
-            bottomFirstnameLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
-            bottomFirstnameLine.widthAnchor.constraint(equalTo: redView.widthAnchor).isActive = true
-            
-            bottomLastnameLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
-            bottomLastnameLine.widthAnchor.constraint(equalTo: redView.widthAnchor).isActive = true
-            
-            signUpButton.widthAnchor.constraint(equalToConstant: 150).isActive = true
-            signUpButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
 
-            
-            whiteView.frame = view.frame
-            whiteView.alpha = 0
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                self.whiteView.alpha = 1
-                self.redView.frame = CGRect(x: 0, y: y, width: self.redView.frame.width, height: self.redView.frame.height)
-                
-            }, completion: nil)
-            
+    override func viewDidLoad() {
     
-            //        self.navigationController?.pushViewController(SignUpController(), animated: true)
-            //        let tabBar = TabBar()
-            //        tabBar.createTabBar()
+        whiteView.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        whiteView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
+        view.addSubview(whiteView)
+        view.addSubview(redView)
+        
+        let height: CGFloat = view.frame.height - 50
+        let y = view.frame.height - height
+        redView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: height)
+        redView.addSubview(stackView)
+        stackView.frame = redView.frame
+        stackView.addArrangedSubview(emailTextField)
+        stackView.addArrangedSubview(bottomEmailLine)
+        stackView.addArrangedSubview(passwordTextField)
+        stackView.addArrangedSubview(bottomPasswordLine)
+        stackView.addArrangedSubview(firstNameTextField)
+        stackView.addArrangedSubview(bottomFirstnameLine)
+        stackView.addArrangedSubview(lastNameTextField)
+        stackView.addArrangedSubview(bottomLastnameLine)
+        stackView.addArrangedSubview(countryTextField)
+        stackView.addArrangedSubview(signUpButton)
+        createToolBar()
+        countryPickerView.delegate = self
+        countryTextField.inputView = countryPickerView
+        
+        
+        stackView.centerXAnchor.constraint(equalTo: redView.centerXAnchor).isActive = true
+        stackView.centerYAnchor.constraint(equalTo: redView.centerYAnchor).isActive = true
+        stackView.widthAnchor.constraint(equalTo: redView.widthAnchor).isActive = true
+        
+        bottomEmailLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        bottomEmailLine.widthAnchor.constraint(equalTo: redView.widthAnchor).isActive = true
+        
+        bottomPasswordLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        bottomPasswordLine.widthAnchor.constraint(equalTo: redView.widthAnchor).isActive = true
+        
+        bottomFirstnameLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        bottomFirstnameLine.widthAnchor.constraint(equalTo: redView.widthAnchor).isActive = true
+        
+        bottomLastnameLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        bottomLastnameLine.widthAnchor.constraint(equalTo: redView.widthAnchor).isActive = true
+        
+        signUpButton.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        signUpButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+
+        
+        whiteView.frame = view.frame
+        whiteView.alpha = 0
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            self.whiteView.alpha = 1
+            self.redView.frame = CGRect(x: 0, y: y, width: self.redView.frame.width, height: self.redView.frame.height)
+            
+        }, completion: nil)
+        
+
+        //        self.navigationController?.pushViewController(SignUpController(), animated: true)
+        //        let tabBar = TabBar()
+        //        tabBar.createTabBar()
         }
        
-    }
-        @objc func handleDismiss() {
+    
+    @objc func handleDismiss() {
         UIView.animate(withDuration: 0.5, animations: {
             self.whiteView.alpha = 0
             if let view = UIApplication.shared.keyWindow {
                 self.redView.frame = CGRect(x: 0, y: view.frame.height, width: self.redView.frame.width, height: self.redView.frame.height)
+                view.endEditing(true)
+
             }
         })
     }
 
-    @objc func signUpButtonClicked(_ sender: UIButton) {
-        
+    @objc func signUpButtonClicked() {
+        self.navigationController?.pushViewController(HomeViewController(), animated: true)
+        let tabBar = TabBar();
+        tabBar.createTabBar();
+
     }
-       override init() {
-        super.init()
-    }
-    
+
     
 }

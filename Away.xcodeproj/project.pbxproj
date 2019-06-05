@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		28475F7922A877DD0094C726 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475F7822A877DD0094C726 /* User.swift */; };
+		28475F7B22A877EA0094C726 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475F7A22A877EA0094C726 /* Activity.swift */; };
+		28475F7D22A877F30094C726 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475F7C22A877F30094C726 /* Event.swift */; };
+		28475F7F22A8781B0094C726 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475F7E22A8781B0094C726 /* City.swift */; };
+		28475F8122A878280094C726 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475F8022A878280094C726 /* Tag.swift */; };
+		28475F8322A87E0E0094C726 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475F8222A87E0E0094C726 /* UserSettings.swift */; };
 		284E396F2215C67C0048D44C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284E396E2215C67C0048D44C /* AppDelegate.swift */; };
 		284E39762215C67C0048D44C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 284E39752215C67C0048D44C /* Assets.xcassets */; };
 		284E39792215C67C0048D44C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 284E39772215C67C0048D44C /* LaunchScreen.storyboard */; };
@@ -44,6 +50,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		28475F7822A877DD0094C726 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		28475F7A22A877EA0094C726 /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
+		28475F7C22A877F30094C726 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		28475F7E22A8781B0094C726 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
+		28475F8022A878280094C726 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
+		28475F8222A87E0E0094C726 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		284E396B2215C67C0048D44C /* Away.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Away.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		284E396E2215C67C0048D44C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		284E39752215C67C0048D44C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -175,6 +187,7 @@
 				28D992D42296AF3A00ACE00C /* ActivityDetailsController.swift */,
 				28D992D82297FF7D00ACE00C /* SubscribeLauncher.swift */,
 				28D992DA22A4818100ACE00C /* ConvenientInformationController.swift */,
+				28475F8222A87E0E0094C726 /* UserSettings.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -191,6 +204,11 @@
 		28D992D72297DE8D00ACE00C /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				28475F7822A877DD0094C726 /* User.swift */,
+				28475F7A22A877EA0094C726 /* Activity.swift */,
+				28475F7C22A877F30094C726 /* Event.swift */,
+				28475F7E22A8781B0094C726 /* City.swift */,
+				28475F8022A878280094C726 /* Tag.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -328,12 +346,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28475F7B22A877EA0094C726 /* Activity.swift in Sources */,
 				28986645228F442100CE97E8 /* LoginViewController.swift in Sources */,
 				2898663D228F417F00CE97E8 /* UserProfileViewController.swift in Sources */,
 				28D992D92297FF7D00ACE00C /* SubscribeLauncher.swift in Sources */,
 				284E396F2215C67C0048D44C /* AppDelegate.swift in Sources */,
 				28986641228F42E500CE97E8 /* AddActivityViewController.swift in Sources */,
+				28475F8122A878280094C726 /* Tag.swift in Sources */,
 				2898663A228DAE3300CE97E8 /* CustomActivityCell.swift in Sources */,
+				28475F7922A877DD0094C726 /* User.swift in Sources */,
+				28475F8322A87E0E0094C726 /* UserSettings.swift in Sources */,
+				28475F7D22A877F30094C726 /* Event.swift in Sources */,
+				28475F7F22A8781B0094C726 /* City.swift in Sources */,
 				287C3CBB22871F1300406834 /* TabBar.swift in Sources */,
 				28986635228DA5C300CE97E8 /* HomeViewController.swift in Sources */,
 				2898663F228F42A300CE97E8 /* TagScreenViewController.swift in Sources */,

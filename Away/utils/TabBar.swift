@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class TabBar: NSObject {
+class TabBar: UITabBar {
     
     var firstTabNavigationController : UINavigationController!
     var secondTabNavigationController : UINavigationController!

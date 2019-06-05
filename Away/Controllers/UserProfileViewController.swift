@@ -25,6 +25,7 @@ class UserProfileViewController: UIViewController {
         let button = UIBarButtonItem(image: planetImageView.image, style: .plain, target: self, action: #selector(getInfos(_:)))
         navigationItem.rightBarButtonItem = button
         navigationItem.rightBarButtonItem?.tintColor = .white
+        
         view.addSubview(topView)
         view.addSubview(bottomView)
         topView.backgroundColor = .white
@@ -40,7 +41,7 @@ class UserProfileViewController: UIViewController {
     func setupConstraints() {
        let topTopView = NSLayoutConstraint(item: topView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: 0)
         let leadingTopView = NSLayoutConstraint(item: topView, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1.0, constant: 0)
-        let heightTopView = NSLayoutConstraint(item: topView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1.0, constant: view.bounds.height/3)
+        let heightTopView = NSLayoutConstraint(item: topView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1.0, constant: view.bounds.height/4)
         let widthTopView = NSLayoutConstraint(item: topView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1.0, constant: view.bounds.width)
             topView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -111,7 +112,7 @@ class UserProfileViewController: UIViewController {
             button.layer.cornerRadius = 15.0
             button.layer.shadowOpacity = 1.0
             button.layer.shadowColor = UIColor(named: "AppLightGrey")?.cgColor
-            button.setTitle("Gérer ses Tags", for: .normal)
+            button.setTitle("Modifier le profil", for: .normal)
             button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
             button.addTarget(self, action: #selector(tagManagementButtonClicked), for: .touchUpInside)
             return button;

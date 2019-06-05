@@ -32,6 +32,8 @@ class LoginViewController: UIViewController {
     let passwordTextField: UITextField = {
         let password = UITextField()
         password.translatesAutoresizingMaskIntoConstraints = false
+        
+        password.backgroundColor = UIColor(named: "AppLightGrey")
         password.placeholder = "Password"
         return password
     }()
@@ -94,9 +96,13 @@ class LoginViewController: UIViewController {
 
         loginTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
         loginTextField.widthAnchor.constraint(equalTo: loginStackView.widthAnchor).isActive = true
-        
+        loginTextField.textAlignment = .center
         bottomLoginLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
         bottomLoginLine.widthAnchor.constraint(equalTo: loginStackView.widthAnchor).isActive = true
+        
+        passwordTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        passwordTextField.widthAnchor.constraint(equalTo: loginStackView.widthAnchor).isActive = true
+        
         
         bottomPasswordLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
         bottomPasswordLine.widthAnchor.constraint(equalTo: loginStackView.widthAnchor).isActive = true
@@ -115,14 +121,12 @@ class LoginViewController: UIViewController {
     }
     @objc func loginButtonClicked() {
         self.navigationController?.pushViewController(HomeViewController(), animated: true)
-        let tabBar = TabBar()
-        tabBar.createTabBar()
-        
-        
+        let tabBar = TabBar();
+        tabBar.createTabBar();
     }
     let subscribeLauncher = SubscribeLauncher()
     @objc func signUpButtonClicked(_ sender: UIButton) {
-        subscribeLauncher.showSignUp()
+        self.navigationController?.pushViewController(SubscribeLauncher(), animated: true)
     }
    
 }

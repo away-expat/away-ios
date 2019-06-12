@@ -8,12 +8,8 @@
 
 import Foundation
 
-class City {
+struct City : Codable{
     let name: String;
     let activities: [Activity];
     
-    init(name: String, activities: [Activity]) {
-        self.name = name;
-        self.activities = activities;
-    }
 }

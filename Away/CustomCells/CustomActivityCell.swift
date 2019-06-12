@@ -31,7 +31,6 @@ class CustomActivityCell: UITableViewCell {
     let card: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .blue
         return view
     }()
     
@@ -42,7 +41,6 @@ class CustomActivityCell: UITableViewCell {
         imgView.clipsToBounds = true
         return imgView
     }()
-    
     
     func setupViews() {
         contentView.addSubview(card)
@@ -58,10 +56,6 @@ class CustomActivityCell: UITableViewCell {
         card.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
         card.layer.shadowOpacity = 1.0
         card.layer.shadowRadius = 2.0
-        //cardImage.layer.masksToBounds = false
-        
-        //card.layer.shadowOpacity = 0.5
-        //card.layer.shadowColor = UIColor.lightGray.cgColor
         
         cardImage.leftAnchor.constraint(equalTo: card.leftAnchor).isActive = true
         cardImage.rightAnchor.constraint(equalTo: card.rightAnchor).isActive = true
@@ -80,5 +74,8 @@ class CustomActivityCell: UITableViewCell {
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+    }
+    func addEvent() -> Void {
+       // checkMark.image = UIImage(named: "check-mark")
     }
 }

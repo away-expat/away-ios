@@ -8,21 +8,9 @@
 
 import Foundation
 
-class User {
+struct User : Codable{
     
-    let firstname: String;
-    let lastname: String;
-    let birthdate: Date;
-    let country: String;
-    let tags: [Tag];
-    let events: [Event];
-    
-    init(firstname: String, lastname:String, birthdate: Date, country: String, tags: [Tag], events: [Event]) {
-        self.firstname = firstname;
-        self.lastname = lastname;
-        self.birthdate = birthdate;
-        self.country = country;
-        self.tags = tags;
-        self.events = events;
-    }
+    let firstname: String
+    let lastname: String
+    let country: String
 }

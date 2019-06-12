@@ -10,6 +10,12 @@ import Foundation
 import UIKit
 
 class AddActivityViewController: UIViewController {
+    
+    let stackView: UIStackView = {
+        let sv = UIStackView()
+        return sv
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Japan"
@@ -25,7 +31,7 @@ class AddActivityViewController: UIViewController {
         
     }
     @objc func getInfos(_ sender: UIButton) {
-        //self.navigationController?.pushViewController(HomeViewController(), animated: true)
-        print("infos")
+        self.navigationController?.pushViewController(ChangeCitiesViewController(), animated: true)
+        print("pays")
     }
 }

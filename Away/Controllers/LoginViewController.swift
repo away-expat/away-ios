@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, UITextFieldDelegate {
     let logoImageView: UIImageView = {
         let logo = UIImageView()
         logo.translatesAutoresizingMaskIntoConstraints = false
@@ -91,12 +91,19 @@ class LoginViewController: UIViewController {
         loginStackView.addArrangedSubview(passwordTextField)
         loginStackView.addArrangedSubview(bottomPasswordLine)
         
+        loginTextField.delegate = self
+        passwordTextField.delegate = self
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        
         logoImageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
         logoImageView.widthAnchor.constraint(equalToConstant: 200).isActive = true
 
         loginTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
         loginTextField.widthAnchor.constraint(equalTo: loginStackView.widthAnchor).isActive = true
         loginTextField.textAlignment = .center
+        passwordTextField.textAlignment = .center
         bottomLoginLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
         bottomLoginLine.widthAnchor.constraint(equalTo: loginStackView.widthAnchor).isActive = true
         
@@ -119,15 +126,47 @@ class LoginViewController: UIViewController {
         loginStackView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         
     }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+
+    }
     @objc func loginButtonClicked() {
         self.navigationController?.pushViewController(HomeViewController(), animated: true)
         let tabBar = TabBar();
         tabBar.createTabBar();
     }
-    let subscribeLauncher = SubscribeLauncher()
+    
     @objc func signUpButtonClicked(_ sender: UIButton) {
-        self.navigationController?.pushViewController(SubscribeLauncher(), animated: true)
+        present(SubscribeLauncherController(), animated: true, completion: nil)
     }
+    
+    func hideKeyboard(textField: UITextField) {
+        textField.resignFirstResponder()
+    }
+    
+    @objc func keyboardWillChange(notification: Notification) {
+        guard let keyboardRect = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+            return
+        }
+        if notification.name == Notification.Name.UIKeyboardWillShow ||
+            notification.name == Notification.Name.UIKeyboardWillChangeFrame {
+
+            view.frame.origin.y = -keyboardRect.height
+        } else {
+            view.frame.origin.y = 0
+
+        }
+        
+    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool{
+        print("Return pressed")
+        hideKeyboard(textField: textField)
+        return true
+    }
+    
+
    
 }
-

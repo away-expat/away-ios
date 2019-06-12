@@ -1,5 +1,5 @@
 //
-//  UserSettings.swift
+//  UserSettingsController.swift
 //  Away
 //
 //  Created by Candice Guitton on 06/06/2019.
@@ -9,9 +9,9 @@
 import Foundation
 import UIKit
 
-class UserSettings: UIViewController {
+class UserSettingsController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad();
-        
+        view.backgroundColor = .purple
     }
 }

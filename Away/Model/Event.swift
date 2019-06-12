@@ -8,14 +8,9 @@
 
 import Foundation
 
-class Event {
-    let activity: Activity;
-    let date: Date;
-    let time: TimeInterval;
-    
-    init(activity: Activity, date: Date, time: TimeInterval ) {
-        self.activity = activity;
-        self.date = date;
-        self.time = time;
-    }
+struct Event : Codable {
+    let activity: Activity
+    let date: Date
+    let time: TimeInterval
+    let owner: User
 }

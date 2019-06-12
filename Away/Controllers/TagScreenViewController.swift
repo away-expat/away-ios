@@ -9,7 +9,24 @@
 import Foundation
 import UIKit
 
-class TagScreenViewController: UIViewController {
+class TagScreenViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    let messageArray = ["Restaurants", "Bars", "Musées", "Karaoke", "Coffee Shop", "Marchés"]
+    let searchTagView: UIView = {
+       let view = UIView()
+        view.backgroundColor = .blue
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    let tagCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 16
+        layout.scrollDirection = .vertical
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        return cv
+    }()
+    let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
+    let tagCellIdentifier = "tagCellId"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -17,16 +34,59 @@ class TagScreenViewController: UIViewController {
         let planetIcon = UIImage(named: "earth")
         let planetImageView = UIImageView()
         planetImageView.image = planetIcon?.withAlignmentRectInsets(UIEdgeInsets(top: 0, left: 0, bottom: -7, right: 0))
-        navigationItem.title = "Japan"
-        let button = UIBarButtonItem(image: planetImageView.image, style: .plain, target: self, action: #selector(getInfos(_:)))
-        navigationItem.rightBarButtonItem = button
-        navigationItem.rightBarButtonItem?.tintColor = .white
         
+        view.addSubview(searchTagView)
+        view.addSubview(tagCollectionView)
+
+        searchTagView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        searchTagView.bottomAnchor.constraint(equalTo: tagCollectionView.topAnchor).isActive = true
+        searchTagView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        searchTagView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        searchTagView.heightAnchor.constraint(equalToConstant: view.bounds.height/3).isActive = true
+        
+        
+        
+        tagCollectionView.dataSource = self
+        tagCollectionView.delegate = self
+        
+        tagCollectionView.backgroundColor = .white
+        
+        tagCollectionView.register(CustomTagCell.self, forCellWithReuseIdentifier: tagCellIdentifier)
+        
+        tagCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        tagCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tagCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        tagCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         
         
     }
     @objc func getInfos(_ sender: UIButton) {
-        //self.navigationController?.pushViewController(HomeViewController(), animated: true)
-        print("infos")
+        self.navigationController?.pushViewController(ChangeCitiesViewController(), animated: true)
+        print("pays")
     }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 6
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: tagCellIdentifier, for: indexPath) as! CustomTagCell
+        cell.label.text = messageArray[indexPath.row]
+        return cell
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return (CGSize(width: 160, height: 120))
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return sectionInsets
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.navigationController?.pushViewController(ListActivityByTagController(), animated: true)
+
+    }
+    
 }

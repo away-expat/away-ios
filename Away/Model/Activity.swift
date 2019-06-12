@@ -8,6 +8,14 @@
 
 import Foundation
 
-class Activity {
-    let name: String = "";
+struct Activity : Codable{
+    let id: Int?
+    let name: String?
+    let address: String?
+    let place_id: String?
+    let rating: Float?
+    let url: String?
+    let photos : String?
+    let type:[String]?
 }
+

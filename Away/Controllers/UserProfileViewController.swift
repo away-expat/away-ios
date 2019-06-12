@@ -35,8 +35,8 @@ class UserProfileViewController: UIViewController {
         
     }
     @objc func getInfos(_ sender: UIButton) {
-        //self.navigationController?.pushViewController(HomeViewController(), animated: true)
-        print("infos")
+        self.navigationController?.pushViewController(ChangeCitiesViewController(), animated: true)
+        print("pays")
     }
     func setupConstraints() {
        let topTopView = NSLayoutConstraint(item: topView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: 0)
@@ -105,7 +105,7 @@ class UserProfileViewController: UIViewController {
             view.heightAnchor.constraint(equalToConstant: 50).isActive = true
             return view
         }()
-        let tagManagementButton: UIButton = {
+        let userSettingsButton: UIButton = {
             let button = UIButton()
             button.translatesAutoresizingMaskIntoConstraints = false
             button.backgroundColor = UIColor(named: "AppPeach")
@@ -114,17 +114,29 @@ class UserProfileViewController: UIViewController {
             button.layer.shadowColor = UIColor(named: "AppLightGrey")?.cgColor
             button.setTitle("Modifier le profil", for: .normal)
             button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
-            button.addTarget(self, action: #selector(tagManagementButtonClicked), for: .touchUpInside)
+            button.addTarget(self, action: #selector(userSettingsButtonClicked), for: .touchUpInside)
             return button;
         }()
-        
+        let tagButton: UIButton = {
+            let button = UIButton()
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.backgroundColor = UIColor(named: "AppPeach")
+            button.layer.cornerRadius = 15.0
+            button.layer.shadowOpacity = 1.0
+            button.layer.shadowColor = UIColor(named: "AppLightGrey")?.cgColor
+            button.setTitle("Tags", for: .normal)
+            button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+            button.addTarget(self, action: #selector(tagButtonClicked), for: .touchUpInside)
+            return button;
+        }()
         topView.addSubview(topViewStackView)
         topViewStackView.addArrangedSubview(userNameDescriptionStackView)
         topViewStackView.addArrangedSubview(avatarImageView)
         userNameDescriptionStackView.addArrangedSubview(userNameLabel)
         userNameDescriptionStackView.addArrangedSubview(descriptionLabel)
         userNameDescriptionStackView.addArrangedSubview(buttonView)
-        buttonView.addSubview(tagManagementButton)
+        buttonView.addSubview(userSettingsButton)
+        buttonView.addSubview(tagButton)
         
         descriptionLabel.widthAnchor.constraint(equalTo: userNameDescriptionStackView.widthAnchor).isActive = true
         descriptionLabel.delegate = self
@@ -142,10 +154,14 @@ class UserProfileViewController: UIViewController {
         buttonView.leadingAnchor.constraint(equalTo: userNameDescriptionStackView.leadingAnchor).isActive = true
         buttonView.bottomAnchor.constraint(equalTo: userNameDescriptionStackView.bottomAnchor).isActive = true
         buttonView.widthAnchor.constraint(equalTo:userNameDescriptionStackView.widthAnchor).isActive = true
+        tagButton.trailingAnchor.constraint(equalTo: buttonView.trailingAnchor).isActive = true
 
     }
-    @objc func tagManagementButtonClicked() {
-        print("damn")
+    @objc func userSettingsButtonClicked() {
+        self.navigationController?.pushViewController(UserSettingsController(), animated: true)
+    }
+    @objc func tagButtonClicked() {
+        self.navigationController?.pushViewController(TagManagementController(), animated: true)
     }
 }
 

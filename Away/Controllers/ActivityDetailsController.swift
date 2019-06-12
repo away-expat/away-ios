@@ -22,7 +22,7 @@ class ActivityDetailsController: UIViewController {
         navigationItem.rightBarButtonItem?.tintColor = .white
     }
     @objc func getInfos(_ sender: UIButton) {
-        //self.navigationController?.pushViewController(HomeViewController(), animated: true)
-        print("infos")
+        self.navigationController?.pushViewController(ChangeCitiesViewController(), animated: true)
+        print("pays")
     }
 }

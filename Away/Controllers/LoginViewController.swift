@@ -143,27 +143,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         present(SubscribeLauncherController(), animated: true, completion: nil)
     }
     
-    func hideKeyboard(textField: UITextField) {
-        textField.resignFirstResponder()
-    }
-    
     @objc func keyboardWillChange(notification: Notification) {
-        guard let keyboardRect = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
-            return
-        }
-        if notification.name == Notification.Name.UIKeyboardWillShow ||
-            notification.name == Notification.Name.UIKeyboardWillChangeFrame {
-
-            view.frame.origin.y = -keyboardRect.height
-        } else {
-            view.frame.origin.y = 0
-
-        }
+        KeyboardUtils.WillChange(notification: notification, view: view)
         
     }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool{
         print("Return pressed")
-        hideKeyboard(textField: textField)
+        KeyboardUtils.hide(textField: textField)
         return true
     }
     

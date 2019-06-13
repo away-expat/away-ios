@@ -23,8 +23,9 @@ class CustomTagCell: UICollectionViewCell {
     let label: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: 16)
         label.textColor = .black
+        label.font = UIFont(name: "AppleSDGothicNeo-Thin", size: 16.0)
+        label.sizeToFit()
         return label;
     }()
     

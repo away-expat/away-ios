@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SubscribeLauncherController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
+class SubscribeLauncherController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate {
     let stackView: UIStackView = {
         let sv = UIStackView()
         sv.translatesAutoresizingMaskIntoConstraints = false
@@ -70,11 +70,29 @@ class SubscribeLauncherController: UIViewController, UIPickerViewDataSource, UIP
         line.backgroundColor = UIColor(named: "AppPeach")
         return line
     }()
+    
+    let birthday: UITextField = {
+        let birth = UITextField()
+        birth.translatesAutoresizingMaskIntoConstraints = false
+        birth.placeholder = "JJ/MM/YY"
+        return birth
+    }()
+    
+    let bottomBirthdayLine: UIView = {
+        let line = UIView()
+        line.translatesAutoresizingMaskIntoConstraints = false
+        line.backgroundColor = UIColor(named: "AppPeach")
+        return line
+    }()
     let countryTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Choose country"
+        textField.textAlignment = .center
         return textField
     }()
+    
+    
+    
     let countries = ["Japan","France","USA"]
     let countryPickerView: UIPickerView = {
         let picker = UIPickerView()
@@ -152,11 +170,24 @@ class SubscribeLauncherController: UIViewController, UIPickerViewDataSource, UIP
         stackView.addArrangedSubview(lastNameTextField)
         stackView.addArrangedSubview(bottomLastnameLine)
         
+        stackView.addArrangedSubview(birthday)
+        stackView.addArrangedSubview(bottomBirthdayLine)
+        
         stackView.addArrangedSubview(countryTextField)
         stackView.addArrangedSubview(signUpButton)
         createToolBar()
         countryPickerView.delegate = self
         countryTextField.inputView = countryPickerView
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
+        lastNameTextField.delegate = self
+        firstNameTextField.delegate = self
+        countryTextField.delegate = self
+        birthday.delegate = self
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
         
         view.addSubview(goBackButton)
         goBackButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -40).isActive = true
@@ -177,16 +208,24 @@ class SubscribeLauncherController: UIViewController, UIPickerViewDataSource, UIP
         bottomLastnameLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
         bottomLastnameLine.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         
+        bottomBirthdayLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        bottomBirthdayLine.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        
         signUpButton.widthAnchor.constraint(equalToConstant: 150).isActive = true
         signUpButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
 
-        }
-       
+    }
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        
+    }
 
     @objc func signUpButtonClicked() {
         self.navigationController?.pushViewController(HomeViewController(), animated: true)
         let user = User(firstname: firstNameTextField.text!, lastname: lastNameTextField.text!, country: countryTextField.text!)
-
+        
         
         
         let tabBar = TabBar();
@@ -197,6 +236,17 @@ class SubscribeLauncherController: UIViewController, UIPickerViewDataSource, UIP
     @objc func goBackSignIn() {
         self.navigationController?.popViewController(animated: true)        
         dismiss(animated: true, completion: nil)
+    }
+    
+    
+    @objc func keyboardWillChange(notification: Notification) {
+        KeyboardUtils.WillChange(notification: notification, view: view)
+        
+    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool{
+        print("Return pressed sign up")
+        KeyboardUtils.hide(textField: textField)
+        return true
     }
     
 }

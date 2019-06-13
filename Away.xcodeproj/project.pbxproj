@@ -22,6 +22,10 @@
 		28475F9322B0616E0094C726 /* TagManagementController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475F9222B0616E0094C726 /* TagManagementController.swift */; };
 		28475F9522B18F780094C726 /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475F9422B18F780094C726 /* LoginService.swift */; };
 		28475F9722B1A8070094C726 /* ErrorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475F9622B1A8070094C726 /* ErrorType.swift */; };
+		28475F9922B252E80094C726 /* KeyboardUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475F9822B252E80094C726 /* KeyboardUtils.swift */; };
+		28475F9D22B2A37B0094C726 /* CityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475F9C22B2A37B0094C726 /* CityService.swift */; };
+		28475F9F22B2EE2E0094C726 /* TagService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475F9E22B2EE2E0094C726 /* TagService.swift */; };
+		28475FA122B2F2790094C726 /* EventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475FA022B2F2790094C726 /* EventService.swift */; };
 		284E396F2215C67C0048D44C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284E396E2215C67C0048D44C /* AppDelegate.swift */; };
 		284E39762215C67C0048D44C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 284E39752215C67C0048D44C /* Assets.xcassets */; };
 		284E39792215C67C0048D44C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 284E39772215C67C0048D44C /* LaunchScreen.storyboard */; };
@@ -77,6 +81,10 @@
 		28475F9222B0616E0094C726 /* TagManagementController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagManagementController.swift; sourceTree = "<group>"; };
 		28475F9422B18F780094C726 /* LoginService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
 		28475F9622B1A8070094C726 /* ErrorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorType.swift; sourceTree = "<group>"; };
+		28475F9822B252E80094C726 /* KeyboardUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardUtils.swift; sourceTree = "<group>"; };
+		28475F9C22B2A37B0094C726 /* CityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityService.swift; sourceTree = "<group>"; };
+		28475F9E22B2EE2E0094C726 /* TagService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagService.swift; sourceTree = "<group>"; };
+		28475FA022B2F2790094C726 /* EventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventService.swift; sourceTree = "<group>"; };
 		284E396B2215C67C0048D44C /* Away.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Away.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		284E396E2215C67C0048D44C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		284E39752215C67C0048D44C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -145,6 +153,9 @@
 				28475F8822AEA9EC0094C726 /* ActivityService.swift */,
 				28475F9422B18F780094C726 /* LoginService.swift */,
 				28475F9622B1A8070094C726 /* ErrorType.swift */,
+				28475F9C22B2A37B0094C726 /* CityService.swift */,
+				28475F9E22B2EE2E0094C726 /* TagService.swift */,
+				28475FA022B2F2790094C726 /* EventService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -218,6 +229,7 @@
 			children = (
 				287C3CBA22871F1300406834 /* TabBar.swift */,
 				28475F8A22AEE10B0094C726 /* Constants.swift */,
+				28475F9822B252E80094C726 /* KeyboardUtils.swift */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -493,6 +505,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28475FA122B2F2790094C726 /* EventService.swift in Sources */,
 				28475F7B22A877EA0094C726 /* Activity.swift in Sources */,
 				28475F8B22AEE10C0094C726 /* Constants.swift in Sources */,
 				28986645228F442100CE97E8 /* LoginViewController.swift in Sources */,
@@ -501,13 +514,16 @@
 				28475F9122AFB1F10094C726 /* EventDetailsController.swift in Sources */,
 				2898663D228F417F00CE97E8 /* UserProfileViewController.swift in Sources */,
 				28D992D92297FF7D00ACE00C /* SubscribeLauncherController.swift in Sources */,
+				28475F9922B252E80094C726 /* KeyboardUtils.swift in Sources */,
 				28475F8F22AFA2BA0094C726 /* CustomEventCell.swift in Sources */,
+				28475F9D22B2A37B0094C726 /* CityService.swift in Sources */,
 				284E396F2215C67C0048D44C /* AppDelegate.swift in Sources */,
 				28475F8522ADD2810094C726 /* CustomTagCell.swift in Sources */,
 				28475F8D22AF99330094C726 /* ListActivityByTagController.swift in Sources */,
 				28475F9722B1A8070094C726 /* ErrorType.swift in Sources */,
 				28986641228F42E500CE97E8 /* AddActivityViewController.swift in Sources */,
 				28475F8922AEA9EC0094C726 /* ActivityService.swift in Sources */,
+				28475F9F22B2EE2E0094C726 /* TagService.swift in Sources */,
 				28475F8122A878280094C726 /* Tag.swift in Sources */,
 				2898663A228DAE3300CE97E8 /* CustomActivityCell.swift in Sources */,
 				28475F7922A877DD0094C726 /* User.swift in Sources */,

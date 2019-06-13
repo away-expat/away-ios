@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class ChangeCitiesViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class ChangeCitiesViewController: UIViewController, UISearchBarDelegate {
     let messageArray = ["Paris", "Tokyo", "London"]
     
     let searchBar: UISearchBar = {
@@ -17,6 +17,7 @@ class ChangeCitiesViewController: UIViewController, UICollectionViewDataSource, 
         sb.translatesAutoresizingMaskIntoConstraints = false
         return sb
     }()
+    
     let layout: UICollectionViewFlowLayout = {
        let l =  UICollectionViewFlowLayout()
         l.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
@@ -27,63 +28,24 @@ class ChangeCitiesViewController: UIViewController, UICollectionViewDataSource, 
     func setupNavigationBar() {
         navigationItem.title = "Japan"
         self.navigationController?.navigationBar.tintColor = .black
-        navigationItem.title = "Japan"
     }
     
     func setupViews() {
-        let countryCollectionView:UICollectionView = {
-            let cv = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
-            cv.translatesAutoresizingMaskIntoConstraints = false
-            cv.backgroundColor = .white
-            cv.register(CustomCountryCell.self, forCellWithReuseIdentifier: "cellId")
-            return cv
-        }()
-        countryCollectionView.dataSource = self
-        countryCollectionView.delegate = self
-        view.addSubview(searchBar)
-        view.addSubview(countryCollectionView)
-
         
-        searchBar.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
+        view.addSubview(searchBar)
+        searchBar.delegate = self
+        
+        searchBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         searchBar.heightAnchor.constraint(equalToConstant: 200).isActive = true
-        
-        countryCollectionView.topAnchor.constraint(equalTo: searchBar.topAnchor, constant: 10).isActive = true
-        countryCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30).isActive = true
-        countryCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
-        countryCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
-        countryCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupNavigationBar()
         setupViews()
-       
-        
-        
+  
     }
-    
-
-    
-    
-     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
-    }
-    
-    
-     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! CustomCountryCell
-            cell.label.text = messageArray[indexPath.row]
-        return cell
-    }
-    
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return (CGSize(width: view.bounds.width, height: 44))
-    }
-    
-   
 }
 

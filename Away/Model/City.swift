@@ -10,6 +10,4 @@ import Foundation
 
 struct City : Codable{
     let name: String;
-    let activities: [Activity];
-    
 }

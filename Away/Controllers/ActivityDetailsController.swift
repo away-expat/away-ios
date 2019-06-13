@@ -16,12 +16,11 @@ class ActivityDetailsController: UIViewController {
         let planetIcon = UIImage(named: "earth")
         let planetImageView = UIImageView()
         planetImageView.image = planetIcon?.withAlignmentRectInsets(UIEdgeInsets(top: 0, left: 0, bottom: -7, right: 0))
-        navigationItem.title = "Japan"
-        let button = UIBarButtonItem(image: planetImageView.image, style: .plain, target: self, action: #selector(getInfos(_:)))
+        let button = UIBarButtonItem(image: planetImageView.image, style: .plain, target: self, action: #selector(changeCities(_:)))
         navigationItem.rightBarButtonItem = button
         navigationItem.rightBarButtonItem?.tintColor = .white
     }
-    @objc func getInfos(_ sender: UIButton) {
+    @objc func changeCities(_ sender: UIButton) {
         self.navigationController?.pushViewController(ChangeCitiesViewController(), animated: true)
         print("pays")
     }

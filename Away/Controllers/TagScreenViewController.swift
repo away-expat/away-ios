@@ -11,6 +11,10 @@ import UIKit
 
 class TagScreenViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     let messageArray = ["Restaurants", "Bars", "Musées", "Karaoke", "Coffee Shop", "Marchés"]
+    var tags: [Tag] = []
+    let tagService = TagService()
+    let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+
     let searchTagView: UIView = {
        let view = UIView()
         view.backgroundColor = .blue
@@ -29,14 +33,18 @@ class TagScreenViewController: UIViewController, UICollectionViewDataSource, UIC
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        navigationController?.navigationBar.isTranslucent = false
         navigationItem.title = "Japan"
         let planetIcon = UIImage(named: "earth")
         let planetImageView = UIImageView()
         planetImageView.image = planetIcon?.withAlignmentRectInsets(UIEdgeInsets(top: 0, left: 0, bottom: -7, right: 0))
+        let button = UIBarButtonItem(image: planetImageView.image, style: .plain, target: self, action: #selector(changeCities(_:)))
+        navigationItem.rightBarButtonItem = button
+        navigationItem.rightBarButtonItem?.tintColor = .white
         
         view.addSubview(searchTagView)
         view.addSubview(tagCollectionView)
+        view.addSubview(indicator)
 
         searchTagView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         searchTagView.bottomAnchor.constraint(equalTo: tagCollectionView.topAnchor).isActive = true
@@ -52,27 +60,45 @@ class TagScreenViewController: UIViewController, UICollectionViewDataSource, UIC
         tagCollectionView.backgroundColor = .white
         
         tagCollectionView.register(CustomTagCell.self, forCellWithReuseIdentifier: tagCellIdentifier)
-        
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+
         tagCollectionView.translatesAutoresizingMaskIntoConstraints = false
         tagCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         tagCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tagCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        indicator.startAnimating()
+        indicator.hidesWhenStopped = true
         
+        tagService.getTag{ response , error in
+            if error != nil {
+                print ("tagscreencontroller error:", error!)
+            } else {
+                self.tags = response
+                
+                DispatchQueue.main.async{
+                    self.tagCollectionView.reloadData()
+                    self.indicator.stopAnimating()
+                }
+            }
+            
+        }
         
     }
-    @objc func getInfos(_ sender: UIButton) {
+    @objc func changeCities(_ sender: UIButton) {
         self.navigationController?.pushViewController(ChangeCitiesViewController(), animated: true)
         print("pays")
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 6
+        return tags.count
     }
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: tagCellIdentifier, for: indexPath) as! CustomTagCell
-        cell.label.text = messageArray[indexPath.row]
+        cell.label.text = tags[indexPath.row].name
         return cell
     }
     
@@ -86,7 +112,6 @@ class TagScreenViewController: UIViewController, UICollectionViewDataSource, UIC
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.navigationController?.pushViewController(ListActivityByTagController(), animated: true)
-
     }
     
 }

@@ -7,8 +7,10 @@
 //
 
 import UIKit
-
+import KeychainAccess
 class LoginViewController: UIViewController, UITextFieldDelegate {
+    var loginService = LoginService()
+    
     let logoImageView: UIImageView = {
         let logo = UIImageView()
         logo.translatesAutoresizingMaskIntoConstraints = false
@@ -125,6 +127,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         loginStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         loginStackView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         
+        
+        
+        
     }
     
     deinit {
@@ -134,9 +139,18 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
     }
     @objc func loginButtonClicked() {
-        self.navigationController?.pushViewController(HomeViewController(), animated: true)
-        let tabBar = TabBar();
-        tabBar.createTabBar();
+        loginService.signIn{ response , error in
+            if error != nil {
+                print ("login error:", error!)
+            } else {
+                try! App.keychain?.set(response, key: "token")
+                self.navigationController?.pushViewController(HomeViewController(), animated: true)
+                let tabBar = TabBar();
+                tabBar.createTabBar();
+            }
+            
+        }
+        
     }
     
     @objc func signUpButtonClicked(_ sender: UIButton) {
@@ -154,5 +168,4 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
 
-   
 }

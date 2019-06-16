@@ -224,7 +224,7 @@ class SubscribeLauncherController: UIViewController, UIPickerViewDataSource, UIP
 
     @objc func signUpButtonClicked() {
         self.navigationController?.pushViewController(HomeViewController(), animated: true)
-        let user = User(firstname: firstNameTextField.text!, lastname: lastNameTextField.text!, country: countryTextField.text!)
+        let user = User(firstname: firstNameTextField.text!, lastname: lastNameTextField.text!, fromCountry: countryTextField.text!, visitedCity: City(name: "Paris"))
         
         
         

@@ -9,8 +9,7 @@
 import Foundation
 import UIKit
 
-class TagScreenViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    let messageArray = ["Restaurants", "Bars", "Musées", "Karaoke", "Coffee Shop", "Marchés"]
+class TagScreenViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate, UICollectionViewDelegateFlowLayout {
     var tags: [Tag] = []
     let tagService = TagService()
     let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
@@ -21,6 +20,13 @@ class TagScreenViewController: UIViewController, UICollectionViewDataSource, UIC
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    let searchBar: UISearchBar = {
+        let sb = UISearchBar()
+        sb.translatesAutoresizingMaskIntoConstraints = false
+        sb.placeholder = "Rechercher"
+        return sb
+    }()
+
     let tagCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 16
@@ -51,7 +57,14 @@ class TagScreenViewController: UIViewController, UICollectionViewDataSource, UIC
         searchTagView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         searchTagView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         searchTagView.heightAnchor.constraint(equalToConstant: view.bounds.height/3).isActive = true
+        searchTagView.addSubview(searchBar)
         
+        searchBar.delegate = self
+        
+        searchBar.topAnchor.constraint(equalTo: searchTagView.topAnchor).isActive = true
+        searchBar.leadingAnchor.constraint(equalTo: searchTagView.leadingAnchor).isActive = true
+        searchBar.trailingAnchor.constraint(equalTo: searchTagView.trailingAnchor).isActive = true
+        searchBar.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         
         tagCollectionView.dataSource = self

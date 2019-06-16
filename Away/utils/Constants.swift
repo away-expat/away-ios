@@ -9,6 +9,7 @@
 import Foundation
 class Constants {
     static let BASE_URL = "http://51.75.122.187:3000"
+    static let SIGN_IN = BASE_URL + "/auth/login"
     static let ACTIVITIES_ROUTE_GOOGLE = BASE_URL + "/activities/googleByCity"
     static let ACTIVITIES_BY_TAG_ROUTE_GOOGLE = BASE_URL + "/activities/googleByCity"
     static let ACTIVITIES_BY_TAG_ROUTE = BASE_URL + "/activities/ByTag/:idTag"

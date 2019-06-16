@@ -9,19 +9,23 @@
 import UIKit
 
 class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    var user = User(firstname: "Candice", lastname: "Guitton", fromCountry: "France", visitedCity: City(name: "Tokyo"))
     var activities: [Activity] = []
     let activityService = ActivityService()
     let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
     let tableView = UITableView()
     
+    let cityLabel : UILabel = {
+        let label = UILabel()
+        return label
+    }()
      override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "Tokyo"
         let planetIcon = UIImage(named: "earth")
         let planetImageView = UIImageView()
         planetImageView.image = planetIcon?.withAlignmentRectInsets(UIEdgeInsets(top: 0, left: 0, bottom: -7, right: 0))
         let button = UIBarButtonItem(image: planetImageView.image, style: .plain, target: self, action: #selector(changeCity(_:)))
-        
+        navigationItem.title = user.visitedCity.name
         navigationItem.rightBarButtonItem = button
         navigationItem.rightBarButtonItem?.tintColor = .white
         

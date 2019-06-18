@@ -9,5 +9,5 @@
 import Foundation
 
 struct Tag : Codable {
-    let name: String;
+    let name: String
 }

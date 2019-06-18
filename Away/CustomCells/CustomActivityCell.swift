@@ -35,7 +35,7 @@ class CustomActivityCell: UITableViewCell {
     }()
     
     let cardImage : UIImageView = {
-        let imgView = UIImageView(image: UIImage(named: "imageBG"))
+        let imgView = UIImageView()
         imgView.translatesAutoresizingMaskIntoConstraints = false
         imgView.contentMode = .scaleAspectFill
         imgView.clipsToBounds = true

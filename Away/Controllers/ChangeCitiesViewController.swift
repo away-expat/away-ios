@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 
 class ChangeCitiesViewController: UIViewController, UISearchBarDelegate {
-    let messageArray = ["Paris", "Tokyo", "London"]
     
     let searchBar: UISearchBar = {
         let sb = UISearchBar()

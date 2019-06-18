@@ -8,13 +8,13 @@
 
 import Foundation
 import UIKit
-
+import Kingfisher
 class ListActivityByTagController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var activities: [Activity] = []
     let activityService = ActivityService()
     let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
     let tableView = UITableView()
-    var tag : Tag = Tag(name:"bar")
+    var tag : Tag = Tag(name: "bar")
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -49,9 +49,10 @@ class ListActivityByTagController: UIViewController, UITableViewDelegate, UITabl
         indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         indicator.startAnimating()
         indicator.hidesWhenStopped = true
-        
         let city = City(name: "Paris")
-        activityService.getActivitiesByTag(city: city,tag: tag, completion :{ response , error in
+        let token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtYWlsIjoiYXplckBnbWFpbC5jb20iLCJwYXNzd29yZCI6ImF6ZXJ0eXVpb3AifQ.RfadKZR1WslusWcqQ5cuBvOs1eir7pAJnsUJ_0HnVBQ"
+        
+        activityService.getActivitiesByTag(token: token, city: city, tag: tag, completion :{ response , error in
             if error != nil {
                 print ("listActivityByTag error:", error!)
             } else {
@@ -64,6 +65,7 @@ class ListActivityByTagController: UIViewController, UITableViewDelegate, UITabl
             }
             
         })
+       
     }
     @objc func changeCity(_ sender: UIButton) {
         self.navigationController?.pushViewController(ChangeCitiesViewController(), animated: true)
@@ -73,6 +75,8 @@ class ListActivityByTagController: UIViewController, UITableViewDelegate, UITabl
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! CustomActivityCell
         cell.label.text = activities[indexPath.row].name
+        let url = URL(string: activities[indexPath.row].photos!)
+        cell.cardImage.kf.setImage(with: url)
         return cell
     }
     
@@ -84,8 +88,7 @@ class ListActivityByTagController: UIViewController, UITableViewDelegate, UITabl
         return 160.0
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        self.navigationController?.pushViewController(EventDetailsController(), animated: true)
+       //get event from activity you just clicked on
         print("selected cell \(indexPath.row)")
     }
 }

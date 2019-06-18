@@ -127,6 +127,19 @@ class UserProfileViewController: UIViewController {
             button.addTarget(self, action: #selector(tagButtonClicked), for: .touchUpInside)
             return button;
         }()
+        
+        let logOutButton: UIButton = {
+            let button = UIButton()
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.backgroundColor = UIColor(named: "AppPeach")
+            button.layer.cornerRadius = 15.0
+            button.layer.shadowOpacity = 1.0
+            button.layer.shadowColor = UIColor(named: "AppLightGrey")?.cgColor
+            button.setTitle("Deco", for: .normal)
+            button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+            button.addTarget(self, action: #selector(signOutButtonClicked), for: .touchUpInside)
+            return button;
+        }()
         topView.addSubview(topViewStackView)
         topViewStackView.addArrangedSubview(userNameDescriptionStackView)
         topViewStackView.addArrangedSubview(avatarImageView)
@@ -135,7 +148,7 @@ class UserProfileViewController: UIViewController {
         userNameDescriptionStackView.addArrangedSubview(buttonView)
         buttonView.addSubview(userSettingsButton)
         buttonView.addSubview(tagButton)
-        
+        buttonView.addSubview(logOutButton)
         descriptionLabel.widthAnchor.constraint(equalTo: userNameDescriptionStackView.widthAnchor).isActive = true
         descriptionLabel.delegate = self
         descriptionLabel.isScrollEnabled = false
@@ -160,6 +173,10 @@ class UserProfileViewController: UIViewController {
     }
     @objc func tagButtonClicked() {
         self.navigationController?.pushViewController(TagManagementController(), animated: true)
+    }
+    @objc func signOutButtonClicked() {
+        try! App.keychain?.remove("token")
+      UIApplication.setRootView(LoginViewController())
     }
 }
 

@@ -7,14 +7,13 @@
 //
 
 import UIKit
-
+import KeychainAccess
 class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var user = User(firstname: "Candice", lastname: "Guitton", fromCountry: "France", visitedCity: City(name: "Tokyo"))
-    var activities: [Activity] = []
+    var events: [Event] = []
     let activityService = ActivityService()
     let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
     let tableView = UITableView()
-    
     let cityLabel : UILabel = {
         let label = UILabel()
         return label
@@ -52,12 +51,12 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         indicator.startAnimating()
         indicator.hidesWhenStopped = true
         
-        
-        activityService.getActivities{ response , error in
+        let token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtYWlsIjoiYXplckBnbWFpbC5jb20iLCJwYXNzd29yZCI6ImF6ZXJ0eXVpb3AifQ.RfadKZR1WslusWcqQ5cuBvOs1eir7pAJnsUJ_0HnVBQ"
+        activityService.getSuggestions(token: token, completion: { response , error in
             if error != nil {
                 print ("homeviewcontroller error:", error!)
             } else {
-                self.activities = response
+                self.events = response
                 
                 DispatchQueue.main.async{
                     self.tableView.reloadData()
@@ -65,7 +64,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 }
             }
     
-        }
+        })
     }
     @objc func changeCity(_ sender: UIButton) {
         self.navigationController?.pushViewController(ChangeCitiesViewController(), animated: true)
@@ -74,12 +73,12 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
      func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! CustomActivityCell
-        cell.label.text = activities[indexPath.row].name
+        cell.label.text = events[indexPath.row].activityName
         return cell
     }
     
      func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return activities.count
+        return events.count
     }
     
      func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

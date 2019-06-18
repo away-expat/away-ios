@@ -8,7 +8,8 @@
 
 import UIKit
 
-class SubscribeLauncherController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate {
+class SubscribeLauncherController: UIViewController, UITextFieldDelegate {
+    let loginService = LoginService()
     let stackView: UIStackView = {
         let sv = UIStackView()
         sv.translatesAutoresizingMaskIntoConstraints = false
@@ -90,23 +91,27 @@ class SubscribeLauncherController: UIViewController, UIPickerViewDataSource, UIP
         textField.textAlignment = .center
         return textField
     }()
-    
-    
-    
-    let countries = ["Japan","France","USA"]
-    let countryPickerView: UIPickerView = {
-        let picker = UIPickerView()
-        return picker
+    let bottomCountryLine: UIView = {
+        let line = UIView()
+        line.translatesAutoresizingMaskIntoConstraints = false
+        line.backgroundColor = UIColor(named: "AppPeach")
+        return line
     }()
-    func createToolBar() {
-        let toolBar = UIToolbar()
-        toolBar.sizeToFit()
-        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(dismissPickerView))
-        toolBar.setItems([doneButton], animated: false)
-        toolBar.isUserInteractionEnabled = true
-        toolBar.backgroundColor = UIColor(named: "AppLightGrey")
-        countryTextField.inputAccessoryView = toolBar
-    }
+   
+    let chooseCityToVisitButton: UIButton = {
+        let btn = UIButton()
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.backgroundColor = UIColor(named: "AppLightGrey")
+        btn.layer.borderColor = UIColor(named: "AppPeach")?.cgColor
+        btn.layer.borderWidth = 1
+        btn.layer.cornerRadius = 4.0
+        btn.titleLabel?.adjustsFontSizeToFitWidth = true
+        btn.titleEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+        btn.setTitle("City you want to visit", for: .normal)
+        btn.setTitleColor(UIColor(named: "AppPeach"), for: .normal)
+        btn.addTarget(self, action: #selector(chooseCityToVisitButtonClicked), for: .touchUpInside)
+        return btn;
+    }()
     
     let signUpButton: UIButton = {
         let button = UIButton()
@@ -120,9 +125,7 @@ class SubscribeLauncherController: UIViewController, UIPickerViewDataSource, UIP
         return button;
     }()
     
-    
-    
-    
+
     let goBackButton: UIButton = {
         let image = UIImage(named: "delete-button")
         let button = UIButton()
@@ -131,28 +134,6 @@ class SubscribeLauncherController: UIViewController, UIPickerViewDataSource, UIP
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
-    @objc func dismissPickerView() {
-        if let view = UIApplication.shared.keyWindow {
-            view.endEditing(true)
-        }
-    }
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return countries.count
-    }
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return countries[row]
-    }
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let selectedCountry = countries[row]
-        countryTextField.text = selectedCountry
-    }
-    
     
 
     override func viewDidLoad() {
@@ -174,10 +155,11 @@ class SubscribeLauncherController: UIViewController, UIPickerViewDataSource, UIP
         stackView.addArrangedSubview(bottomBirthdayLine)
         
         stackView.addArrangedSubview(countryTextField)
+        stackView.addArrangedSubview(bottomCountryLine)
+        stackView.addArrangedSubview(chooseCityToVisitButton)
+
+
         stackView.addArrangedSubview(signUpButton)
-        createToolBar()
-        countryPickerView.delegate = self
-        countryTextField.inputView = countryPickerView
         emailTextField.delegate = self
         passwordTextField.delegate = self
         lastNameTextField.delegate = self
@@ -211,6 +193,9 @@ class SubscribeLauncherController: UIViewController, UIPickerViewDataSource, UIP
         bottomBirthdayLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
         bottomBirthdayLine.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         
+        bottomCountryLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        bottomCountryLine.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        
         signUpButton.widthAnchor.constraint(equalToConstant: 150).isActive = true
         signUpButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
 
@@ -221,15 +206,30 @@ class SubscribeLauncherController: UIViewController, UIPickerViewDataSource, UIP
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
         
     }
-
+    @objc func chooseCityToVisitButtonClicked() {
+        present(ChangeCitiesViewController(), animated: true)
+    }
     @objc func signUpButtonClicked() {
         self.navigationController?.pushViewController(HomeViewController(), animated: true)
-        let user = User(firstname: firstNameTextField.text!, lastname: lastNameTextField.text!, fromCountry: countryTextField.text!, visitedCity: City(name: "Paris"))
+        loginService.signUp(firstname: firstNameTextField.text!, lastname: lastNameTextField.text!, mail: emailTextField.text!, password: passwordTextField.text!, birth: birthday.text!, country: countryTextField.text!, idCity: 151, completion: { response , error in
+            if error != nil {
+                print ("login error:", error!)
+            } else {
+                try! App.keychain?.set(response, key: "token")
+                self.navigationController?.pushViewController(HomeViewController(), animated: true)
+                DispatchQueue.main.async{
+                    let tabBar = TabBar();
+                    tabBar.createTabBar();
+                }
+            }
+            
+        })
         
         
         
         let tabBar = TabBar();
         tabBar.createTabBar();
+        self.navigationController?.dismiss(animated: false, completion: nil)
 
     }
     

@@ -27,6 +27,7 @@
 		28475F9F22B2EE2E0094C726 /* TagService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475F9E22B2EE2E0094C726 /* TagService.swift */; };
 		28475FA122B2F2790094C726 /* EventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475FA022B2F2790094C726 /* EventService.swift */; };
 		28475FA522B6B95F0094C726 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475FA422B6B95F0094C726 /* Token.swift */; };
+		28475FA822B82E790094C726 /* ActivityByTagResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475FA722B82E790094C726 /* ActivityByTagResponse.swift */; };
 		284E396F2215C67C0048D44C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284E396E2215C67C0048D44C /* AppDelegate.swift */; };
 		284E39762215C67C0048D44C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 284E39752215C67C0048D44C /* Assets.xcassets */; };
 		284E39792215C67C0048D44C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 284E39772215C67C0048D44C /* LaunchScreen.storyboard */; };
@@ -38,7 +39,7 @@
 		2898663A228DAE3300CE97E8 /* CustomActivityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28986639228DAE3300CE97E8 /* CustomActivityCell.swift */; };
 		2898663D228F417F00CE97E8 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2898663C228F417F00CE97E8 /* UserProfileViewController.swift */; };
 		2898663F228F42A300CE97E8 /* TagScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2898663E228F42A300CE97E8 /* TagScreenViewController.swift */; };
-		28986641228F42E500CE97E8 /* AddActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28986640228F42E500CE97E8 /* AddActivityViewController.swift */; };
+		28986641228F42E500CE97E8 /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28986640228F42E500CE97E8 /* CreateEventViewController.swift */; };
 		28986643228F435A00CE97E8 /* ChangeCitiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28986642228F435A00CE97E8 /* ChangeCitiesViewController.swift */; };
 		28986645228F442100CE97E8 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28986644228F442100CE97E8 /* LoginViewController.swift */; };
 		28D992D52296AF3A00ACE00C /* ActivityDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D992D42296AF3A00ACE00C /* ActivityDetailsController.swift */; };
@@ -87,6 +88,7 @@
 		28475F9E22B2EE2E0094C726 /* TagService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagService.swift; sourceTree = "<group>"; };
 		28475FA022B2F2790094C726 /* EventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventService.swift; sourceTree = "<group>"; };
 		28475FA422B6B95F0094C726 /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
+		28475FA722B82E790094C726 /* ActivityByTagResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityByTagResponse.swift; sourceTree = "<group>"; };
 		284E396B2215C67C0048D44C /* Away.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Away.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		284E396E2215C67C0048D44C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		284E39752215C67C0048D44C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -104,7 +106,7 @@
 		28986639228DAE3300CE97E8 /* CustomActivityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomActivityCell.swift; sourceTree = "<group>"; };
 		2898663C228F417F00CE97E8 /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		2898663E228F42A300CE97E8 /* TagScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagScreenViewController.swift; sourceTree = "<group>"; };
-		28986640228F42E500CE97E8 /* AddActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddActivityViewController.swift; sourceTree = "<group>"; };
+		28986640228F42E500CE97E8 /* CreateEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
 		28986642228F435A00CE97E8 /* ChangeCitiesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeCitiesViewController.swift; sourceTree = "<group>"; };
 		28986644228F442100CE97E8 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		28D992D42296AF3A00ACE00C /* ActivityDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityDetailsController.swift; sourceTree = "<group>"; };
@@ -162,6 +164,14 @@
 			path = Service;
 			sourceTree = "<group>";
 		};
+		28475FA622B82E670094C726 /* Response */ = {
+			isa = PBXGroup;
+			children = (
+				28475FA722B82E790094C726 /* ActivityByTagResponse.swift */,
+			);
+			path = Response;
+			sourceTree = "<group>";
+		};
 		284E39622215C67C0048D44C = {
 			isa = PBXGroup;
 			children = (
@@ -187,6 +197,7 @@
 		284E396D2215C67C0048D44C /* Away */ = {
 			isa = PBXGroup;
 			children = (
+				28475FA622B82E670094C726 /* Response */,
 				28475F8622AEA96F0094C726 /* Service */,
 				28D992D72297DE8D00ACE00C /* Model */,
 				28D992D32294266700ACE00C /* CustomCells */,
@@ -242,7 +253,7 @@
 				2898663C228F417F00CE97E8 /* UserProfileViewController.swift */,
 				28986642228F435A00CE97E8 /* ChangeCitiesViewController.swift */,
 				28986644228F442100CE97E8 /* LoginViewController.swift */,
-				28986640228F42E500CE97E8 /* AddActivityViewController.swift */,
+				28986640228F42E500CE97E8 /* CreateEventViewController.swift */,
 				2898663E228F42A300CE97E8 /* TagScreenViewController.swift */,
 				28986634228DA5C300CE97E8 /* HomeViewController.swift */,
 				28D992D42296AF3A00ACE00C /* ActivityDetailsController.swift */,
@@ -444,10 +455,12 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Away/Pods-Away-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/KeychainAccess/KeychainAccess.framework",
+				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainAccess.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -534,6 +547,7 @@
 				28475F9322B0616E0094C726 /* TagManagementController.swift in Sources */,
 				28475F9522B18F780094C726 /* LoginService.swift in Sources */,
 				28475F9122AFB1F10094C726 /* EventDetailsController.swift in Sources */,
+				28475FA822B82E790094C726 /* ActivityByTagResponse.swift in Sources */,
 				2898663D228F417F00CE97E8 /* UserProfileViewController.swift in Sources */,
 				28D992D92297FF7D00ACE00C /* SubscribeLauncherController.swift in Sources */,
 				28475F9922B252E80094C726 /* KeyboardUtils.swift in Sources */,
@@ -543,7 +557,7 @@
 				28475F8522ADD2810094C726 /* CustomTagCell.swift in Sources */,
 				28475F8D22AF99330094C726 /* ListActivityByTagController.swift in Sources */,
 				28475F9722B1A8070094C726 /* ErrorType.swift in Sources */,
-				28986641228F42E500CE97E8 /* AddActivityViewController.swift in Sources */,
+				28986641228F42E500CE97E8 /* CreateEventViewController.swift in Sources */,
 				28475F8922AEA9EC0094C726 /* ActivityService.swift in Sources */,
 				28475FA522B6B95F0094C726 /* Token.swift in Sources */,
 				28475F9F22B2EE2E0094C726 /* TagService.swift in Sources */,

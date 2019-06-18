@@ -19,18 +19,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+//        let window = UIWindow(frame: UIScreen.main.bounds)
+//        window.backgroundColor = .white
+//        let navigationController = UINavigationController(rootViewController:LoginViewController())
+//
+//        window.rootViewController = navigationController
+//        UINavigationBar.appearance().barTintColor = UIColor(named: "AppPeach")
         
         App.keychain = Keychain(server: Bundle.main.bundleIdentifier!, protocolType: .https)
         
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.backgroundColor = #colorLiteral(red: 0.9960784314, green: 0.9960784314, blue: 0.9960784314, alpha: 1)
-        
+        UINavigationBar.appearance().barTintColor = UIColor(named: "AppPeach")
+
         if App.keychain!["token"] != nil {
             // Show home page
-            let homeViewController = HomeViewController()
-            self.window?.rootViewController = homeViewController
-            homeViewController.navigationController!.isNavigationBarHidden = true
-            UINavigationBar.appearance().barTintColor = UIColor(named: "AppPeach")
+            let navigationController = UINavigationController(rootViewController:HomeViewController())
+            self.window?.rootViewController = navigationController
+            navigationController.isNavigationBarHidden = true
+            let tabBar = TabBar();
+            tabBar.createTabBar();
             
         } else {
             let loginViewController = LoginViewController()
@@ -65,5 +73,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 
+}
+extension UIApplication {
+    public static func setRootView(_ viewController: UIViewController) {
+        UIApplication.shared.keyWindow?.rootViewController = viewController
+    }
 }
 

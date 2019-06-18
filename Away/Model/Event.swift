@@ -9,8 +9,10 @@
 import Foundation
 
 struct Event : Codable {
-    let activity: Activity
+    let activityName: String
+    let activityId: Int
     let date: Date
     let time: TimeInterval
+    let description: String
     let owner: User
 }

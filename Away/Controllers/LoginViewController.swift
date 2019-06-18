@@ -14,7 +14,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     let logoImageView: UIImageView = {
         let logo = UIImageView()
         logo.translatesAutoresizingMaskIntoConstraints = false
-
         logo.image = UIImage(named: "logo")
         return logo
     }()
@@ -34,7 +33,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     let passwordTextField: UITextField = {
         let password = UITextField()
         password.translatesAutoresizingMaskIntoConstraints = false
-        
         password.backgroundColor = UIColor(named: "AppLightGrey")
         password.placeholder = "Password"
         return password
@@ -72,7 +70,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         stackView.axis = UILayoutConstraintAxis.vertical
         stackView.distribution = .equalSpacing
         stackView.alignment = .center
-        stackView.spacing = 30
+        stackView.spacing = 15
         stackView.translatesAutoresizingMaskIntoConstraints = false;
         return stackView
     }()
@@ -139,17 +137,22 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
     }
     @objc func loginButtonClicked() {
-        loginService.signIn{ response , error in
+        print("login", loginTextField.text!)
+        print("password ",passwordTextField.text!)
+        loginService.signIn(mail: loginTextField.text!, password: passwordTextField.text!, completion: { response , error in
             if error != nil {
                 print ("login error:", error!)
             } else {
+                print(response)
                 try! App.keychain?.set(response, key: "token")
                 self.navigationController?.pushViewController(HomeViewController(), animated: true)
-                let tabBar = TabBar();
-                tabBar.createTabBar();
+                DispatchQueue.main.async{
+                    let tabBar = TabBar();
+                    tabBar.createTabBar();
+                }
             }
             
-        }
+        })
         
     }
     

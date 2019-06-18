@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class AddActivityViewController: UIViewController {
+class CreateEventViewController: UIViewController {
     
     let stackView: UIStackView = {
         let sv = UIStackView()
@@ -25,12 +25,10 @@ class AddActivityViewController: UIViewController {
         let button = UIBarButtonItem(image: planetImageView.image, style: .plain, target: self, action: #selector(getInfos(_:)))
         navigationItem.rightBarButtonItem = button
         navigationItem.rightBarButtonItem?.tintColor = .white
-        
-        
+        view.backgroundColor = .white
         
     }
     @objc func getInfos(_ sender: UIButton) {
         self.navigationController?.pushViewController(ChangeCitiesViewController(), animated: true)
-        print("pays")
     }
 }

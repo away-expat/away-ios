@@ -19,6 +19,9 @@ class ActivityDetailsController: UIViewController {
         let button = UIBarButtonItem(image: planetImageView.image, style: .plain, target: self, action: #selector(changeCities(_:)))
         navigationItem.rightBarButtonItem = button
         navigationItem.rightBarButtonItem?.tintColor = .white
+        
+        
+        
     }
     @objc func changeCities(_ sender: UIButton) {
         self.navigationController?.pushViewController(ChangeCitiesViewController(), animated: true)

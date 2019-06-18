@@ -8,11 +8,9 @@
 
 import UIKit
 
-class CustomCountryCell: UICollectionViewCell {
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
+class CustomCityCell: UITableViewCell {
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         addViews()
     }
     

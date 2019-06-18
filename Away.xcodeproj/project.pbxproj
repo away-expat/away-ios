@@ -34,7 +34,7 @@
 		284E39842215C67C0048D44C /* AwayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284E39832215C67C0048D44C /* AwayTests.swift */; };
 		284E398F2215C67C0048D44C /* AwayUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284E398E2215C67C0048D44C /* AwayUITests.swift */; };
 		287C3CBB22871F1300406834 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287C3CBA22871F1300406834 /* TabBar.swift */; };
-		2898663222887AB300CE97E8 /* CustomCountryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2898663022887AB300CE97E8 /* CustomCountryCell.swift */; };
+		2898663222887AB300CE97E8 /* CustomCityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2898663022887AB300CE97E8 /* CustomCityCell.swift */; };
 		28986635228DA5C300CE97E8 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28986634228DA5C300CE97E8 /* HomeViewController.swift */; };
 		2898663A228DAE3300CE97E8 /* CustomActivityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28986639228DAE3300CE97E8 /* CustomActivityCell.swift */; };
 		2898663D228F417F00CE97E8 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2898663C228F417F00CE97E8 /* UserProfileViewController.swift */; };
@@ -101,7 +101,7 @@
 		284E398E2215C67C0048D44C /* AwayUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwayUITests.swift; sourceTree = "<group>"; };
 		284E39902215C67C0048D44C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		287C3CBA22871F1300406834 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
-		2898663022887AB300CE97E8 /* CustomCountryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCountryCell.swift; sourceTree = "<group>"; };
+		2898663022887AB300CE97E8 /* CustomCityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCityCell.swift; sourceTree = "<group>"; };
 		28986634228DA5C300CE97E8 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		28986639228DAE3300CE97E8 /* CustomActivityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomActivityCell.swift; sourceTree = "<group>"; };
 		2898663C228F417F00CE97E8 /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
@@ -271,7 +271,7 @@
 			isa = PBXGroup;
 			children = (
 				28986639228DAE3300CE97E8 /* CustomActivityCell.swift */,
-				2898663022887AB300CE97E8 /* CustomCountryCell.swift */,
+				2898663022887AB300CE97E8 /* CustomCityCell.swift */,
 				28475F8422ADD2810094C726 /* CustomTagCell.swift */,
 				28475F8E22AFA2BA0094C726 /* CustomEventCell.swift */,
 			);
@@ -573,7 +573,7 @@
 				28D992DB22A4818100ACE00C /* ConvenientInformationController.swift in Sources */,
 				28986643228F435A00CE97E8 /* ChangeCitiesViewController.swift in Sources */,
 				28D992D52296AF3A00ACE00C /* ActivityDetailsController.swift in Sources */,
-				2898663222887AB300CE97E8 /* CustomCountryCell.swift in Sources */,
+				2898663222887AB300CE97E8 /* CustomCityCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

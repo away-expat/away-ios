@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 
 class CustomEventCell: UITableViewCell {
-   // private let connectedUser = User()
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()

@@ -18,16 +18,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static var keychain: Keychain?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-//        let window = UIWindow(frame: UIScreen.main.bounds)
-//        window.backgroundColor = .white
-//        let navigationController = UINavigationController(rootViewController:LoginViewController())
-//
-//        window.rootViewController = navigationController
-//        UINavigationBar.appearance().barTintColor = UIColor(named: "AppPeach")
-        
+
         App.keychain = Keychain(server: Bundle.main.bundleIdentifier!, protocolType: .https)
-        
+
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.backgroundColor = #colorLiteral(red: 0.9960784314, green: 0.9960784314, blue: 0.9960784314, alpha: 1)
         UINavigationBar.appearance().barTintColor = UIColor(named: "AppPeach")

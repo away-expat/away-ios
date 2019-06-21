@@ -10,8 +10,12 @@ import Foundation
 
 struct User: Codable{
     
-    let firstname: String
-    let lastname: String
-    let fromCountry: String
-    let visitedCity: City
+    let id: Int
+    var firstname: String
+    var lastname: String
+    var mail: String
+    var country: String
+    var birth: String
+    var token: String
+    var at: City
 }

@@ -41,9 +41,9 @@ class ActivityService {
 //        }.resume()
 //    }
     
-    func getActivitiesByTag(token: String, city:City, tag: Tag, completion: @escaping ([Activity], ErrorType?) -> ()) {
+    func getActivitiesByTag(token: String, city:String, tag: Tag, completion: @escaping ([Activity], ErrorType?) -> ()) {
         
-        let urlString = Constants.ACTIVITIES_BY_TAG_ROUTE_GOOGLE+city.name+"/"+tag.name
+        let urlString = Constants.ACTIVITIES_BY_TAG_ROUTE_GOOGLE+city+"/"+tag.name
         let urlComponent = URLComponents(string: urlString)
         if urlComponent == nil { completion([], ErrorType.badUrl) }
         

@@ -10,12 +10,20 @@ import Foundation
 import UIKit
 
 class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource {
-  
+    let cityService = CityService()
+    var cityDelegate: ChangeCitiesDelegate?
     
-   
+    let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
     let searchBar: UISearchBar = {
         let sb = UISearchBar()
+        if let textfield = sb.value(forKey: "searchField") as? UITextField {
+            textfield.backgroundColor = UIColor(named: "AppLightGrey")
+            textfield.attributedPlaceholder = NSAttributedString(string: "Rechercher une ville", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
+        }
+        sb.layer.cornerRadius = 20
         sb.translatesAutoresizingMaskIntoConstraints = false
+        sb.barTintColor = .white
+        sb.backgroundImage = UIImage()
         return sb
     }()
     
@@ -30,25 +38,33 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
 
 
     var searchActive : Bool = false
-    var data = ["San Francisco","New York","San Jose","Chicago","Los Angeles","Austin","Seattle"]
-    var filtered:[String] = []
+    var cities : [City] = []
+    var filtered:[City] = []
     let cityCellIdentifier = "cityCellId"
 
     func setupViews() {
-        
         view.addSubview(searchBar)
-        view.addSubview(tableView)
         searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         searchBar.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         
+        view.addSubview(tableView)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.separatorStyle = UITableViewCellSeparatorStyle.none
         tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        view.addSubview(indicator)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        indicator.startAnimating()
+        indicator.hidesWhenStopped = true
 
+        
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,6 +75,7 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
         tableView.delegate = self
         tableView.dataSource = self
         searchBar.delegate = self
+        
         tableView.register(CustomCityCell.self, forCellReuseIdentifier: cityCellIdentifier)
 
     }
@@ -67,6 +84,7 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchActive = true;
+        
     }
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
@@ -82,9 +100,25 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
-        filtered = data.filter({ (text) -> Bool in
-            let tmp: NSString = text as NSString
+        if searchText.count > 2 {
+            indicator.startAnimating()
+            indicator.hidesWhenStopped = true
+            cityService.getCities(search: searchText, completion: { response , error in
+                if error != nil {
+                    print ("change cities error:", error!)
+                } else {
+                    self.cities = response
+                    
+                    DispatchQueue.main.async{
+                        self.tableView.reloadData()
+                        self.indicator.stopAnimating()
+                    }
+                }
+                
+            })
+        }
+        filtered = cities.filter({ (city) -> Bool in
+            let tmp: NSString = city.name as NSString
             let range = tmp.range(of: searchText, options: NSString.CompareOptions.caseInsensitive)
             return range.location != NSNotFound
         })
@@ -93,7 +127,6 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
         } else {
             searchActive = true;
         }
-        self.tableView.reloadData()
     }
     
     override func didReceiveMemoryWarning() {
@@ -110,18 +143,37 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
         if(searchActive) {
             return filtered.count
         }
-        return data.count;
+        return cities.count;
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cityCellIdentifier) as! CustomCityCell;
         if(searchActive){
-            cell.textLabel?.text = filtered[indexPath.row]
+            cell.textLabel?.text = filtered[indexPath.row].name + " " + cities[indexPath.row].country
         } else {
-            cell.textLabel?.text = data[indexPath.row];
+            cell.textLabel?.text = cities[indexPath.row].name + " " + cities[indexPath.row].country
         }
         
         return cell;
     }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("selected cell \(indexPath.row)")
+        if searchActive {
+            getCityNameInSearchBar(city: filtered[indexPath.row])
+            print("", filtered[indexPath.row])
+        } else {
+            print("", cities[indexPath.row])
+            getCityNameInSearchBar(city: cities[indexPath.row])
+        }
+        
+    }
+    func getCityNameInSearchBar(city: City) {
+        searchBar.text = city.name
+        cityDelegate?.onCitiesChanged(city: city)
+        dismiss(animated: true, completion: nil)
+    }
+}
 
+protocol ChangeCitiesDelegate {
+    func onCitiesChanged(city: City)
 }
 

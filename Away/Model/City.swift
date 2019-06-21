@@ -9,5 +9,9 @@
 import Foundation
 
 struct City : Codable{
-    let name: String
+    var id: Int
+    var name: String
+    var country: String
+    var place_id: String
+    var location: String
 }

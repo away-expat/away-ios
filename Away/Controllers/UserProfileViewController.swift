@@ -8,33 +8,25 @@
 
 import Foundation
 import UIKit
+import KeychainAccess
 
-class UserProfileViewController: UIViewController {
+class UserProfileViewController: UIViewController, ChangeCitiesDelegate {
+ 
     let topView = UIView()
     let bottomView = UIView()
+    var user : User?
+    let userService = UserService()
+    static var keychain: Keychain?
+    let token = App.keychain!["token"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.isTranslucent = false
-        navigationItem.title = "Japan"
-        let planetIcon = UIImage(named: "earth")
-        let planetImageView = UIImageView()
-        planetImageView.image = planetIcon?.withAlignmentRectInsets(UIEdgeInsets(top: 0, left: 0, bottom: -7, right: 0))
-        let button = UIBarButtonItem(image: planetImageView.image, style: .plain, target: self, action: #selector(changeCities(_:)))
-        navigationItem.rightBarButtonItem = button
-        navigationItem.rightBarButtonItem?.tintColor = .white
-        
-        view.addSubview(topView)
-        view.addSubview(bottomView)
-        topView.backgroundColor = .white
-        bottomView.backgroundColor = UIColor(named: "AppLightGrey")
-        buildTopView(topView: topView)
-        setupConstraints()
-        
+        getConnectedUser()
+    
     }
     @objc func changeCities(_ sender: UIButton) {
-        self.navigationController?.pushViewController(ChangeCitiesViewController(), animated: true)
-        print("pays")
+        present(ChangeCitiesViewController(), animated: true)
+        navigationItem.title = user?.at.name
     }
     func setupConstraints() {
        let topTopView = NSLayoutConstraint(item: topView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: 0)
@@ -89,11 +81,19 @@ class UserProfileViewController: UIViewController {
             return label
         }()
         
-        let descriptionLabel: UITextView = {
+        let birthday: UITextView = {
             let textView = UITextView()
             textView.translatesAutoresizingMaskIntoConstraints = false
             textView.font = UIFont.boldSystemFont(ofSize: 14)
-            textView.text = "je suis contente de faire de l'ios omg cest trop bien "
+            textView.text = "15/08/1992"
+            textView.isEditable = false
+            return textView
+        }()
+        let country: UITextView = {
+            let textView = UITextView()
+            textView.translatesAutoresizingMaskIntoConstraints = false
+            textView.font = UIFont.boldSystemFont(ofSize: 14)
+            textView.text = "France"
             textView.isEditable = false
             return textView
         }()
@@ -144,14 +144,15 @@ class UserProfileViewController: UIViewController {
         topViewStackView.addArrangedSubview(userNameDescriptionStackView)
         topViewStackView.addArrangedSubview(avatarImageView)
         userNameDescriptionStackView.addArrangedSubview(userNameLabel)
-        userNameDescriptionStackView.addArrangedSubview(descriptionLabel)
+        userNameDescriptionStackView.addArrangedSubview(birthday)
+        userNameDescriptionStackView.addArrangedSubview(country)
         userNameDescriptionStackView.addArrangedSubview(buttonView)
         buttonView.addSubview(userSettingsButton)
         buttonView.addSubview(tagButton)
         buttonView.addSubview(logOutButton)
-        descriptionLabel.widthAnchor.constraint(equalTo: userNameDescriptionStackView.widthAnchor).isActive = true
-        descriptionLabel.delegate = self
-        descriptionLabel.isScrollEnabled = false
+        birthday.widthAnchor.constraint(equalTo: userNameDescriptionStackView.widthAnchor).isActive = true
+        
+        
         topViewStackView.topAnchor.constraint(equalTo: topView.topAnchor).isActive = true
         topViewStackView.leadingAnchor.constraint(equalTo: topView.leadingAnchor, constant: 8).isActive = true
         topViewStackView.trailingAnchor.constraint(equalTo: topView.trailingAnchor, constant: -8).isActive = true
@@ -177,6 +178,47 @@ class UserProfileViewController: UIViewController {
     @objc func signOutButtonClicked() {
         try! App.keychain?.remove("token")
       UIApplication.setRootView(LoginViewController())
+    }
+    
+    func getConnectedUser() {
+        userService.getConnectedUser(token: token!, completion: { response , error in
+            if error != nil {
+                print ("homeviewcontroller get user error:", error!)
+            } else {
+                self.user = response
+                DispatchQueue.main.async{
+                    self.setupViews()
+                }
+            }
+            
+        })
+    }
+    func onCitiesChanged(city: City) {
+        navigationItem.title = city.name
+        self.user!.at = city
+    }
+    @objc func chooseCityToVisitButtonClicked() {
+        let changeCitiesViewController = ChangeCitiesViewController()
+        changeCitiesViewController.cityDelegate = self
+        present(changeCitiesViewController, animated: true)
+    }
+    
+    func setupViews() {
+        navigationController?.navigationBar.isTranslucent = false
+        navigationItem.title = self.user?.at.name
+        let planetIcon = UIImage(named: "earth")
+        let planetImageView = UIImageView()
+        planetImageView.image = planetIcon?.withAlignmentRectInsets(UIEdgeInsets(top: 0, left: 0, bottom: -7, right: 0))
+        let button = UIBarButtonItem(image: planetImageView.image, style: .plain, target: self, action: #selector(changeCities(_:)))
+        navigationItem.rightBarButtonItem = button
+        navigationItem.rightBarButtonItem?.tintColor = .white
+        
+        view.addSubview(topView)
+        view.addSubview(bottomView)
+        topView.backgroundColor = .white
+        bottomView.backgroundColor = UIColor(named: "AppLightGrey")
+        buildTopView(topView: topView)
+        setupConstraints()
     }
 }
 

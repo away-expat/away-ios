@@ -1,22 +1,23 @@
 //
-//  CityService.swift
+//  UserService.swift
 //  Away
 //
-//  Created by Candice Guitton on 13/06/2019.
+//  Created by Candice Guitton on 19/06/2019.
 //  Copyright © 2019 Candice Guitton. All rights reserved.
 //
 import UIKit
-class CityService {
+class UserService {
     
-    func getCities(search: String, completion: @escaping ([City], ErrorType?) -> ()) {
+    func getConnectedUser(token: String, completion: @escaping (User?, ErrorType?) -> ()) {
         
-        let urlString = Constants.CITIES_ROUTE + "/" + search
-        let urlComponent = URLComponents(string: urlString)
-        if urlComponent == nil { completion([], ErrorType.badUrl) }
+        let urlString = Constants.GET_CONNECTED_USER
+        let url = URL(string: urlString)
+        if url == nil { completion(nil, ErrorType.badUrl) }
+        var request = URLRequest(url: url!)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let token = token
+        request.setValue(token, forHTTPHeaderField: "Authorization")
         
-        guard let url = urlComponent?.url else { return }
-        let request = URLRequest(url: url)
-        print(request)
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             
             guard let data = data else {return}
@@ -24,16 +25,16 @@ class CityService {
             if let httpResponse = response as? HTTPURLResponse {
                 print("error \(httpResponse.statusCode)")
                 if (httpResponse.statusCode == 401) {
-                    completion([], ErrorType.unauthorized)
+                    completion(nil, ErrorType.unauthorized)
                 }
             }
             
             do {
                 let decoder = JSONDecoder()
-                let response = try decoder.decode([City].self, from: data)
+                let response = try decoder.decode(User.self, from: data)
                 completion(response, nil)
             } catch let errorJson {
-                completion([], ErrorType.serverError)
+                completion(nil, ErrorType.serverError)
                 print(errorJson)
                 return
             }

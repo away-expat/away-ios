@@ -8,7 +8,9 @@
 
 import UIKit
 
-class SubscribeLauncherController: UIViewController, UITextFieldDelegate {
+class SubscribeLauncherController: UIViewController, UITextFieldDelegate, ChangeCitiesDelegate {
+   
+    
     let loginService = LoginService()
     let stackView: UIStackView = {
         let sv = UIStackView()
@@ -134,7 +136,8 @@ class SubscribeLauncherController: UIViewController, UITextFieldDelegate {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
+    var city: City?
+
 
     override func viewDidLoad() {
         view.backgroundColor = .white
@@ -166,7 +169,7 @@ class SubscribeLauncherController: UIViewController, UITextFieldDelegate {
         firstNameTextField.delegate = self
         countryTextField.delegate = self
         birthday.delegate = self
-
+        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
@@ -206,17 +209,24 @@ class SubscribeLauncherController: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
         
     }
-    @objc func chooseCityToVisitButtonClicked() {
-        present(ChangeCitiesViewController(), animated: true)
+    func onCitiesChanged(city: City) {
+        chooseCityToVisitButton.setTitle(city.name, for: .normal)
     }
+    @objc func chooseCityToVisitButtonClicked() {
+        let changeCitiesViewController = ChangeCitiesViewController()
+        changeCitiesViewController.cityDelegate = self
+        present(changeCitiesViewController, animated: true)
+    }
+    
     @objc func signUpButtonClicked() {
         self.navigationController?.pushViewController(HomeViewController(), animated: true)
-        loginService.signUp(firstname: firstNameTextField.text!, lastname: lastNameTextField.text!, mail: emailTextField.text!, password: passwordTextField.text!, birth: birthday.text!, country: countryTextField.text!, idCity: 151, completion: { response , error in
+        loginService.signUp(firstname: firstNameTextField.text!, lastname: lastNameTextField.text!, mail: emailTextField.text!, password: passwordTextField.text!, birth: birthday.text!, country: countryTextField.text!, idCity: city!.id, completion: { response , error in
             if error != nil {
                 print ("login error:", error!)
             } else {
                 try! App.keychain?.set(response, key: "token")
                 self.navigationController?.pushViewController(HomeViewController(), animated: true)
+                
                 DispatchQueue.main.async{
                     let tabBar = TabBar();
                     tabBar.createTabBar();

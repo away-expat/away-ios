@@ -9,14 +9,62 @@
 import Foundation
 import UIKit
 import Kingfisher
+import KeychainAccess
+
 class ListActivityByTagController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var activities: [Activity] = []
     let activityService = ActivityService()
     let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
     let tableView = UITableView()
-    var tag : Tag = Tag(name: "bar")
+    var tag : Tag = Tag(id: 1, name: "bar")
+    var user : User?
+    let userService = UserService()
+    static var keychain: Keychain?
+    let token = App.keychain!["token"]
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        getConnectedUser()
+    }
+    @objc func changeCity(_ sender: UIButton) {
+        self.navigationController?.pushViewController(ChangeCitiesViewController(), animated: true)
+        print("pays")
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! CustomActivityCell
+        cell.label.text = activities[indexPath.row].name
+        let url = URL(string: activities[indexPath.row].photos!)
+        cell.cardImage.kf.setImage(with: url)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return activities.count
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 160.0
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+       //get event from activity you just clicked on
+        print("selected cell \(indexPath.row)")
+    }
+
+    func getConnectedUser() {
+        userService.getConnectedUser(token: token!, completion: { response , error in
+            if error != nil {
+                print ("listTag get user error:", error!)
+            } else {
+                self.user = response
+                self.setupViews()
+            }
+
+        })
+    }
+    
+    func setupViews() {
+        
         view.backgroundColor = .white
         navigationItem.title = "Tokyo"
         let planetIcon = UIImage(named: "earth")
@@ -47,12 +95,11 @@ class ListActivityByTagController: UIViewController, UITableViewDelegate, UITabl
         
         indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        
         indicator.startAnimating()
         indicator.hidesWhenStopped = true
-        let city = City(name: "Paris")
-        let token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtYWlsIjoiYXplckBnbWFpbC5jb20iLCJwYXNzd29yZCI6ImF6ZXJ0eXVpb3AifQ.RfadKZR1WslusWcqQ5cuBvOs1eir7pAJnsUJ_0HnVBQ"
-        
-        activityService.getActivitiesByTag(token: token, city: city, tag: tag, completion :{ response , error in
+        let city = user?.at.name
+        activityService.getActivitiesByTag(token: token!, city: city!, tag: tag, completion :{ response , error in
             if error != nil {
                 print ("listActivityByTag error:", error!)
             } else {
@@ -65,31 +112,7 @@ class ListActivityByTagController: UIViewController, UITableViewDelegate, UITabl
             }
             
         })
-       
-    }
-    @objc func changeCity(_ sender: UIButton) {
-        self.navigationController?.pushViewController(ChangeCitiesViewController(), animated: true)
-        print("pays")
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! CustomActivityCell
-        cell.label.text = activities[indexPath.row].name
-        let url = URL(string: activities[indexPath.row].photos!)
-        cell.cardImage.kf.setImage(with: url)
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return activities.count
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 160.0
-    }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-       //get event from activity you just clicked on
-        print("selected cell \(indexPath.row)")
+        
     }
 }
 

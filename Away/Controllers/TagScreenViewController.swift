@@ -8,12 +8,16 @@
 
 import Foundation
 import UIKit
+import KeychainAccess
 
-class TagScreenViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate, UICollectionViewDelegateFlowLayout {
+class TagScreenViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate, UICollectionViewDelegateFlowLayout, ChangeCitiesDelegate {
     var tags: [Tag] = []
     let tagService = TagService()
     let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
-
+    var user : User?
+    let userService = UserService()
+    static var keychain: Keychain?
+    let token = App.keychain!["token"]
     let searchTagView: UIView = {
        let view = UIView()
         view.backgroundColor = .blue
@@ -39,19 +43,37 @@ class TagScreenViewController: UIViewController, UICollectionViewDataSource, UIC
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        getConnectedUser()
+        
+        
+    }
+    
+    func getConnectedUser() {
+        userService.getConnectedUser(token: token!, completion: { response , error in
+            if error != nil {
+                print ("homeviewcontroller get user error:", error!)
+            } else {
+                self.user = response
+                DispatchQueue.main.async{
+                    self.setupViews()
+                }
+            }
+            
+        })
+    }
+    func setupViews() {
         navigationController?.navigationBar.isTranslucent = false
-        navigationItem.title = "Japan"
         let planetIcon = UIImage(named: "earth")
         let planetImageView = UIImageView()
         planetImageView.image = planetIcon?.withAlignmentRectInsets(UIEdgeInsets(top: 0, left: 0, bottom: -7, right: 0))
-        let button = UIBarButtonItem(image: planetImageView.image, style: .plain, target: self, action: #selector(changeCities(_:)))
+        let button = UIBarButtonItem(image: planetImageView.image, style: .plain, target: self, action: #selector(chooseCityToVisitButtonClicked))
         navigationItem.rightBarButtonItem = button
         navigationItem.rightBarButtonItem?.tintColor = .white
         
         view.addSubview(searchTagView)
         view.addSubview(tagCollectionView)
         view.addSubview(indicator)
-
+        
         searchTagView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         searchTagView.bottomAnchor.constraint(equalTo: tagCollectionView.topAnchor).isActive = true
         searchTagView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
@@ -74,7 +96,7 @@ class TagScreenViewController: UIViewController, UICollectionViewDataSource, UIC
         
         tagCollectionView.register(CustomTagCell.self, forCellWithReuseIdentifier: tagCellIdentifier)
         indicator.translatesAutoresizingMaskIntoConstraints = false
-
+        
         tagCollectionView.translatesAutoresizingMaskIntoConstraints = false
         tagCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         tagCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
@@ -97,17 +119,19 @@ class TagScreenViewController: UIViewController, UICollectionViewDataSource, UIC
             }
             
         }
-        
     }
-    @objc func changeCities(_ sender: UIButton) {
-        self.navigationController?.pushViewController(ChangeCitiesViewController(), animated: true)
-        print("pays")
+    func onCitiesChanged(city: City) {
+        navigationItem.title = city.name
+    }
+    @objc func chooseCityToVisitButtonClicked() {
+        let changeCitiesViewController = ChangeCitiesViewController()
+        changeCitiesViewController.cityDelegate = self
+        present(changeCitiesViewController, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return tags.count
     }
-    
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: tagCellIdentifier, for: indexPath) as! CustomTagCell

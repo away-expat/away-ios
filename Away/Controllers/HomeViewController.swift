@@ -9,8 +9,6 @@
 import UIKit
 import KeychainAccess
 class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ChangeCitiesDelegate {
-    
-    
     var user : User?
     let userService = UserService()
     var events: [Event] = []
@@ -19,6 +17,13 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     let tableView = UITableView()
     let cityLabel : UILabel = {
         let label = UILabel()
+        return label
+    }()
+    
+    let emptyEventList : UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Aucun évènement"
         return label
     }()
     static var keychain: Keychain?
@@ -30,7 +35,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
 
      func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! CustomActivityCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! CustomEventCell
         cell.label.text = events[indexPath.row].activityName
         return cell
     }
@@ -82,13 +87,15 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         view.addSubview(tableView)
         view.addSubview(indicator)
-        
+        view.addSubview(emptyEventList)
         tableView.delegate = self
         tableView.dataSource = self
         
+        emptyEventList.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        emptyEventList.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         
         tableView.separatorStyle = UITableViewCellSeparatorStyle.none
-        tableView.register(CustomActivityCell.self, forCellReuseIdentifier: "cellId")
+        tableView.register(CustomEventCell.self, forCellReuseIdentifier: "cellId")
         
         indicator.translatesAutoresizingMaskIntoConstraints = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -111,6 +118,12 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 self.events = response
                 
                 DispatchQueue.main.async{
+                    if self.events.isEmpty {
+                        self.emptyEventList.isHidden = false
+                        self.indicator.stopAnimating()
+                    } else {
+                        self.emptyEventList.isHidden = true
+                    }
                     self.tableView.reloadData()
                     self.indicator.stopAnimating()
                 }

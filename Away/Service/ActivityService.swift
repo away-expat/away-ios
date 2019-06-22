@@ -103,8 +103,8 @@ class ActivityService {
             
             do {
                 let decoder = JSONDecoder()
-                let response = try decoder.decode([Event].self, from: data)
-                completion(response, nil)
+                let response = try decoder.decode(SuggestionEventsReponse.self, from: data)
+                completion(response.results, nil)
             } catch let errorJson {
                 completion([], ErrorType.serverError)
                 print(errorJson)

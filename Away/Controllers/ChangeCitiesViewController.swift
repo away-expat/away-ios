@@ -20,6 +20,7 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
             textfield.backgroundColor = UIColor(named: "AppLightGrey")
             textfield.attributedPlaceholder = NSAttributedString(string: "Rechercher une ville", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
         }
+        sb.setValue("Annuler", forKey: "cancelButtonText")
         sb.layer.cornerRadius = 20
         sb.translatesAutoresizingMaskIntoConstraints = false
         sb.barTintColor = .white
@@ -33,7 +34,12 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
         l.itemSize = CGSize(width: 100, height: 80)
         return l
     }()
-    
+    let emptyList : UILabel = {
+        let label = UILabel()
+        label.text = "Choisissez une ville à visiter"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     let tableView = UITableView()
 
 
@@ -48,6 +54,7 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
         searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         searchBar.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        searchBar.setShowsCancelButton(true, animated: true)
         
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -61,9 +68,10 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
         indicator.translatesAutoresizingMaskIntoConstraints = false
         indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        indicator.startAnimating()
-        indicator.hidesWhenStopped = true
-
+        view.addSubview(emptyList)
+        emptyList.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        emptyList.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        
         
     }
     override func viewDidLoad() {
@@ -79,8 +87,6 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
         tableView.register(CustomCityCell.self, forCellReuseIdentifier: cityCellIdentifier)
 
     }
-  
-  
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchActive = true;
@@ -93,6 +99,7 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchActive = false;
+        dismissView()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -110,6 +117,12 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
                     self.cities = response
                     
                     DispatchQueue.main.async{
+                        if self.cities.isEmpty {
+                            self.emptyList.isHidden = false
+                        } else {
+                            self.emptyList.isHidden = true
+
+                        }
                         self.tableView.reloadData()
                         self.indicator.stopAnimating()
                     }
@@ -169,7 +182,11 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
     func getCityNameInSearchBar(city: City) {
         searchBar.text = city.name
         cityDelegate?.onCitiesChanged(city: city)
+        dismissView()
+    }
+    @objc func dismissView() {
         dismiss(animated: true, completion: nil)
+        
     }
 }
 

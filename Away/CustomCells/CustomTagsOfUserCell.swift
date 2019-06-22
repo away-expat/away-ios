@@ -24,29 +24,42 @@ class CustomTagsOfUserCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
-        label.font = UIFont(name: "AppleSDGothicNeo-Thin", size: 8.0)
+        label.font = UIFont(name: "Arial", size: 13.0)
         label.sizeToFit()
-        return label;
+        return label
     }()
     
     let cellView: UIView = {
         let cellView = UIView()
         cellView.translatesAutoresizingMaskIntoConstraints = false
         cellView.backgroundColor = UIColor(named: "AppPeach")
+        cellView.layer.cornerRadius = 5
         return cellView
     }()
+
+    let dislikeButton :UIButton = {
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 5, height: 5))
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(named: "delete"), for: .normal)
+        return button
+    }()
     
-    func addViews() {
+    
+     func addViews() {
         contentView.addSubview(cellView)
         cellView.addSubview(label)
+        cellView.addSubview(dislikeButton)
         cellView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
         cellView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
         cellView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
         cellView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
         
-        label.centerXAnchor.constraint(equalTo: cellView.centerXAnchor, constant: 0).isActive = true
-        label.centerYAnchor.constraint(equalTo: cellView.centerYAnchor, constant: 0).isActive = true
-        
+        label.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
+        label.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 5).isActive = true
+        label.trailingAnchor.constraint(equalTo: dislikeButton.leadingAnchor).isActive = true
+        dislikeButton.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -5).isActive = true
+        dislikeButton.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
+
     }
-    
+   
 }

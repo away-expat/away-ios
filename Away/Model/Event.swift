@@ -9,10 +9,13 @@
 import Foundation
 
 struct Event : Codable {
+    let id: Int
+    let title: String
     let activityName: String
     let activityId: Int
-    let date: Date
-    let time: TimeInterval
+    let date: String
+    let hour: String
     let description: String
     let owner: User
+    let photo: String
 }

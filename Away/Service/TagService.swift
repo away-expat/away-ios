@@ -142,38 +142,29 @@ class TagService {
             }.resume()
     }
 
-    func dislikeTag(token: String, id: Int, completion: @escaping (Tag?, ErrorType?) -> ()) {
+    func dislikeTag(token: String, id: Int, completion: @escaping (Bool ,ErrorType?) -> ()) {
         
         let urlString = Constants.DISLIKE_TAG + "/" + id.description
         let url = URL(string: urlString)
-        if url == nil { completion(nil, ErrorType.badUrl) }
+        if url == nil { completion(false, ErrorType.badUrl) }
         var request = URLRequest(url: url!)
-        request.httpMethod = "POST"
+        request.httpMethod = "DELETE"
         let token = token
         request.setValue(token, forHTTPHeaderField: "Authorization")
         print(request)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-            
-            guard let data = data else {return}
-            
+                        
             if let httpResponse = response as? HTTPURLResponse {
                 print("error \(httpResponse.statusCode)")
                 if (httpResponse.statusCode == 401) {
-                    completion(nil, ErrorType.unauthorized)
+                    completion(false, ErrorType.unauthorized)
+                }
+                if (httpResponse.statusCode == 200) {
+                    completion(true, nil)
                 }
             }
-            
-            do {
-                let decoder = JSONDecoder()
-                let response = try decoder.decode(Tag.self, from: data)
-                completion(response, nil)
-            } catch let errorJson {
-                completion(nil, ErrorType.serverError)
-                print(errorJson)
-                return
-            }
-            
+           
             }.resume()
     }
     

@@ -77,7 +77,7 @@ class SubscribeLauncherController: UIViewController, UITextFieldDelegate, Change
     let birthday: UITextField = {
         let birth = UITextField()
         birth.translatesAutoresizingMaskIntoConstraints = false
-        birth.placeholder = "JJ/MM/YY"
+        birth.placeholder = "YY/MM/DD"
         return birth
     }()
     
@@ -210,6 +210,7 @@ class SubscribeLauncherController: UIViewController, UITextFieldDelegate, Change
         
     }
     func onCitiesChanged(city: City) {
+        self.city = city
         chooseCityToVisitButton.setTitle(city.name, for: .normal)
     }
     @objc func chooseCityToVisitButtonClicked() {
@@ -219,26 +220,42 @@ class SubscribeLauncherController: UIViewController, UITextFieldDelegate, Change
     }
     
     @objc func signUpButtonClicked() {
-        self.navigationController?.pushViewController(HomeViewController(), animated: true)
+        
+        if firstNameTextField.text == nil{
+            print("phoque1")
+        }
+        if lastNameTextField.text == nil{
+            print("phoque2")
+        }
+        if emailTextField.text == nil{
+            print("phoque3")
+        }
+        if passwordTextField.text == nil{
+            print("phoque4")
+        }
+        if birthday.text == nil
+        {
+            print("phoque5")
+        }
+        if countryTextField.text == nil {
+            print("phoque6")
+        }
+        if city?.id == nil {
+            print("phoque7")
+        }
         loginService.signUp(firstname: firstNameTextField.text!, lastname: lastNameTextField.text!, mail: emailTextField.text!, password: passwordTextField.text!, birth: birthday.text!, country: countryTextField.text!, idCity: city!.id, completion: { response , error in
             if error != nil {
                 print ("login error:", error!)
             } else {
                 try! App.keychain?.set(response, key: "token")
-                self.navigationController?.pushViewController(HomeViewController(), animated: true)
-                
                 DispatchQueue.main.async{
-                    let tabBar = TabBar();
-                    tabBar.createTabBar();
+                    let tagManagementController = TagManagementController()
+                    tagManagementController.isSubscriberController = true
+                    self.present(tagManagementController, animated: true)
                 }
             }
             
         })
-        
-        
-        
-        let tabBar = TabBar();
-        tabBar.createTabBar();
         self.navigationController?.dismiss(animated: false, completion: nil)
 
     }

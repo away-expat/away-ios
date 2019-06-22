@@ -26,7 +26,7 @@ class CustomTagCell: UICollectionViewCell {
         label.textColor = .black
         label.font = UIFont(name: "AppleSDGothicNeo-Thin", size: 16.0)
         label.sizeToFit()
-        return label;
+        return label
     }()
     
     let cellView: UIView = {

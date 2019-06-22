@@ -25,12 +25,6 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
         sb.backgroundImage = UIImage()
         return sb
     }()
-    let layout: UICollectionViewFlowLayout = {
-        let l =  UICollectionViewFlowLayout()
-        l.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
-        l.itemSize = CGSize(width: 100, height: 80)
-        return l
-    }()
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 16
@@ -38,6 +32,9 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         return cv
     }()
+
+    let sectionInsets = UIEdgeInsets(top: 10.0, left: 5.0, bottom: 10.0, right: 0.0)
+    
     let tableView = UITableView()
     let emptyTagCollectionView : UILabel = {
         let label = UILabel()
@@ -45,22 +42,33 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    var searchActive : Bool = false
+    let validateTagWhenSubscribing : UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Valider", for: .normal)
+        button.isHidden = true
+        return button
+    }()
     var filtered:[Tag] = []
     let tagSearchCellIdentifier = "tagSearchCellId"
-    
+    var isSubscriberController: Bool = false
     var tagsOfUser : [Tag] = []
     let tagsOfUserCellIdentifier = "tagsOfUserCellId"
     
     let tagService = TagService()
-    static var keychain: Keychain?
     let token = App.keychain!["token"]
     var user : User?
     let userService = UserService()
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        if isSubscriberController {
+            view.addSubview(validateTagWhenSubscribing)
+            validateTagWhenSubscribing.isHidden = false
+            validateTagWhenSubscribing.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+            validateTagWhenSubscribing.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 30).isActive = true
+            validateTagWhenSubscribing.addTarget(self, action: #selector(validateTag), for: .touchUpInside)
+        }
         getConnectedUser()
         tableView.delegate = self
         tableView.dataSource = self
@@ -92,12 +100,14 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
             indicator.startAnimating()
             indicator.hidesWhenStopped = true
             collectionView.isHidden = true
+            self.tableView.isHidden = false
             tagService.getTags(token: token!, search: searchText, completion: { response , error in
                 if error != nil {
                     print ("add/remove tag error:", error!)
                 } else {
                     self.filtered = response
                     DispatchQueue.main.async{
+                        
                         self.tableView.reloadData()
                         self.indicator.stopAnimating()
                     }
@@ -126,7 +136,7 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("selected cell \(indexPath.row)")
-            getTagNameInSearchBar(tag: filtered[indexPath.row])
+           getTagNameInSearchBar(tag: filtered[indexPath.row])
             tagService.likeTag(token: token!, id: filtered[indexPath.row].id, completion: { response , error in
                 if error != nil {
                     print ("like tag error:", error!)
@@ -143,6 +153,11 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
                 
             })
     }
+    @objc func validateTag() {
+        self.navigationController?.pushViewController(HomeViewController(), animated: true)
+        let tabBar = TabBar()
+        tabBar.createTabBar()
+    }
     func getTagNameInSearchBar(tag: Tag) {
         searchBar.text = tag.name
     }
@@ -152,10 +167,18 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
         
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return (CGSize(width: 100, height: 40))
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return sectionInsets
+    }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: tagsOfUserCellIdentifier, for: indexPath) as! CustomTagsOfUserCell
         cell.label.text = tagsOfUser[indexPath.row].name
+        cell.dislikeButton.tag =  tagsOfUser[indexPath.row].id
+        cell.dislikeButton.addTarget(self, action: #selector(triggerAlert(_:)), for: .touchUpInside)
         return cell
     }
     func setupViews() {
@@ -164,8 +187,11 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
         view.addSubview(indicator)
         view.addSubview(collectionView)
         view.addSubview(emptyTagCollectionView)
-        
-        searchBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        if isSubscriberController {
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        } else {
+            searchBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        }
         searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         searchBar.heightAnchor.constraint(equalToConstant: 50).isActive = true
@@ -217,5 +243,37 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
         })
         
     }
+    @objc func triggerAlert(_ sender: UIButton) {
+        let tagId = sender.tag
+        let alert = UIAlertController(title: "Etes vous sur de vouloir supprimer ce tag?", message: "Vous pourrez l'ajouter de nouveau plus tard", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
+            self.dislikeTag(tag: tagId)
+        }))
+        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+        
+        present(alert, animated: true, completion: nil)
+        
+    }
+    
+    func dislikeTag(tag: Int) {
+        tagService.dislikeTag(token: token!, id: tag, completion: { success , error in
+            if !success {
+                print ("dislike tag error:", error!)
+            } else {
+                let index = self.tagsOfUser.index(where: { (item) -> Bool in
+                    item.id == tag
+                })
+                self.tagsOfUser.remove(at: index!)
+                DispatchQueue.main.async{
+                    self.tableView.reloadData()
+                    self.collectionView.isHidden = false
+                    self.collectionView.reloadData()
+                }
+            }
+            
+        })
+    }
+    
 }
 

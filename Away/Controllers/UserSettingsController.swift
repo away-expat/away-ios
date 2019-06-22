@@ -55,11 +55,23 @@ class UserSettingsController: UIViewController {
         return line
     }()
     
+    let logOutButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = UIColor(named: "AppPeach")
+        button.layer.cornerRadius = 15.0
+        button.layer.shadowOpacity = 1.0
+        button.layer.shadowColor = UIColor(named: "AppLightGrey")?.cgColor
+        button.setTitle("Déconnexion", for: .normal)
+        button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+        button.addTarget(self, action: #selector(signOutButtonClicked), for: .touchUpInside)
+        return button;
+    }()
     override func viewDidLoad() {
         super.viewDidLoad();
         view.backgroundColor = .purple
         view.addSubview(stackView)
-        
+        view.addSubview(logOutButton)
         stackView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
@@ -74,6 +86,10 @@ class UserSettingsController: UIViewController {
 
     }
     
+    @objc func signOutButtonClicked() {
+        try! App.keychain?.remove("token")
+        UIApplication.setRootView(LoginViewController())
+    }
     
     
 }

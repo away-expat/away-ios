@@ -14,16 +14,16 @@ class KeyboardUtils {
     }
 
     static func WillChange(notification: Notification, view: UIView) {
-        guard let keyboardRect = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
-            return
-        }
-        if notification.name == Notification.Name.UIKeyboardWillShow ||
-            notification.name == Notification.Name.UIKeyboardWillChangeFrame {
-            
-            view.frame.origin.y = -keyboardRect.height
-        } else {
-            view.frame.origin.y = 0
-        }
+//        guard let keyboardRect = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+//            return
+//        }
+//        if notification.name == Notification.Name.UIKeyboardWillShow ||
+//            notification.name == Notification.Name.UIKeyboardWillChangeFrame {
+//
+//            view.frame.origin.y = 0
+//        } else {
+//            view.frame.origin.y = 0
+//        }
     }
 
 }

@@ -20,7 +20,7 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
     let eventService = EventService()
     let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
     let tableView = UITableView()
-    
+    static var keychain: Keychain?
     let token = App.keychain!["token"]
     let emptyEventList : UILabel = {
         let label = UILabel()
@@ -60,6 +60,26 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
         present(ChangeCitiesViewController(), animated: true)
         navigationItem.title = user?.at.name
     }
+    
+    func setupViews() {
+        navigationController?.navigationBar.isTranslucent = false
+        navigationItem.title = self.user?.at.name
+        let planetIcon = UIImage(named: "earth")
+        let planetImageView = UIImageView()
+        planetImageView.image = planetIcon?.withAlignmentRectInsets(UIEdgeInsets(top: 0, left: 0, bottom: -7, right: 0))
+        let button = UIBarButtonItem(image: planetImageView.image, style: .plain, target: self, action: #selector(changeCities(_:)))
+        navigationItem.rightBarButtonItem = button
+        navigationItem.rightBarButtonItem?.tintColor = .white
+        
+        view.addSubview(topView)
+        view.addSubview(bottomView)
+        topView.backgroundColor = .white
+        bottomView.backgroundColor = UIColor(named: "AppLightGrey")
+        buildTopView(topView: topView)
+        buildBottomView(bottomView: bottomView)
+        setupConstraints()
+    }
+    
     func setupConstraints() {
         topView.translatesAutoresizingMaskIntoConstraints = false
         bottomView.translatesAutoresizingMaskIntoConstraints = false
@@ -233,7 +253,7 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
         tableView.bottomAnchor.constraint(equalTo: bottomView.bottomAnchor, constant: -15).isActive = true
         emptyEventList.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
         emptyEventList.centerYAnchor.constraint(equalTo: tableView.centerYAnchor).isActive = true
-
+        
         eventService.getUserEvents(token: token!, completion: { response, error in
             if error != nil {
                 print ("user profile get events error:", error!)
@@ -284,24 +304,7 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
         present(changeCitiesViewController, animated: true)
     }
     
-    func setupViews() {
-        navigationController?.navigationBar.isTranslucent = false
-        navigationItem.title = self.user?.at.name
-        let planetIcon = UIImage(named: "earth")
-        let planetImageView = UIImageView()
-        planetImageView.image = planetIcon?.withAlignmentRectInsets(UIEdgeInsets(top: 0, left: 0, bottom: -7, right: 0))
-        let button = UIBarButtonItem(image: planetImageView.image, style: .plain, target: self, action: #selector(changeCities(_:)))
-        navigationItem.rightBarButtonItem = button
-        navigationItem.rightBarButtonItem?.tintColor = .white
-        
-        view.addSubview(topView)
-        view.addSubview(bottomView)
-        topView.backgroundColor = .white
-        bottomView.backgroundColor = UIColor(named: "AppLightGrey")
-        buildTopView(topView: topView)
-        buildBottomView(bottomView: bottomView)
-        setupConstraints()
-    }
+   
 }
 
 extension UserProfileViewController: UITextViewDelegate{

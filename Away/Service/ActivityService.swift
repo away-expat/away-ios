@@ -8,38 +8,38 @@
 import UIKit
 class ActivityService {
     
-//    func getActivities(token: String, completion: @escaping ([Activity], ErrorType?) -> ()) {
-//
-//        let urlString = Constants.ACTIVITIES_ROUTE_GOOGLE+"/paris/bar"
-//        let url = URL(string: urlString)
-//        if url == nil { completion([], ErrorType.badUrl) }
-//        var request = URLRequest(url: url!)
-//        let token = token
-//        request.setValue(token, forHTTPHeaderField: "Authorization")
-//
-//        URLSession.shared.dataTask(with: request) { (data, response, error) in
-//
-//        guard let data = data else {return}
-//
-//        if let httpResponse = response as? HTTPURLResponse {
-//            print("error \(httpResponse.statusCode)")
-//            if (httpResponse.statusCode == 401) {
-//                completion([], ErrorType.unauthorized)
-//            }
-//        }
-//
-//        do {
-//            let decoder = JSONDecoder()
-//            let response = try decoder.decode([Activity].self, from: data)
-//            completion(response, nil)
-//        } catch let errorJson {
-//            completion([], ErrorType.serverError)
-//            print(errorJson)
-//            return
-//        }
-//
-//        }.resume()
-//    }
+    func getActivities(token: String, search: String, completion: @escaping ([Activity], ErrorType?) -> ()) {
+
+        let urlString = Constants.SEARCH_ACTIVITIES + search
+        let url = URL(string: urlString)
+        if url == nil { completion([], ErrorType.badUrl) }
+        var request = URLRequest(url: url!)
+        let token = token
+        request.setValue(token, forHTTPHeaderField: "Authorization")
+
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+
+        guard let data = data else {return}
+
+        if let httpResponse = response as? HTTPURLResponse {
+            print("error \(httpResponse.statusCode)")
+            if (httpResponse.statusCode == 401) {
+                completion([], ErrorType.unauthorized)
+            }
+        }
+
+        do {
+            let decoder = JSONDecoder()
+            let response = try decoder.decode([Activity].self, from: data)
+            completion(response, nil)
+        } catch let errorJson {
+            completion([], ErrorType.serverError)
+            print(errorJson)
+            return
+        }
+
+        }.resume()
+    }
     
     func getActivitiesByTag(token: String, city:String, tag: Tag, completion: @escaping ([Activity], ErrorType?) -> ()) {
         
@@ -103,8 +103,8 @@ class ActivityService {
             
             do {
                 let decoder = JSONDecoder()
-                let response = try decoder.decode(SuggestionEventsReponse.self, from: data)
-                completion(response.results, nil)
+                let response = try decoder.decode([Event].self, from: data)
+                completion(response, nil)
             } catch let errorJson {
                 completion([], ErrorType.serverError)
                 print(errorJson)

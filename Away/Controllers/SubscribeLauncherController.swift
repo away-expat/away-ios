@@ -138,10 +138,16 @@ class SubscribeLauncherController: UIViewController, UITextFieldDelegate, Change
     }()
     var city: City?
 
-
+    let scrollView: UIScrollView = {
+        let v = UIScrollView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        
+        return v
+    }()
     override func viewDidLoad() {
         view.backgroundColor = .white
-        view.addSubview(stackView)
+        view.addSubview(scrollView)
+        scrollView.addSubview(stackView)
         stackView.addArrangedSubview(emailTextField)
         stackView.addArrangedSubview(bottomEmailLine)
         
@@ -174,12 +180,19 @@ class SubscribeLauncherController: UIViewController, UITextFieldDelegate, Change
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
         
-        view.addSubview(goBackButton)
-        goBackButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -40).isActive = true
-        goBackButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        stackView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        scrollView.addSubview(goBackButton)
+        scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50).isActive = true
+        
+        goBackButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -40).isActive = true
+        goBackButton.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+        
+        stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+        stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+        stackView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 50).isActive = true
+        stackView.bottomAnchor.constraint(equalTo: goBackButton.topAnchor, constant: -30).isActive = true
         
         bottomEmailLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
         bottomEmailLine.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
@@ -267,7 +280,7 @@ class SubscribeLauncherController: UIViewController, UITextFieldDelegate, Change
     
     
     @objc func keyboardWillChange(notification: Notification) {
-        KeyboardUtils.WillChange(notification: notification, view: view)
+        KeyboardUtils.WillChange(notification: notification, view: scrollView)
         
     }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool{

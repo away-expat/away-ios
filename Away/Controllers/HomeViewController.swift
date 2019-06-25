@@ -26,6 +26,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         label.text = "Aucun évènement"
         return label
     }()
+    
     static var keychain: Keychain?
     let token = App.keychain!["token"]
     override func viewDidLoad() {
@@ -88,6 +89,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         view.addSubview(tableView)
         view.addSubview(indicator)
         view.addSubview(emptyEventList)
+        emptyEventList.isHidden = true
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -109,7 +111,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         indicator.startAnimating()
         indicator.hidesWhenStopped = true
-        
+
         
         activityService.getSuggestions(token: token!, completion: { response , error in
             if error != nil {
@@ -118,14 +120,14 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 self.events = response
                 
                 DispatchQueue.main.async{
+                    self.indicator.stopAnimating()
+
                     if self.events.isEmpty {
                         self.emptyEventList.isHidden = false
-                        self.indicator.stopAnimating()
                     } else {
                         self.emptyEventList.isHidden = true
                     }
                     self.tableView.reloadData()
-                    self.indicator.stopAnimating()
                 }
             }
             

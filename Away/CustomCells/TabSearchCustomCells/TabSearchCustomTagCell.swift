@@ -1,5 +1,5 @@
 //
-//  CustomTagCell.swift
+//  TabSearchCustomTagCell.swift
 //  Away
 //
 //  Created by Candice Guitton on 10/06/2019.
@@ -8,11 +8,10 @@
 
 import UIKit
 
-class CustomTagCell: UICollectionViewCell {
+class TabSearchCustomTagCell: UITableViewCell {
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         addViews()
     }
     
@@ -24,7 +23,7 @@ class CustomTagCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
-        label.font = UIFont(name: "AppleSDGothicNeo-Thin", size: 16.0)
+        label.font = UIFont.init(name: "AmericanTypewriter", size: 20)
         label.sizeToFit()
         return label
     }()
@@ -44,8 +43,8 @@ class CustomTagCell: UICollectionViewCell {
         cellView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
         cellView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
         
-        label.centerXAnchor.constraint(equalTo: cellView.centerXAnchor, constant: 0).isActive = true
-        label.centerYAnchor.constraint(equalTo: cellView.centerYAnchor, constant: 0).isActive = true
+        label.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 30).isActive = true
+        label.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
         
     }
     

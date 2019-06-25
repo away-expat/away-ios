@@ -42,13 +42,7 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    let validateTagWhenSubscribing : UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Valider", for: .normal)
-        button.isHidden = true
-        return button
-    }()
+    
     var filtered:[Tag] = []
     let tagSearchCellIdentifier = "tagSearchCellId"
     var isSubscriberController: Bool = false
@@ -62,13 +56,6 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        if isSubscriberController {
-            view.addSubview(validateTagWhenSubscribing)
-            validateTagWhenSubscribing.isHidden = false
-            validateTagWhenSubscribing.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-            validateTagWhenSubscribing.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 30).isActive = true
-            validateTagWhenSubscribing.addTarget(self, action: #selector(validateTag), for: .touchUpInside)
-        }
         getConnectedUser()
         tableView.delegate = self
         tableView.dataSource = self
@@ -107,7 +94,7 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
                 } else {
                     self.filtered = response
                     DispatchQueue.main.async{
-                        
+                        self.emptyTagCollectionView.isHidden = true
                         self.tableView.reloadData()
                         self.indicator.stopAnimating()
                     }
@@ -127,17 +114,17 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filtered.count;
+        return filtered.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: tagSearchCellIdentifier) as! CustomTagSearchCell;
             cell.textLabel?.text = filtered[indexPath.row].name
-        return cell;
+        return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("selected cell \(indexPath.row)")
-           getTagNameInSearchBar(tag: filtered[indexPath.row])
-            tagService.likeTag(token: token!, id: filtered[indexPath.row].id, completion: { response , error in
+        searchBar.text = ""
+        tagService.likeTag(token: token!, id: filtered[indexPath.row].id, completion: { response , error in
                 if error != nil {
                     print ("like tag error:", error!)
                 } else {
@@ -153,7 +140,12 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
                 
             })
     }
-    @objc func validateTag() {
+    
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        validateTag()
+    }
+    func validateTag() {
         self.navigationController?.pushViewController(HomeViewController(), animated: true)
         let tabBar = TabBar()
         tabBar.createTabBar()
@@ -189,13 +181,20 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
         view.addSubview(emptyTagCollectionView)
         if isSubscriberController {
             searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+            searchBar.setValue("Valider", forKey: "cancelButtonText")
+            searchBar.setShowsCancelButton(true, animated: true)
+
         } else {
             searchBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         }
+        if tagsOfUser.isEmpty {
+            emptyTagCollectionView.isHidden = false
+        }
+
         searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         searchBar.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
+
     
         tableView.separatorStyle = UITableViewCellSeparatorStyle.none
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -266,6 +265,9 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
                 })
                 self.tagsOfUser.remove(at: index!)
                 DispatchQueue.main.async{
+                    if self.tagsOfUser.isEmpty {
+                        self.emptyTagCollectionView.isHidden = false
+                    }
                     self.tableView.reloadData()
                     self.collectionView.isHidden = false
                     self.collectionView.reloadData()

@@ -44,7 +44,6 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
 
 
     var searchActive : Bool = false
-    var cities : [City] = []
     var filtered:[City] = []
     let cityCellIdentifier = "cityCellId"
 
@@ -88,22 +87,9 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
 
     }
     
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        searchActive = true;
-        
-    }
-    
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        searchActive = false;
-    }
-    
+
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchActive = false;
         dismissView()
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchActive = false;
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -114,10 +100,10 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
                 if error != nil {
                     print ("change cities error:", error!)
                 } else {
-                    self.cities = response
+                    self.filtered = response
                     
                     DispatchQueue.main.async{
-                        if self.cities.isEmpty {
+                        if self.filtered.isEmpty {
                             self.emptyList.isHidden = false
                         } else {
                             self.emptyList.isHidden = true
@@ -130,16 +116,7 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
                 
             })
         }
-        filtered = cities.filter({ (city) -> Bool in
-            let tmp: NSString = city.name as NSString
-            let range = tmp.range(of: searchText, options: NSString.CompareOptions.caseInsensitive)
-            return range.location != NSNotFound
-        })
-        if(filtered.count == 0){
-            searchActive = false;
-        } else {
-            searchActive = true;
-        }
+       
     }
     
     override func didReceiveMemoryWarning() {
@@ -153,31 +130,17 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if(searchActive) {
-            return filtered.count
-        }
-        return cities.count;
+        return filtered.count;
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cityCellIdentifier) as! CustomCityCell;
-        if(searchActive){
-            cell.textLabel?.text = filtered[indexPath.row].name + " " + cities[indexPath.row].country
-        } else {
-            cell.textLabel?.text = cities[indexPath.row].name + " " + cities[indexPath.row].country
-        }
-        
+            cell.textLabel?.text = filtered[indexPath.row].name + " " + filtered[indexPath.row].country
         return cell;
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("selected cell \(indexPath.row)")
-        if searchActive {
             getCityNameInSearchBar(city: filtered[indexPath.row])
             print("", filtered[indexPath.row])
-        } else {
-            print("", cities[indexPath.row])
-            getCityNameInSearchBar(city: cities[indexPath.row])
-        }
-        
     }
     func getCityNameInSearchBar(city: City) {
         searchBar.text = city.name

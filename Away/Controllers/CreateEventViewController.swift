@@ -13,6 +13,8 @@ class CreateEventViewController: UIViewController {
     
     let stackView: UIStackView = {
         let sv = UIStackView()
+        sv.axis = .vertical
+        sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
     
@@ -20,7 +22,11 @@ class CreateEventViewController: UIViewController {
         super.viewDidLoad()
         navigationItem.title = "Create Event"
         view.backgroundColor = .white
-        
+        setupViews()
     }
    
+    func setupViews() {
+        view.addSubview(stackView)
+        
+    }
 }

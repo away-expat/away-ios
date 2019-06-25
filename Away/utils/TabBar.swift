@@ -25,7 +25,7 @@ class TabBar: UITabBar {
         tabBarController.delegate = self
         
         firstTabNavigationController = UINavigationController.init(rootViewController: HomeViewController())
-        secondTabNavigationController = UINavigationController.init(rootViewController: TagScreenViewController())
+        secondTabNavigationController = UINavigationController.init(rootViewController: SearchScreenViewController())
         thirdTabNavigationController = UINavigationController.init(rootViewController: CreateEventViewController())
         fourthTabNavigationController = UINavigationController.init(rootViewController: ConvenientInformationController())
         fifthTabNavigationController = UINavigationController.init(rootViewController: UserProfileViewController())

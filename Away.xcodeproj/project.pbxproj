@@ -13,7 +13,7 @@
 		28475F7F22A8781B0094C726 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475F7E22A8781B0094C726 /* City.swift */; };
 		28475F8122A878280094C726 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475F8022A878280094C726 /* Tag.swift */; };
 		28475F8322A87E0E0094C726 /* UserSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475F8222A87E0E0094C726 /* UserSettingsController.swift */; };
-		28475F8522ADD2810094C726 /* CustomTagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475F8422ADD2810094C726 /* CustomTagCell.swift */; };
+		28475F8522ADD2810094C726 /* TabSearchCustomTagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475F8422ADD2810094C726 /* TabSearchCustomTagCell.swift */; };
 		28475F8922AEA9EC0094C726 /* ActivityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475F8822AEA9EC0094C726 /* ActivityService.swift */; };
 		28475F8B22AEE10C0094C726 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475F8A22AEE10B0094C726 /* Constants.swift */; };
 		28475F8D22AF99330094C726 /* ListActivityByTagController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28475F8C22AF99330094C726 /* ListActivityByTagController.swift */; };
@@ -38,12 +38,16 @@
 		28547F2922BC4C3E00C478BD /* CustomTagsOfUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28547F2822BC4C3E00C478BD /* CustomTagsOfUserCell.swift */; };
 		28547F2B22BC5EBD00C478BD /* SuggestionEventsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28547F2A22BC5EBD00C478BD /* SuggestionEventsResponse.swift */; };
 		28547F2D22BE68C500C478BD /* CustomEventListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28547F2C22BE68C500C478BD /* CustomEventListCell.swift */; };
+		287A2B0A22C102F000381E5C /* SegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287A2B0922C102F000381E5C /* SegmentedControl.swift */; };
+		287A2B0C22C171DD00381E5C /* TabSearchCustomActivityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287A2B0B22C171DD00381E5C /* TabSearchCustomActivityCell.swift */; };
+		287A2B0E22C171E900381E5C /* TabSearchCustomUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287A2B0D22C171E900381E5C /* TabSearchCustomUserCell.swift */; };
+		287A2B1022C171F300381E5C /* TabSearchCustomEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287A2B0F22C171F300381E5C /* TabSearchCustomEventCell.swift */; };
 		287C3CBB22871F1300406834 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287C3CBA22871F1300406834 /* TabBar.swift */; };
 		2898663222887AB300CE97E8 /* CustomCityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2898663022887AB300CE97E8 /* CustomCityCell.swift */; };
 		28986635228DA5C300CE97E8 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28986634228DA5C300CE97E8 /* HomeViewController.swift */; };
 		2898663A228DAE3300CE97E8 /* CustomActivityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28986639228DAE3300CE97E8 /* CustomActivityCell.swift */; };
 		2898663D228F417F00CE97E8 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2898663C228F417F00CE97E8 /* UserProfileViewController.swift */; };
-		2898663F228F42A300CE97E8 /* TagScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2898663E228F42A300CE97E8 /* TagScreenViewController.swift */; };
+		2898663F228F42A300CE97E8 /* SearchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2898663E228F42A300CE97E8 /* SearchScreenViewController.swift */; };
 		28986641228F42E500CE97E8 /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28986640228F42E500CE97E8 /* CreateEventViewController.swift */; };
 		28986643228F435A00CE97E8 /* ChangeCitiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28986642228F435A00CE97E8 /* ChangeCitiesViewController.swift */; };
 		28986645228F442100CE97E8 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28986644228F442100CE97E8 /* LoginViewController.swift */; };
@@ -79,7 +83,7 @@
 		28475F7E22A8781B0094C726 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
 		28475F8022A878280094C726 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		28475F8222A87E0E0094C726 /* UserSettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsController.swift; sourceTree = "<group>"; };
-		28475F8422ADD2810094C726 /* CustomTagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTagCell.swift; sourceTree = "<group>"; };
+		28475F8422ADD2810094C726 /* TabSearchCustomTagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabSearchCustomTagCell.swift; sourceTree = "<group>"; };
 		28475F8822AEA9EC0094C726 /* ActivityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityService.swift; sourceTree = "<group>"; };
 		28475F8A22AEE10B0094C726 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		28475F8C22AF99330094C726 /* ListActivityByTagController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListActivityByTagController.swift; sourceTree = "<group>"; };
@@ -110,12 +114,16 @@
 		28547F2822BC4C3E00C478BD /* CustomTagsOfUserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTagsOfUserCell.swift; sourceTree = "<group>"; };
 		28547F2A22BC5EBD00C478BD /* SuggestionEventsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionEventsResponse.swift; sourceTree = "<group>"; };
 		28547F2C22BE68C500C478BD /* CustomEventListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomEventListCell.swift; sourceTree = "<group>"; };
+		287A2B0922C102F000381E5C /* SegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedControl.swift; sourceTree = "<group>"; };
+		287A2B0B22C171DD00381E5C /* TabSearchCustomActivityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabSearchCustomActivityCell.swift; sourceTree = "<group>"; };
+		287A2B0D22C171E900381E5C /* TabSearchCustomUserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabSearchCustomUserCell.swift; sourceTree = "<group>"; };
+		287A2B0F22C171F300381E5C /* TabSearchCustomEventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabSearchCustomEventCell.swift; sourceTree = "<group>"; };
 		287C3CBA22871F1300406834 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 		2898663022887AB300CE97E8 /* CustomCityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCityCell.swift; sourceTree = "<group>"; };
 		28986634228DA5C300CE97E8 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		28986639228DAE3300CE97E8 /* CustomActivityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomActivityCell.swift; sourceTree = "<group>"; };
 		2898663C228F417F00CE97E8 /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
-		2898663E228F42A300CE97E8 /* TagScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagScreenViewController.swift; sourceTree = "<group>"; };
+		2898663E228F42A300CE97E8 /* SearchScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchScreenViewController.swift; sourceTree = "<group>"; };
 		28986640228F42E500CE97E8 /* CreateEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
 		28986642228F435A00CE97E8 /* ChangeCitiesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeCitiesViewController.swift; sourceTree = "<group>"; };
 		28986644228F442100CE97E8 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -240,6 +248,17 @@
 			path = AwayUITests;
 			sourceTree = "<group>";
 		};
+		287A2B1122C1726B00381E5C /* TabSearchCustomCells */ = {
+			isa = PBXGroup;
+			children = (
+				28475F8422ADD2810094C726 /* TabSearchCustomTagCell.swift */,
+				287A2B0B22C171DD00381E5C /* TabSearchCustomActivityCell.swift */,
+				287A2B0D22C171E900381E5C /* TabSearchCustomUserCell.swift */,
+				287A2B0F22C171F300381E5C /* TabSearchCustomEventCell.swift */,
+			);
+			path = TabSearchCustomCells;
+			sourceTree = "<group>";
+		};
 		287A7B10227A168D00CCD4B3 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -266,7 +285,7 @@
 				28986642228F435A00CE97E8 /* ChangeCitiesViewController.swift */,
 				28986644228F442100CE97E8 /* LoginViewController.swift */,
 				28986640228F42E500CE97E8 /* CreateEventViewController.swift */,
-				2898663E228F42A300CE97E8 /* TagScreenViewController.swift */,
+				2898663E228F42A300CE97E8 /* SearchScreenViewController.swift */,
 				28986634228DA5C300CE97E8 /* HomeViewController.swift */,
 				28D992D42296AF3A00ACE00C /* ActivityDetailsController.swift */,
 				28D992D82297FF7D00ACE00C /* SubscribeLauncherController.swift */,
@@ -275,6 +294,7 @@
 				28475F8C22AF99330094C726 /* ListActivityByTagController.swift */,
 				28475F9022AFB1F10094C726 /* EventDetailsController.swift */,
 				28475F9222B0616E0094C726 /* TagManagementController.swift */,
+				287A2B0922C102F000381E5C /* SegmentedControl.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -282,9 +302,9 @@
 		28D992D32294266700ACE00C /* CustomCells */ = {
 			isa = PBXGroup;
 			children = (
+				287A2B1122C1726B00381E5C /* TabSearchCustomCells */,
 				28986639228DAE3300CE97E8 /* CustomActivityCell.swift */,
 				2898663022887AB300CE97E8 /* CustomCityCell.swift */,
-				28475F8422ADD2810094C726 /* CustomTagCell.swift */,
 				28475F8E22AFA2BA0094C726 /* CustomEventCell.swift */,
 				28475FAD22BC1D220094C726 /* CustomTagSearchCell.swift */,
 				28547F2822BC4C3E00C478BD /* CustomTagsOfUserCell.swift */,
@@ -562,15 +582,18 @@
 				28475F9322B0616E0094C726 /* TagManagementController.swift in Sources */,
 				28475F9522B18F780094C726 /* LoginService.swift in Sources */,
 				28475F9122AFB1F10094C726 /* EventDetailsController.swift in Sources */,
+				287A2B1022C171F300381E5C /* TabSearchCustomEventCell.swift in Sources */,
 				28547F2D22BE68C500C478BD /* CustomEventListCell.swift in Sources */,
 				28475FA822B82E790094C726 /* ActivityByTagResponse.swift in Sources */,
+				287A2B0E22C171E900381E5C /* TabSearchCustomUserCell.swift in Sources */,
 				2898663D228F417F00CE97E8 /* UserProfileViewController.swift in Sources */,
 				28D992D92297FF7D00ACE00C /* SubscribeLauncherController.swift in Sources */,
+				287A2B0C22C171DD00381E5C /* TabSearchCustomActivityCell.swift in Sources */,
 				28475F9922B252E80094C726 /* KeyboardUtils.swift in Sources */,
 				28475F8F22AFA2BA0094C726 /* CustomEventCell.swift in Sources */,
 				28475F9D22B2A37B0094C726 /* CityService.swift in Sources */,
 				284E396F2215C67C0048D44C /* AppDelegate.swift in Sources */,
-				28475F8522ADD2810094C726 /* CustomTagCell.swift in Sources */,
+				28475F8522ADD2810094C726 /* TabSearchCustomTagCell.swift in Sources */,
 				28547F2B22BC5EBD00C478BD /* SuggestionEventsResponse.swift in Sources */,
 				28475F8D22AF99330094C726 /* ListActivityByTagController.swift in Sources */,
 				28475F9722B1A8070094C726 /* ErrorType.swift in Sources */,
@@ -589,10 +612,11 @@
 				28547F2922BC4C3E00C478BD /* CustomTagsOfUserCell.swift in Sources */,
 				287C3CBB22871F1300406834 /* TabBar.swift in Sources */,
 				28986635228DA5C300CE97E8 /* HomeViewController.swift in Sources */,
-				2898663F228F42A300CE97E8 /* TagScreenViewController.swift in Sources */,
+				2898663F228F42A300CE97E8 /* SearchScreenViewController.swift in Sources */,
 				28D992DB22A4818100ACE00C /* ConvenientInformationController.swift in Sources */,
 				28986643228F435A00CE97E8 /* ChangeCitiesViewController.swift in Sources */,
 				28D992D52296AF3A00ACE00C /* ActivityDetailsController.swift in Sources */,
+				287A2B0A22C102F000381E5C /* SegmentedControl.swift in Sources */,
 				2898663222887AB300CE97E8 /* CustomCityCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

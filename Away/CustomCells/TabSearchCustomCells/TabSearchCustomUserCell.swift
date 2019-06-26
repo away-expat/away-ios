@@ -39,8 +39,8 @@ class TabSearchCustomUserCell: UITableViewCell {
     let avatarImageView : UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
         imageView.layer.cornerRadius = 50
         imageView.clipsToBounds = true
         imageView.layer.borderWidth = 3
@@ -51,7 +51,7 @@ class TabSearchCustomUserCell: UITableViewCell {
     let cellView: UIView = {
         let cellView = UIView()
         cellView.translatesAutoresizingMaskIntoConstraints = false
-        cellView.backgroundColor = UIColor(named: "AppPeach")
+        cellView.backgroundColor = .white
         return cellView
     }()
     
@@ -59,13 +59,14 @@ class TabSearchCustomUserCell: UITableViewCell {
         contentView.addSubview(cellView)
         cellView.addSubview(username)
         cellView.addSubview(country)
+        cellView.addSubview(avatarImageView)
         cellView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
         cellView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
         cellView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
         cellView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
         
         avatarImageView.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
-        avatarImageView.leadingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: 20).isActive = true
+        avatarImageView.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 20).isActive = true
         
         username.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 30).isActive = true
         username.topAnchor.constraint(equalTo: cellView.topAnchor, constant: 10).isActive = true

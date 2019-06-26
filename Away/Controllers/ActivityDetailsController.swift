@@ -20,7 +20,7 @@ class ActivityDetailsController: UIViewController {
         navigationItem.rightBarButtonItem = button
         navigationItem.rightBarButtonItem?.tintColor = .white
         
-        
+        view.backgroundColor = .yellow
         
     }
     @objc func changeCities(_ sender: UIButton) {

@@ -8,6 +8,57 @@
 import UIKit
 class EventService {
     
+    func createEvent(token: String, title: String, description: String, date: String, time: String, activity: Int, completion: @escaping (Event?, ErrorType?) -> ()){
+        
+        let urlString = Constants.CREATE_EVENT
+        let url = URL(string: urlString)
+        if url == nil { completion(nil, ErrorType.badUrl) }
+        var request = URLRequest(url: url!)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(token, forHTTPHeaderField: "Authorization")
+
+        let parameters = [
+            "title": title,
+            "description": description,
+            "date": date,
+            "time": time,
+            "activity": activity
+            ] as [String:Any]
+        let jsonData: Data
+        do {
+            jsonData = try JSONSerialization.data(withJSONObject: parameters, options: .init())
+            request.httpBody = jsonData
+        } catch {
+            print("Error: cannot create JSON from data")
+            return
+        }
+        request.httpBody = jsonData
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
+            guard let data = data else {return}
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                print("error \(httpResponse.statusCode)")
+                if (httpResponse.statusCode == 401) {
+                    completion(nil, ErrorType.unauthorized)
+                }
+            }
+            
+            do {
+                let json = JSONDecoder()
+                let response = try json.decode(Event.self, from: data)
+                completion(response, nil)
+            } catch let errorJson {
+                completion(nil, ErrorType.serverError)
+                print(errorJson)
+                return
+            }
+            
+            }.resume()
+    }
+    
     func getEventsByActivity(token: String, completion: @escaping ([Event], ErrorType?) -> ()) {
         
         let urlString = Constants.EVENTS_BY_ACTIVITY_ROUTE

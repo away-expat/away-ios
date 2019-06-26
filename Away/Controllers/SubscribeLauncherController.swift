@@ -10,7 +10,7 @@ import UIKit
 
 class SubscribeLauncherController: UIViewController, UITextFieldDelegate, ChangeCitiesDelegate {
    
-    
+    var selectedDate: String?
     let loginService = LoginService()
     let stackView: UIStackView = {
         let sv = UIStackView()
@@ -80,7 +80,17 @@ class SubscribeLauncherController: UIViewController, UITextFieldDelegate, Change
         birth.placeholder = "YY/MM/DD"
         return birth
     }()
-    
+    let datePicker: UIDatePicker = {
+        let datePicker = UIDatePicker()
+        datePicker.datePickerMode = UIDatePicker.Mode.date
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy/mm/dd"
+        let selectedDate = dateFormatter.string(from: datePicker.date)
+        datePicker.timeZone = NSTimeZone.local
+        datePicker.backgroundColor = .white
+        datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
+        return datePicker
+    }()
     let bottomBirthdayLine: UIView = {
         let line = UIView()
         line.translatesAutoresizingMaskIntoConstraints = false
@@ -107,7 +117,6 @@ class SubscribeLauncherController: UIViewController, UITextFieldDelegate, Change
         btn.layer.borderColor = UIColor(named: "AppPeach")?.cgColor
         btn.layer.borderWidth = 1
         btn.layer.cornerRadius = 4.0
-        btn.titleLabel?.adjustsFontSizeToFitWidth = true
         btn.titleEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
         btn.setTitle("City you want to visit", for: .normal)
         btn.setTitleColor(UIColor(named: "AppPeach"), for: .normal)
@@ -287,6 +296,14 @@ class SubscribeLauncherController: UIViewController, UITextFieldDelegate, Change
         print("Return pressed sign up")
         KeyboardUtils.hide(textField: textField)
         return true
+    }
+    @objc func datePickerValueChanged(_ sender: UIDatePicker){
+        
+        let dateFormatter: DateFormatter = DateFormatter()
+        
+        dateFormatter.dateFormat = "yyyy/mm/dd"
+        
+        selectedDate = dateFormatter.string(from: sender.date)
     }
     
 }

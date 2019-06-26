@@ -18,4 +18,5 @@ struct User: Codable{
     var birth: String
     var token: String
     var at: City
+    var avatar: String
 }

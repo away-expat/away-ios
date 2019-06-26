@@ -31,7 +31,7 @@ class TabSearchCustomTagCell: UITableViewCell {
     let cellView: UIView = {
         let cellView = UIView()
         cellView.translatesAutoresizingMaskIntoConstraints = false
-        cellView.backgroundColor = UIColor(named: "AppPeach")
+        cellView.backgroundColor = .white
         return cellView
     }()
     

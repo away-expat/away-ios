@@ -99,7 +99,8 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
         let button = UIBarButtonItem(image: planetImageView.image, style: .plain, target: self, action: #selector(chooseCityToVisitButtonClicked))
         navigationItem.rightBarButtonItem = button
         navigationItem.rightBarButtonItem?.tintColor = .white
-        
+        navigationItem.title = user?.at.name
+
         let codeSegmented = SegmentedControl(frame: CGRect(x: 0, y: 40, width: self.view.frame.width, height: 40), buttonTitle: ["location", "event", "tag", "people"])
         codeSegmented.backgroundColor = .clear
         codeSegmented.segmentControlDelegate = self
@@ -201,11 +202,10 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
             return cell
         case 3:
             let cell = tableView.dequeueReusableCell(withIdentifier: userTabCellIdentifier, for: indexPath) as! TabSearchCustomUserCell
-            //            let url = URL(string: users[indexPath.row].photos!)
-            //            cell.avatarImageView.kf.setImage(with: url)
-            
             cell.username.text = users[indexPath.row].firstname + " " + users[indexPath.row].lastname
             cell.country.text =  users[indexPath.row].country
+            let url = URL(string: users[indexPath.row].avatar)
+            cell.avatarImageView.kf.setImage(with: url)
             //cell.dislikeButton.addTarget(self, action: #selector(triggerAlert(_:)), for: .touchUpInside)
             return cell
         default:
@@ -225,14 +225,41 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
             return users.count
         default:
             return 0
-        }    }
+        }
+        
+    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 110.0
     }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        print("selected cell \(indexPath.row) in index \(currentTab)")
+        switch self.currentTab {
+        case 0:
+            let activityDetailsController = ActivityDetailsController()
+            //activityDetailsController.activity = activities[indexPath.row]
+            self.navigationController?.pushViewController(activityDetailsController, animated: true)
+            print("selected cell \(indexPath.row) in index \(currentTab)")
+            break
+        case 1:
+            let eventDetailsController = EventDetailsController()
+           // eventDetailsController.event = events[indexPath.row]
+            self.navigationController?.pushViewController(eventDetailsController, animated: true)
+            print("selected cell \(indexPath.row) in index \(currentTab)")
+            break
+        case 2:
+            print("selected cell \(indexPath.row) in index \(currentTab)")
+            //like ou dislike
+            break
+        case 3:
+            let userProfileController = UserProfileViewController()
+            userProfileController.user = users[indexPath.row]
+            self.navigationController?.pushViewController(userProfileController, animated: true)
+            print("selected cell \(indexPath.row) in index \(currentTab)")
+            break
+        default:
+            break
+        }
     }
     
     func onCitiesChanged(city: City) {

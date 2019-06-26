@@ -15,7 +15,7 @@ struct Activity : Codable{
     let place_id: String?
     let url: String?
     let photos : String?
-    let type:[String]?
+    let location : String?
     let rating: Float?
 
 }

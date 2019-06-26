@@ -25,7 +25,7 @@ class Constants {
     
     static let EVENTS_BY_ACTIVITY_ROUTE = BASE_URL + "/getEventsByActivity"
     static let EVENTS_SUGGESTION = BASE_URL + "/activities/suggestion"
-    
+    static let CREATE_EVENT = BASE_URL + "/events"
     static let GET_CONNECTED_USER = BASE_URL + "/users/userInfo"
     static let GET_USER_EVENTS = BASE_URL + "/events/getUserEvents"
     

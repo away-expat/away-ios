@@ -24,22 +24,22 @@ class TabSearchCustomActivityCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
         label.font = UIFont.init(name: "AmericanTypewriter", size: 20)
-        label.sizeToFit()
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
     let cellView: UIView = {
         let cellView = UIView()
         cellView.translatesAutoresizingMaskIntoConstraints = false
-        cellView.backgroundColor = UIColor(named: "AppPeach")
+        cellView.backgroundColor = .white
         return cellView
     }()
     
     let avatarImageView : UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
         imageView.layer.cornerRadius = 50
         imageView.clipsToBounds = true
         imageView.layer.borderWidth = 3

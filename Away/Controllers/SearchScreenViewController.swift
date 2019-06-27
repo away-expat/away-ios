@@ -237,7 +237,7 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
         switch self.currentTab {
         case 0:
             let activityDetailsController = ActivityDetailsController()
-            //activityDetailsController.activity = activities[indexPath.row]
+            activityDetailsController.activity = activities[indexPath.row]
             self.navigationController?.pushViewController(activityDetailsController, animated: true)
             print("selected cell \(indexPath.row) in index \(currentTab)")
             break

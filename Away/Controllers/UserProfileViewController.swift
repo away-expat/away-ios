@@ -55,19 +55,14 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
         print("selected cell \(indexPath.row)")
     }
     
-    
-    @objc func changeCities(_ sender: UIButton) {
-        present(ChangeCitiesViewController(), animated: true)
-        navigationItem.title = user?.at.name
-    }
-    
+
     func setupViews() {
         navigationController?.navigationBar.isTranslucent = false
         navigationItem.title = self.user?.at.name
         let planetIcon = UIImage(named: "earth")
         let planetImageView = UIImageView()
         planetImageView.image = planetIcon?.withAlignmentRectInsets(UIEdgeInsets(top: 0, left: 0, bottom: -7, right: 0))
-        let button = UIBarButtonItem(image: planetImageView.image, style: .plain, target: self, action: #selector(changeCities(_:)))
+        let button = UIBarButtonItem(image: planetImageView.image, style: .plain, target: self, action: #selector(chooseCityToVisitButtonClicked))
         navigationItem.rightBarButtonItem = button
         navigationItem.rightBarButtonItem?.tintColor = .white
         
@@ -307,16 +302,4 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
    
 }
 
-extension UserProfileViewController: UITextViewDelegate{
-    func textViewDidChange(_ textView: UITextView) {
-        let size = CGSize(width: view.frame.width, height: .infinity)
-        let estimatedSize = textView.sizeThatFits(size)
-        
-        textView.constraints.forEach {(constraint) in
-            if constraint.firstAttribute == .height {
-                constraint.constant = estimatedSize.height
-            }
-            
-        }
-    }
-}
+

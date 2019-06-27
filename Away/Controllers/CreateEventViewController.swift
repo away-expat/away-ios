@@ -55,11 +55,12 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseTim
         label.text = "Description : "
         return label
     }()
-    let descriptionTextField: UITextField = {
-        let tf = UITextField()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = "de l'évènement"
-        return tf
+    let descriptionTextField: UITextView = {
+        let tv = UITextView()
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.text = "Placeholder"
+        tv.textColor = UIColor.lightGray
+        return tv
     }()
     let stackViewDatePicker: UIStackView = {
         let sv = UIStackView()
@@ -144,6 +145,12 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseTim
         
         stackViewDescription.addArrangedSubview(descriptionLabel)
         stackViewDescription.addArrangedSubview(descriptionTextField)
+        descriptionTextField.topAnchor.constraint(equalTo: stackViewDescription.topAnchor).isActive = true
+        descriptionTextField.leadingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor).isActive = true
+        descriptionTextField.trailingAnchor.constraint(equalTo: stackViewDescription.trailingAnchor).isActive = true
+        descriptionTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        descriptionTextField.delegate = self
+        descriptionTextField.isScrollEnabled = true
 
         stackView.addArrangedSubview(stackViewDatePicker)
         
@@ -230,5 +237,18 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseTim
             }
             
         })
+    }
+}
+extension CreateEventViewController: UITextViewDelegate{
+    func textViewDidChange(_ textView: UITextView) {
+        let size = CGSize(width: view.frame.width, height: .infinity)
+        let estimatedSize = textView.sizeThatFits(size)
+        
+        textView.constraints.forEach {(constraint) in
+            if constraint.firstAttribute == .height {
+                constraint.constant = estimatedSize.height
+            }
+            
+        }
     }
 }

@@ -16,6 +16,7 @@ struct Activity : Codable{
     let url: String?
     let photos : String?
     let location : String?
+    let type:[String]?
     let rating: Float?
 
 }

@@ -59,18 +59,17 @@ class EventService {
             }.resume()
     }
     
-    func getEventsByActivity(token: String, completion: @escaping ([Event], ErrorType?) -> ()) {
+    func getEventsByActivity(token: String, activityId: Int, completion: @escaping ([Event], ErrorType?) -> ()) {
         
-        let urlString = Constants.EVENTS_BY_ACTIVITY_ROUTE
-        let urlComponent = URLComponents(string: urlString)
-        if urlComponent == nil { completion([], ErrorType.badUrl) }
-        guard let url = urlComponent?.url else { return }
-        var request = URLRequest(url: url)
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-        let token = token
+        let urlString = Constants.EVENTS_BY_ACTIVITY_ROUTE + "/" + activityId.description
+        let url = URL(string: urlString)
+        if url == nil { completion([], ErrorType.badUrl) }
+        var request = URLRequest(url: url!)
+        request.httpMethod = "GET"
         request.setValue(token, forHTTPHeaderField: "Authorization")
-        
-        guard let data = data else {return}
+
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+         guard let data = data else {return}
         
         if let httpResponse = response as? HTTPURLResponse {
             print("error \(httpResponse.statusCode)")
@@ -93,17 +92,17 @@ class EventService {
     }
     
     func getUserEvents(token: String, completion: @escaping ([Event], ErrorType?) -> ()) {
-        print(token)
+
         let urlString = Constants.GET_USER_EVENTS
-        let urlComponent = URLComponents(string: urlString)
-        if urlComponent == nil { completion([], ErrorType.badUrl) }
-        guard let url = urlComponent?.url else { return }
-        var request = URLRequest(url: url)
+        let url = URL(string: urlString)
+        if url == nil { completion([], ErrorType.badUrl) }
+        var request = URLRequest(url: url!)
         request.httpMethod = "GET"
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-        let token = token
         request.setValue(token, forHTTPHeaderField: "Authorization")
-            print(request)
+        
+   
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+        request.setValue(token, forHTTPHeaderField: "Authorization")
         guard let data = data else {return}
         
         if let httpResponse = response as? HTTPURLResponse {
@@ -162,4 +161,3 @@ class EventService {
             }.resume()
     }
 }
-

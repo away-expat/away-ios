@@ -23,7 +23,7 @@ class Constants {
     static let LIKE_TAG = BASE_URL + "/tags/like"
     static let DISLIKE_TAG = BASE_URL + "/tags/dislike"
     
-    static let EVENTS_BY_ACTIVITY_ROUTE = BASE_URL + "/getEventsByActivity"
+    static let EVENTS_BY_ACTIVITY_ROUTE = BASE_URL + "/events/getEventsByActivity"
     static let EVENTS_SUGGESTION = BASE_URL + "/activities/suggestion"
     static let CREATE_EVENT = BASE_URL + "/events"
     static let GET_CONNECTED_USER = BASE_URL + "/users/userInfo"

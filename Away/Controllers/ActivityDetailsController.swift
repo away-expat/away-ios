@@ -41,7 +41,7 @@ class ActivityDetailsController: UIViewController, UITableViewDelegate, UITableV
         return cv
     }()
     
-    let sectionInsets = UIEdgeInsets(top: 10.0, left: 5.0, bottom: 10.0, right: 0.0)
+    let sectionInsets = UIEdgeInsets(top: 3.0, left: 5.0, bottom: 3.0, right: 0.0)
     
     let activityTitle: UILabel = {
        let label = UILabel()
@@ -56,10 +56,21 @@ class ActivityDetailsController: UIViewController, UITableViewDelegate, UITableV
         iv.clipsToBounds = true
         return iv
     }()
-    let activityLocationLink: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    let imageActivityLink: UIImageView = {
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        let image = UIImage(named: "location-icon")
+        iv.image = image?.withAlignmentRectInsets(UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
+        iv.clipsToBounds = true
+        return iv
+    }()
+    let activityLocationLink: UIButton = {
+        let btn = UIButton()
+        btn.titleLabel?.adjustsFontSizeToFitWidth = true
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.setTitleColor(UIColor.black, for: .normal)
+        btn.addTarget(self, action: #selector(urlActivity), for: .allTouchEvents)
+        return btn
     }()
     
     override func viewDidLoad() {
@@ -68,7 +79,13 @@ class ActivityDetailsController: UIViewController, UITableViewDelegate, UITableV
         setupViews()
         
     }
-    
+    @objc func urlActivity(sender: UITapGestureRecognizer) {
+        let url = activity?.url
+        let targetURL = NSURL(string: url!)
+        let application = UIApplication.shared
+        application.open(targetURL! as URL, completionHandler: nil)
+        print("yo")
+    }
 //    func getConnectedUser() {
 //        userService.getConnectedUser(token: token!, completion: { response , error in
 //            if error != nil {
@@ -95,8 +112,9 @@ class ActivityDetailsController: UIViewController, UITableViewDelegate, UITableV
         view.addSubview(activityImage)
         let url = URL(string: (activity?.photos)!)
         activityImage.kf.setImage(with: url)
+        view.addSubview(imageActivityLink)
         view.addSubview(activityLocationLink)
-        activityLocationLink.text = activity?.address // add onclick vers google with url
+        activityLocationLink.setTitle(activity?.address, for: .normal)
         tags = activity?.type
         view.addSubview(collectionView)
         collectionView.dataSource = self
@@ -115,10 +133,17 @@ class ActivityDetailsController: UIViewController, UITableViewDelegate, UITableV
         activityImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15).isActive = true
         activityImage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
         activityImage.heightAnchor.constraint(equalToConstant: 150).isActive = true
-        activityLocationLink.topAnchor.constraint(equalTo: activityImage.bottomAnchor, constant: 5).isActive = true
-        activityLocationLink.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        activityLocationLink.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        
+        imageActivityLink.topAnchor.constraint(equalTo: activityImage.bottomAnchor, constant: 7).isActive = true
+        imageActivityLink.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
+        imageActivityLink.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        imageActivityLink.widthAnchor.constraint(equalToConstant: 20).isActive = true
+
+        activityLocationLink.topAnchor.constraint(equalTo: activityImage.bottomAnchor, constant: 7).isActive = true
+        activityLocationLink.leadingAnchor.constraint(equalTo: imageActivityLink.trailingAnchor, constant: 5).isActive = true
+        activityLocationLink.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5).isActive = true
         activityLocationLink.heightAnchor.constraint(equalToConstant: 20).isActive = true
+
         collectionView.topAnchor.constraint(equalTo: activityLocationLink.bottomAnchor, constant: 5).isActive = true
         collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
@@ -214,9 +239,12 @@ class ActivityDetailsController: UIViewController, UITableViewDelegate, UITableV
                 DispatchQueue.main.async{
                     if self.events.isEmpty {
                         self.emptyEventList.isHidden = false
+                        self.tableView.isHidden = true
                         self.indicator.stopAnimating()
                     } else {
                         self.emptyEventList.isHidden = true
+                        self.tableView.isHidden = false
+
                     }
                     self.tableView.reloadData()
                     self.indicator.stopAnimating()

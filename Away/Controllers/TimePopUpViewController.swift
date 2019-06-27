@@ -74,8 +74,7 @@ class TimePopUpViewController: UIViewController {
     }
     @objc func saveEvent() {
         let timeFormatter: DateFormatter = DateFormatter()
-        timeFormatter.dateFormat = "hh:mm"
-        
+        timeFormatter.dateFormat = "HH:mm"
         let selectedTime: String = timeFormatter.string(from: timePicker.date)
         timeDelegate?.saveTime(time: selectedTime)
         dismiss(animated: true)

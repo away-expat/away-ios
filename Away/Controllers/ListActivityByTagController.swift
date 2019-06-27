@@ -16,7 +16,7 @@ class ListActivityByTagController: UIViewController, UITableViewDelegate, UITabl
     let activityService = ActivityService()
     let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
     let tableView = UITableView()
-    var tag : Tag = Tag(id: 1, name: "bar")
+    var tag : Tag?
     var user : User?
     let userService = UserService()
     static var keychain: Keychain?
@@ -98,8 +98,8 @@ class ListActivityByTagController: UIViewController, UITableViewDelegate, UITabl
         
         indicator.startAnimating()
         indicator.hidesWhenStopped = true
-        let city = user?.at.name
-        activityService.getActivitiesByTag(token: token!, city: city!, tag: tag, completion :{ response , error in
+        let city = user?.at.id.description
+        activityService.getActivitiesByTag(token: token!, city: city!, tag: tag!.name, completion :{ response , error in
             if error != nil {
                 print ("listActivityByTag error:", error!)
             } else {

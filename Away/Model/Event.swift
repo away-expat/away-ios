@@ -16,6 +16,4 @@ struct Event : Codable {
     let date: String
     let hour: String
     let description: String
-    let owner: User
-    let photo: String
 }

@@ -16,15 +16,31 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
         switch index {
         case 0:
             currentTab = 0
+            if searchQuery != nil && searchQuery!.count > 2 {
+                startLoading()
+                getActivities(search: searchQuery!)
+            }
             break
         case 1:
             currentTab = 1
+            if searchQuery != nil && searchQuery!.count > 2 {
+                startLoading()
+                getEvents(search: searchQuery!)
+            }
             break
         case 2:
             currentTab = 2
+            if searchQuery != nil && searchQuery!.count > 2 {
+                startLoading()
+                getTags(search: searchQuery!)
+            }
             break
         case 3:
             currentTab = 3
+            if searchQuery != nil && searchQuery!.count > 2 {
+                startLoading()
+                getUsers(search: searchQuery!)
+            }
             break
         default:
             break
@@ -56,6 +72,7 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
     var user : User?
     static var keychain: Keychain?
     let token = App.keychain!["token"]
+    var searchQuery:String?
     
     let searchBar: UISearchBar = {
         let sb = UISearchBar()
@@ -77,7 +94,10 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
         
         
     }
-    
+    func startLoading() {
+        tableView.isHidden = true
+        indicator.isHidden = false
+    }
     func getConnectedUser() {
         userService.getConnectedUser(token: token!, completion: { response , error in
             if error != nil {
@@ -144,23 +164,25 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        searchQuery = searchText
         if searchText.count > 2 {
             indicator.startAnimating()
             indicator.hidesWhenStopped = true
             tableView.isHidden = true
+    
             switch self.currentTab {
             case 0:
-                tableView.isHidden = false
-                getActivitiess(search: searchText)
+                startLoading()
+                getActivities(search: searchText)
             case 1:
-                tableView.isHidden = false
+                startLoading()
                 getEvents(search: searchText)
             case 2:
-                tableView.isHidden = false
+                startLoading()
                 getTags(search: searchText)
 
             case 3:
-                tableView.isHidden = false
+                startLoading()
                 getUsers(search: searchText)
             default:
                 break
@@ -171,6 +193,9 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
             activities = []
             tags = []
             events = []
+            self.tableView.isHidden = true
+            self.indicator.stopAnimating()
+            self.emptyCollectionView.isHidden = true
             self.tableView.reloadData()
             
         }
@@ -182,31 +207,39 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
         switch self.currentTab {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: activityTabCellIdentifier, for: indexPath) as! TabSearchCustomActivityCell
-            cell.label.text = activities[indexPath.row].name
-            let url = URL(string: activities[indexPath.row].photos!)
-            cell.avatarImageView.kf.setImage(with: url)
-            //cell.dislikeButton.addTarget(self, action: #selector(triggerAlert(_:)), for: .touchUpInside)
+            if indexPath.row < activities.count {
+                cell.label.text = activities[indexPath.row].name
+                let url = URL(string: activities[indexPath.row].photos!)
+                cell.avatarImageView.kf.setImage(with: url)
+                //cell.dislikeButton.addTarget(self, action: #selector(triggerAlert(_:)), for: .touchUpInside)
+            }
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: eventTabCellIdentifier, for: indexPath) as! TabSearchCustomEventCell
-            let url = URL(string: events[indexPath.row].photo)
-            cell.avatarImageView.kf.setImage(with: url)
-            cell.title.text = events[indexPath.row].title
-            cell.dateTime.text =  events[indexPath.row].date + " " + events[indexPath.row].hour
-            //cell.dislikeButton.addTarget(self, action: #selector(triggerAlert(_:)), for: .touchUpInside)
+//            let url = URL(string: events[indexPath.row].activityId)
+//            cell.avatarImageView.kf.setImage(with: url)
+            if indexPath.row < events.count {
+                cell.title.text = events[indexPath.row].title
+                cell.dateTime.text =  events[indexPath.row].date + " " + events[indexPath.row].hour
+                //cell.dislikeButton.addTarget(self, action: #selector(triggerAlert(_:)), for: .touchUpInside)
+            }
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: tagTabCellIdentifier, for: indexPath) as! TabSearchCustomTagCell
-            cell.label.text = tags[indexPath.row].name
-            //cell.dislikeButton.addTarget(self, action: #selector(triggerAlert(_:)), for: .touchUpInside)
+            if indexPath.row < tags.count {
+                cell.label.text = tags[indexPath.row].name
+                //cell.addTarget(self, action: #selector(listActivityByTag), for: .touchUpInside)
+            }
             return cell
         case 3:
             let cell = tableView.dequeueReusableCell(withIdentifier: userTabCellIdentifier, for: indexPath) as! TabSearchCustomUserCell
-            cell.username.text = users[indexPath.row].firstname + " " + users[indexPath.row].lastname
-            cell.country.text =  users[indexPath.row].country
-            let url = URL(string: users[indexPath.row].avatar)
-            cell.avatarImageView.kf.setImage(with: url)
-            //cell.dislikeButton.addTarget(self, action: #selector(triggerAlert(_:)), for: .touchUpInside)
+            if indexPath.row < users.count {
+                cell.username.text = users[indexPath.row].firstname + " " + users[indexPath.row].lastname
+                cell.country.text =  users[indexPath.row].country
+                let url = URL(string: users[indexPath.row].avatar)
+                cell.avatarImageView.kf.setImage(with: url)
+                //cell.dislikeButton.addTarget(self, action: #selector(triggerAlert(_:)), for: .touchUpInside)
+            }
             return cell
         default:
             return UITableViewCell()
@@ -248,6 +281,9 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
             print("selected cell \(indexPath.row) in index \(currentTab)")
             break
         case 2:
+            let listActivityByTagController = ListActivityByTagController()
+            listActivityByTagController.tag = tags[indexPath.row]
+            self.navigationController?.pushViewController(listActivityByTagController, animated: true)
             print("selected cell \(indexPath.row) in index \(currentTab)")
             //like ou dislike
             break
@@ -270,7 +306,7 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
         changeCitiesViewController.cityDelegate = self
         present(changeCitiesViewController, animated: true)
     }
-    
+   
     func getTags(search: String) {
         tagService.searchTags(token: token!, search: search, completion: { response , error in
             if error != nil {
@@ -282,15 +318,17 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
                         self.emptyCollectionView.isHidden = false
                     } else {
                         self.emptyCollectionView.isHidden = true
+                        self.tableView.isHidden = false
+
                     }
-                    self.tableView.reloadData()
                     self.indicator.stopAnimating()
+                    self.tableView.reloadData()
                 }
             }
             
         })
     }
-    func getActivitiess(search: String) {
+    func getActivities(search: String) {
         activityService.getActivities(token: token!, search: search, completion: { response , error in
             if error != nil {
                 print ("get activities error:", error!)
@@ -301,9 +339,10 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
                         self.emptyCollectionView.isHidden = false
                     } else {
                         self.emptyCollectionView.isHidden = true
+                        self.tableView.isHidden = false
                     }
-                    self.tableView.reloadData()
                     self.indicator.stopAnimating()
+                    self.tableView.reloadData()
                 }
             }
             
@@ -320,9 +359,10 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
                         self.emptyCollectionView.isHidden = false
                     } else {
                         self.emptyCollectionView.isHidden = true
+                        self.tableView.isHidden = false
                     }
-                    self.tableView.reloadData()
                     self.indicator.stopAnimating()
+                    self.tableView.reloadData()
                 }
             }
             
@@ -339,9 +379,10 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
                         self.emptyCollectionView.isHidden = false
                     } else {
                         self.emptyCollectionView.isHidden = true
+                        self.tableView.isHidden = false
                     }
-                    self.tableView.reloadData()
                     self.indicator.stopAnimating()
+                    self.tableView.reloadData()
                 }
             }
             

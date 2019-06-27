@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 class EventDetailsController: UIViewController {
+    var event: Event?
     
     override func viewDidLoad() {
         super.viewDidLoad()

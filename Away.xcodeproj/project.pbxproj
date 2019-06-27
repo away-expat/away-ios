@@ -46,6 +46,7 @@
 		287A2B1522C2DF6400381E5C /* TimePopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287A2B1422C2DF6400381E5C /* TimePopUpViewController.swift */; };
 		287A2B1722C2F15900381E5C /* SelectActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287A2B1622C2F15900381E5C /* SelectActivityViewController.swift */; };
 		287A2B1922C3BB3700381E5C /* CustomTagsOfActivityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287A2B1822C3BB3700381E5C /* CustomTagsOfActivityCell.swift */; };
+		287A2B1E22C54F6600381E5C /* CreateEventResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287A2B1D22C54F6600381E5C /* CreateEventResponse.swift */; };
 		287C3CBB22871F1300406834 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287C3CBA22871F1300406834 /* TabBar.swift */; };
 		2898663222887AB300CE97E8 /* CustomCityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2898663022887AB300CE97E8 /* CustomCityCell.swift */; };
 		28986635228DA5C300CE97E8 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28986634228DA5C300CE97E8 /* HomeViewController.swift */; };
@@ -126,6 +127,7 @@
 		287A2B1422C2DF6400381E5C /* TimePopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimePopUpViewController.swift; sourceTree = "<group>"; };
 		287A2B1622C2F15900381E5C /* SelectActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectActivityViewController.swift; sourceTree = "<group>"; };
 		287A2B1822C3BB3700381E5C /* CustomTagsOfActivityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTagsOfActivityCell.swift; sourceTree = "<group>"; };
+		287A2B1D22C54F6600381E5C /* CreateEventResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventResponse.swift; sourceTree = "<group>"; };
 		287C3CBA22871F1300406834 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 		2898663022887AB300CE97E8 /* CustomCityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCityCell.swift; sourceTree = "<group>"; };
 		28986634228DA5C300CE97E8 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 			children = (
 				28475FA722B82E790094C726 /* ActivityByTagResponse.swift */,
 				28547F2A22BC5EBD00C478BD /* SuggestionEventsResponse.swift */,
+				287A2B1D22C54F6600381E5C /* CreateEventResponse.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -612,6 +615,7 @@
 				28475F9722B1A8070094C726 /* ErrorType.swift in Sources */,
 				28475FAE22BC1D220094C726 /* CustomTagSearchCell.swift in Sources */,
 				28986641228F42E500CE97E8 /* CreateEventViewController.swift in Sources */,
+				287A2B1E22C54F6600381E5C /* CreateEventResponse.swift in Sources */,
 				28475F8922AEA9EC0094C726 /* ActivityService.swift in Sources */,
 				28475FA522B6B95F0094C726 /* Token.swift in Sources */,
 				287A2B1922C3BB3700381E5C /* CustomTagsOfActivityCell.swift in Sources */,

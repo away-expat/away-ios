@@ -75,7 +75,7 @@ class DatePopUpViewController: UIViewController {
     }
     @objc func saveEvent() {
         let dateFormatter: DateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy/MM/dd"
+        dateFormatter.dateFormat = "yyyy-MM-dd"
 
         let selectedDate: String = dateFormatter.string(from: datePicker.date)
         dateDelegate?.saveDate(date: selectedDate)

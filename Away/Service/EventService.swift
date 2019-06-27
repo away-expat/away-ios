@@ -22,8 +22,8 @@ class EventService {
             "title": title,
             "description": description,
             "date": date,
-            "time": time,
-            "activity": activity
+            "hour": time,
+            "idActivity": activity
             ] as [String:Any]
         let jsonData: Data
         do {

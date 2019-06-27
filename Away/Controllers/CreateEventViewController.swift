@@ -8,7 +8,7 @@
 
 import UIKit
 import KeychainAccess
-class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseTimeDelegate, SelectActivityDelegate{
+class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseTimeDelegate, SelectActivityDelegate, UITextViewDelegate{
    
     var activity: Activity?
     var activitySelected: Bool = false
@@ -22,45 +22,62 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseTim
         sv.axis = .vertical
         sv.translatesAutoresizingMaskIntoConstraints = false
         sv.distribution = .equalSpacing
-        sv.spacing = 10
-        sv.alignment = .center
         return sv
     }()
     let stackViewTitle: UIStackView = {
         let sv = UIStackView()
         sv.axis = .horizontal
+        sv.spacing = 5
+        sv.distribution = .fillEqually
+        sv.alignment = .leading
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
     let titleLabel : UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Titre : "
         return label
     }()
     let titleTextField: UITextField = {
-        let tf = UITextField()
+        let tf = UITextField(frame: CGRect(x: 0, y: 0, width: 50, height: 40))
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = "de l'évènement"
         return tf
     }()
-    
+    let lineTitle: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor(named: "AppLightOrange")
+        return view
+    }()
     let stackViewDescription: UIStackView = {
         let sv = UIStackView()
         sv.axis = .horizontal
+        sv.spacing = 5
+        sv.distribution = .fillEqually
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
     let descriptionLabel : UILabel = {
         let label = UILabel()
         label.text = "Description : "
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
     let descriptionTextField: UITextView = {
-        let tv = UITextView()
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.text = "Placeholder"
-        tv.textColor = UIColor.lightGray
-        return tv
+        let textView = UITextView(frame: CGRect(x: 0, y: 0, width: 0, height: 100))
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.font = UIFont.boldSystemFont(ofSize: 14)
+        textView.isEditable = true
+        return textView
+    }()
+    
+    let lineDescription: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor(named: "AppLightOrange")
+        return view
     }()
     let stackViewDatePicker: UIStackView = {
         let sv = UIStackView()
@@ -77,7 +94,6 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseTim
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.placeholder = "de l'évènement"
-        //tf.allowsEditingTextAttributes = false
         tf.addTarget(self, action: #selector(datePickerPopup(_:)), for: .allTouchEvents)
         return tf
     }()
@@ -137,43 +153,55 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseTim
     func setupViews() {
         view.addSubview(stackView)
         stackView.addArrangedSubview(stackViewTitle)
-        
         stackViewTitle.addArrangedSubview(titleLabel)
         stackViewTitle.addArrangedSubview(titleTextField)
+        stackView.addSubview(lineTitle)
+        lineTitle.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        lineTitle.leadingAnchor.constraint(equalTo: stackView.leadingAnchor).isActive = true
+        lineTitle.trailingAnchor.constraint(equalTo: stackView.trailingAnchor).isActive = true
+        lineTitle.topAnchor.constraint(equalTo: stackViewTitle.bottomAnchor, constant: 15).isActive = true
 
         stackView.addArrangedSubview(stackViewDescription)
-        
         stackViewDescription.addArrangedSubview(descriptionLabel)
         stackViewDescription.addArrangedSubview(descriptionTextField)
-        descriptionTextField.topAnchor.constraint(equalTo: stackViewDescription.topAnchor).isActive = true
-        descriptionTextField.leadingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor).isActive = true
-        descriptionTextField.trailingAnchor.constraint(equalTo: stackViewDescription.trailingAnchor).isActive = true
-        descriptionTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+
+        
         descriptionTextField.delegate = self
         descriptionTextField.isScrollEnabled = true
+        stackView.addSubview(lineDescription)
+        lineDescription.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        lineDescription.leadingAnchor.constraint(equalTo: stackView.leadingAnchor).isActive = true
+        lineDescription.trailingAnchor.constraint(equalTo: stackView.trailingAnchor).isActive = true
+        lineDescription.topAnchor.constraint(equalTo: stackViewDescription.bottomAnchor, constant: 15).isActive = true
 
         stackView.addArrangedSubview(stackViewDatePicker)
         
         stackViewDatePicker.addArrangedSubview(dateLabel)
+
         stackViewDatePicker.addArrangedSubview(dateTextField)
 
         stackView.addArrangedSubview(stackViewTimePicker)
 
         stackViewTimePicker.addArrangedSubview(timeLabel)
+
         stackViewTimePicker.addArrangedSubview(timeTextField)
 
         stackView.addArrangedSubview(selectActivity)
         stackView.addArrangedSubview(saveEventButton)
-        selectActivity.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 60).isActive = true
-        selectActivity.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -60).isActive = true
-        saveEventButton.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 20).isActive = true
-        saveEventButton.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -20).isActive = true
         stackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 10).isActive = true
         stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15).isActive = true
         stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
         stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -60).isActive = true
         
+        selectActivity.leadingAnchor.constraint(equalTo: stackView.leadingAnchor).isActive = true
+        selectActivity.trailingAnchor.constraint(equalTo: stackView.trailingAnchor).isActive = true
+        saveEventButton.leadingAnchor.constraint(equalTo: stackView.leadingAnchor).isActive = true
+        saveEventButton.trailingAnchor.constraint(equalTo: stackView.trailingAnchor).isActive = true
+        
     }
+    
+   
+    
     @objc func datePickerPopup(_ sender: UITextField) {
         let datePopupViewController = DatePopUpViewController()
         datePopupViewController.dateDelegate = self
@@ -231,7 +259,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseTim
             } else {
                 DispatchQueue.main.async{
                     let eventDetailsController = EventDetailsController()
-                    //eventDetailsController.event = response
+                    eventDetailsController.event = response
                     self.present(eventDetailsController, animated: true)
                 }
             }
@@ -239,16 +267,16 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseTim
         })
     }
 }
-extension CreateEventViewController: UITextViewDelegate{
-    func textViewDidChange(_ textView: UITextView) {
-        let size = CGSize(width: view.frame.width, height: .infinity)
-        let estimatedSize = textView.sizeThatFits(size)
-        
-        textView.constraints.forEach {(constraint) in
-            if constraint.firstAttribute == .height {
-                constraint.constant = estimatedSize.height
-            }
-            
-        }
-    }
-}
+//extension CreateEventViewController: UITextViewDelegate{
+//    func textViewDidChange(_ textView: UITextView) {
+//        let size = CGSize(width: view.frame.width, height: .infinity)
+//        let estimatedSize = textView.sizeThatFits(size)
+//
+//        textView.constraints.forEach {(constraint) in
+//            if constraint.firstAttribute == .height {
+//                constraint.constant = estimatedSize.height
+//            }
+//
+//        }
+//    }
+//}

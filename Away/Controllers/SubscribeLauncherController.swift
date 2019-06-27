@@ -77,14 +77,14 @@ class SubscribeLauncherController: UIViewController, UITextFieldDelegate, Change
     let birthday: UITextField = {
         let birth = UITextField()
         birth.translatesAutoresizingMaskIntoConstraints = false
-        birth.placeholder = "YY/MM/DD"
+        birth.placeholder = "YY-MM-DD"
         return birth
     }()
     let datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = UIDatePicker.Mode.date
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy/mm/dd"
+        dateFormatter.dateFormat = "yyyy-mm-dd"
         let selectedDate = dateFormatter.string(from: datePicker.date)
         datePicker.timeZone = NSTimeZone.local
         datePicker.backgroundColor = .white

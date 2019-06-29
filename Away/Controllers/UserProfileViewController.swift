@@ -14,7 +14,7 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
  
     let topView = UIView()
     let bottomView = UIView()
-    var user : User?
+    var user: User?
     let userService = UserService()
     var events: [Event] = []
     let eventService = EventService()
@@ -22,6 +22,9 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
     let tableView = UITableView()
     static var keychain: Keychain?
     let token = App.keychain!["token"]
+    var userId: Int?
+    var isConnectedUser : Bool = true
+
     let emptyEventList : UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -30,7 +33,15 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
     }()
     override func viewDidLoad() {
         super.viewDidLoad()
-        getConnectedUser()
+        let connectedUserId = Int(App.keychain!["userId"]!)
+        if userId == connectedUserId || userId == nil {
+            getConnectedUser()
+        } else {
+            isConnectedUser = false
+            getUserById(userId: userId!)
+            getUserEvents(userId: userId!)
+
+        }
     
     }
     
@@ -65,7 +76,7 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
         let button = UIBarButtonItem(image: planetImageView.image, style: .plain, target: self, action: #selector(chooseCityToVisitButtonClicked))
         navigationItem.rightBarButtonItem = button
         navigationItem.rightBarButtonItem?.tintColor = .white
-        
+        view.backgroundColor = .white
         view.addSubview(topView)
         view.addSubview(bottomView)
         topView.backgroundColor = .white
@@ -109,13 +120,15 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
             return sv
         }()
         
-        let avatar = UIImage(named: "bird")
+        
         let avatarImageView = UIImageView()
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
         avatarImageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
         avatarImageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         avatarImageView.layer.cornerRadius = 50
-        avatarImageView.image = avatar
+        let url = URL(string: user!.avatar)
+        avatarImageView.kf.setImage(with: url)
+        
         avatarImageView.clipsToBounds = true
         avatarImageView.layer.borderWidth = 3
         avatarImageView.layer.borderColor = UIColor.white.cgColor
@@ -208,6 +221,7 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
             view.heightAnchor.constraint(equalToConstant: 1).isActive = true
             return view
         }()
+
         let userSettingsButton: UIButton = {
             let button = UIButton()
             button.translatesAutoresizingMaskIntoConstraints = false
@@ -229,15 +243,20 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
         userSettingsButton.topAnchor.constraint(equalTo: lineView.bottomAnchor, constant: 10).isActive = true
         userSettingsButton.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 5).isActive = true
         userSettingsButton.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -5).isActive = true
-        
-        
+        userSettingsButton.isHidden = !isConnectedUser
         bottomView.addSubview(tableView)
         tableView.delegate = self
         tableView.dataSource = self
         bottomView.addSubview(eventsListLabel)
         bottomView.addSubview(emptyEventList)
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        eventsListLabel.topAnchor.constraint(equalTo: userSettingsButton.bottomAnchor, constant: 20).isActive = true
+        if !isConnectedUser {
+            eventsListLabel.topAnchor.constraint(equalTo: lineView.bottomAnchor, constant: 20).isActive = true
+
+        } else {
+            eventsListLabel.topAnchor.constraint(equalTo: userSettingsButton.bottomAnchor, constant: 20).isActive = true
+
+        }
         eventsListLabel.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 15).isActive = true
         
         tableView.separatorStyle = UITableViewCellSeparatorStyle.none
@@ -249,7 +268,19 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
         emptyEventList.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
         emptyEventList.centerYAnchor.constraint(equalTo: tableView.centerYAnchor).isActive = true
         
-        eventService.getUserEvents(token: token!, completion: { response, error in
+    }
+    @objc func userSettingsButtonClicked() {
+        self.navigationController?.pushViewController(UserSettingsController(), animated: true)
+    }
+    @objc func tagButtonClicked() {
+        
+        let tagManagementController = TagManagementController()
+        tagManagementController.isConnectedUser = isConnectedUser
+        self.navigationController?.pushViewController(tagManagementController, animated: true)
+    }
+    
+    func getUserEvents(userId : Int) {
+        eventService.getUserEvents(token: token!, userId: userId, completion: { response, error in
             if error != nil {
                 print ("user profile get events error:", error!)
             } else {
@@ -262,20 +293,31 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
                         self.emptyEventList.isHidden = true
                     }
                     self.tableView.reloadData()
-                    self.indicator.stopAnimating()                }
+                    self.indicator.stopAnimating()
+                    
+                }
             }
             
         })
-
-    }
-    @objc func userSettingsButtonClicked() {
-        self.navigationController?.pushViewController(UserSettingsController(), animated: true)
-    }
-    @objc func tagButtonClicked() {
-        self.navigationController?.pushViewController(TagManagementController(), animated: true)
     }
     
-    
+    func getUserById(userId: Int) {
+        userService.getUserById(token: token!, userId: userId, completion: { response, error in
+            if error != nil {
+                print ("user profile get user by id error:", error!)
+            } else {
+                self.user?.avatar = response!.avatar
+                self.user?.firstname = response!.firstname
+                self.user?.lastname = response!.lastname
+                self.user?.country = response!.country
+                self.user?.birth = response!.birth
+                DispatchQueue.main.async{
+                    self.setupViews()
+                }
+            }
+            
+        })
+    }
     func getConnectedUser() {
         userService.getConnectedUser(token: token!, completion: { response , error in
             if error != nil {
@@ -284,6 +326,8 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
                 self.user = response
                 DispatchQueue.main.async{
                     self.setupViews()
+                    self.getUserEvents(userId: self.user!.id)
+
                 }
             }
             

@@ -86,6 +86,12 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
         sb.backgroundImage = UIImage()
         return sb
     }()
+    let searchTabIcon : UIImageView = {
+        let iv = UIImageView(image: UIImage(named: "searchTab"))
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.tintColor = .gray
+        return iv
+    }()
     let tableView = UITableView()
     
     override func viewDidLoad() {
@@ -129,7 +135,7 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
         view.addSubview(indicator)
         view.addSubview(emptyCollectionView)
         view.addSubview(tableView)
-
+        view.addSubview(searchTabIcon)
         
         
         searchBar.delegate = self
@@ -146,7 +152,9 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
         emptyCollectionView.isHidden = true
         emptyCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         emptyCollectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        
+        searchTabIcon.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        searchTabIcon.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+
         tableView.delegate = self
         tableView.dataSource = self
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -169,7 +177,8 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
             indicator.startAnimating()
             indicator.hidesWhenStopped = true
             tableView.isHidden = true
-    
+            searchTabIcon.isHidden = true
+
             switch self.currentTab {
             case 0:
                 startLoading()
@@ -193,6 +202,7 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
             activities = []
             tags = []
             events = []
+            searchTabIcon.isHidden = false
             self.tableView.isHidden = true
             self.indicator.stopAnimating()
             self.emptyCollectionView.isHidden = true
@@ -211,24 +221,21 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
                 cell.label.text = activities[indexPath.row].name
                 let url = URL(string: activities[indexPath.row].photos!)
                 cell.avatarImageView.kf.setImage(with: url)
-                //cell.dislikeButton.addTarget(self, action: #selector(triggerAlert(_:)), for: .touchUpInside)
             }
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: eventTabCellIdentifier, for: indexPath) as! TabSearchCustomEventCell
-//            let url = URL(string: events[indexPath.row].activityId)
-//            cell.avatarImageView.kf.setImage(with: url)
             if indexPath.row < events.count {
                 cell.title.text = events[indexPath.row].title
                 cell.dateTime.text =  events[indexPath.row].date + " " + events[indexPath.row].hour
-                //cell.dislikeButton.addTarget(self, action: #selector(triggerAlert(_:)), for: .touchUpInside)
+                let url = URL(string: events[indexPath.row].photo)
+                cell.avatarImageView.kf.setImage(with: url)
             }
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: tagTabCellIdentifier, for: indexPath) as! TabSearchCustomTagCell
             if indexPath.row < tags.count {
                 cell.label.text = tags[indexPath.row].name
-                //cell.addTarget(self, action: #selector(listActivityByTag), for: .touchUpInside)
             }
             return cell
         case 3:
@@ -238,7 +245,6 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
                 cell.country.text =  users[indexPath.row].country
                 let url = URL(string: users[indexPath.row].avatar)
                 cell.avatarImageView.kf.setImage(with: url)
-                //cell.dislikeButton.addTarget(self, action: #selector(triggerAlert(_:)), for: .touchUpInside)
             }
             return cell
         default:
@@ -276,7 +282,7 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
             break
         case 1:
             let eventDetailsController = EventDetailsController()
-           // eventDetailsController.event = events[indexPath.row]
+            eventDetailsController.eventId = events[indexPath.row].id
             self.navigationController?.pushViewController(eventDetailsController, animated: true)
             print("selected cell \(indexPath.row) in index \(currentTab)")
             break
@@ -290,6 +296,7 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
         case 3:
             let userProfileController = UserProfileViewController()
             userProfileController.user = users[indexPath.row]
+            userProfileController.userId = users[indexPath.row].id
             self.navigationController?.pushViewController(userProfileController, animated: true)
             print("selected cell \(indexPath.row) in index \(currentTab)")
             break

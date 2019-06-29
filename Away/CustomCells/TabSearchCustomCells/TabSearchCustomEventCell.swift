@@ -31,15 +31,15 @@ class TabSearchCustomEventCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .gray
-        label.font = UIFont(name: "AppleSDGothicNeo-Thin", size: 10.0)
+        label.font = UIFont(name: "AppleSDGothicNeo-Thin", size: 16.0)
         label.sizeToFit()
         return label
     }()
     let avatarImageView : UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 80).isActive = true
         imageView.layer.cornerRadius = 50
         imageView.clipsToBounds = true
         imageView.layer.borderWidth = 3
@@ -50,7 +50,7 @@ class TabSearchCustomEventCell: UITableViewCell {
     let cellView: UIView = {
         let cellView = UIView()
         cellView.translatesAutoresizingMaskIntoConstraints = false
-        cellView.backgroundColor = UIColor(named: "AppPeach")
+        cellView.backgroundColor = .white
         return cellView
     }()
     
@@ -67,12 +67,14 @@ class TabSearchCustomEventCell: UITableViewCell {
         avatarImageView.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
         avatarImageView.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 20).isActive = true
         
-        title.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
         title.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 30).isActive = true
         title.topAnchor.constraint(equalTo: cellView.topAnchor, constant: 10).isActive = true
         
         dateTime.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 30).isActive = true
         dateTime.topAnchor.constraint(equalTo: title.bottomAnchor).isActive = true
+        
+        
     }
     
 }
+

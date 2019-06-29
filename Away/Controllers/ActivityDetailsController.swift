@@ -84,7 +84,6 @@ class ActivityDetailsController: UIViewController, UITableViewDelegate, UITableV
         let targetURL = NSURL(string: url!)
         let application = UIApplication.shared
         application.open(targetURL! as URL, completionHandler: nil)
-        print("yo")
     }
 //    func getConnectedUser() {
 //        userService.getConnectedUser(token: token!, completion: { response , error in

@@ -10,19 +10,49 @@ import Foundation
 import UIKit
 
 class UserSettingsController: UIViewController {
+    var selectedDate: String?
     let stackView: UIStackView = {
         let sv = UIStackView()
         sv.translatesAutoresizingMaskIntoConstraints = false
         sv.axis = UILayoutConstraintAxis.vertical
-        sv.distribution = .equalSpacing
+        sv.sizeToFit()
+        sv.alignment = .center
         sv.spacing = 20
         return sv
     }()
-    let firstname: UITextField = {
-        let textfield = UITextField()
-        textfield.translatesAutoresizingMaskIntoConstraints = false
-        textfield.placeholder = "Firstname"
-        return textfield
+    let emailTextField: UITextField = {
+        let email = UITextField()
+        email.translatesAutoresizingMaskIntoConstraints = false
+        email.placeholder = "Email"
+        return email
+    }()
+    let bottomEmailLine: UIView = {
+        let line = UIView()
+        line.translatesAutoresizingMaskIntoConstraints = false
+        line.backgroundColor = UIColor(named: "AppPeach")
+        return line
+    }()
+    
+    
+    let passwordTextField: UITextField = {
+        let password = UITextField()
+        password.translatesAutoresizingMaskIntoConstraints = false
+        password.placeholder = "Password"
+        return password
+    }()
+    
+    let bottomPasswordLine: UIView = {
+        let line = UIView()
+        line.translatesAutoresizingMaskIntoConstraints = false
+        line.backgroundColor = UIColor(named: "AppPeach")
+        return line
+    }()
+    
+    let firstNameTextField: UITextField = {
+        let firstname = UITextField()
+        firstname.translatesAutoresizingMaskIntoConstraints = false
+        firstname.placeholder = "Firstname"
+        return firstname
     }()
     let bottomFirstnameLine: UIView = {
         let line = UIView()
@@ -30,11 +60,11 @@ class UserSettingsController: UIViewController {
         line.backgroundColor = UIColor(named: "AppPeach")
         return line
     }()
-    let lastname: UITextField = {
-        let textfield = UITextField()
-        textfield.translatesAutoresizingMaskIntoConstraints = false
-        textfield.placeholder = "Lastname"
-        return textfield
+    let lastNameTextField: UITextField = {
+        let lastname = UITextField()
+        lastname.translatesAutoresizingMaskIntoConstraints = false
+        lastname.placeholder = "Lastname"
+        return lastname
     }()
     let bottomLastnameLine: UIView = {
         let line = UIView()
@@ -42,19 +72,42 @@ class UserSettingsController: UIViewController {
         line.backgroundColor = UIColor(named: "AppPeach")
         return line
     }()
+    
     let birthday: UITextField = {
-        let textfield = UITextField()
-        textfield.translatesAutoresizingMaskIntoConstraints = false
-        textfield.placeholder = "Birthday"
-        return textfield
+        let birth = UITextField()
+        birth.translatesAutoresizingMaskIntoConstraints = false
+        birth.placeholder = "YY-MM-DD"
+        return birth
     }()
+//    let datePicker: UIDatePicker = {
+//        let datePicker = UIDatePicker()
+//        datePicker.datePickerMode = UIDatePicker.Mode.date
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "yyyy-mm-dd"
+//        let selectedDate = dateFormatter.string(from: datePicker.date)
+//        datePicker.timeZone = NSTimeZone.local
+//        datePicker.backgroundColor = .white
+//        datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
+//        return datePicker
+//    }()
     let bottomBirthdayLine: UIView = {
         let line = UIView()
         line.translatesAutoresizingMaskIntoConstraints = false
         line.backgroundColor = UIColor(named: "AppPeach")
         return line
     }()
-    
+    let countryTextField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "Choose country"
+        textField.textAlignment = .center
+        return textField
+    }()
+    let bottomCountryLine: UIView = {
+        let line = UIView()
+        line.translatesAutoresizingMaskIntoConstraints = false
+        line.backgroundColor = UIColor(named: "AppPeach")
+        return line
+    }()
     let logOutButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -69,26 +122,55 @@ class UserSettingsController: UIViewController {
     }()
     override func viewDidLoad() {
         super.viewDidLoad();
-        view.backgroundColor = .purple
+        view.backgroundColor = .white
         view.addSubview(stackView)
-        view.addSubview(logOutButton)
         stackView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        stackView.addArrangedSubview(firstname)
+        stackView.addArrangedSubview(emailTextField)
+        stackView.addArrangedSubview(bottomEmailLine)
+        stackView.addArrangedSubview(passwordTextField)
+        stackView.addArrangedSubview(bottomPasswordLine)
+        stackView.addArrangedSubview(firstNameTextField)
         stackView.addArrangedSubview(bottomFirstnameLine)
-        stackView.addArrangedSubview(lastname)
+        stackView.addArrangedSubview(lastNameTextField)
         stackView.addArrangedSubview(bottomLastnameLine)
         stackView.addArrangedSubview(birthday)
         stackView.addArrangedSubview(bottomBirthdayLine)
-
+        view.addSubview(logOutButton)
+        
+//        bottomEmailLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
+//        bottomEmailLine.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+//
+//        bottomPasswordLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
+//        bottomPasswordLine.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+//
+//        bottomFirstnameLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
+//        bottomFirstnameLine.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+//
+//        bottomLastnameLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
+//        bottomLastnameLine.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+//
+//
+//        bottomCountryLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
+//        bottomCountryLine.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        logOutButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 10).isActive = true
+        logOutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 5).isActive = true
 
     }
     
     @objc func signOutButtonClicked() {
         try! App.keychain?.remove("token")
         UIApplication.setRootView(LoginViewController())
+    }
+    @objc func datePickerValueChanged(_ sender: UIDatePicker){
+        
+        let dateFormatter: DateFormatter = DateFormatter()
+        
+        dateFormatter.dateFormat = "yyyy/mm/dd"
+        
+        selectedDate = dateFormatter.string(from: sender.date)
     }
     
     

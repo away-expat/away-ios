@@ -15,6 +15,9 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     let activityService = ActivityService()
     let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
     let tableView = UITableView()
+    
+    private let refreshControl = UIRefreshControl()
+
     let cityLabel : UILabel = {
         let label = UILabel()
         return label
@@ -29,6 +32,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     static var keychain: Keychain?
     let token = App.keychain!["token"]
+    let userId = App.keychain!["userId"]
     override func viewDidLoad() {
         super.viewDidLoad()
         getConnectedUser()
@@ -62,6 +66,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             } else {
                 self.user = response
                 DispatchQueue.main.async{
+                    try! App.keychain?.set(self.user!.id.description, key: "userId")
                     self.setupViews()
                 }
             }
@@ -89,6 +94,11 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         view.addSubview(tableView)
         view.addSubview(indicator)
         view.addSubview(emptyEventList)
+        if #available(iOS 10.0, *) {
+            tableView.refreshControl = refreshControl
+        } else {
+            tableView.addSubview(refreshControl)
+        }
         emptyEventList.isHidden = true
         tableView.delegate = self
         tableView.dataSource = self
@@ -112,16 +122,44 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         indicator.startAnimating()
         indicator.hidesWhenStopped = true
 
+        refreshControl.addTarget(self, action: #selector(refreshEventSuggestion), for: .valueChanged)
+        getEventSuggestions()
         
+    }
+    
+    @objc func refreshEventSuggestion() {
+        self.emptyEventList.isHidden = true
         activityService.getSuggestions(token: token!, completion: { response , error in
             if error != nil {
                 print ("homeviewcontroller error:", error!)
             } else {
                 self.events = response
-                
                 DispatchQueue.main.async{
                     self.indicator.stopAnimating()
+                    
+                    if self.events.isEmpty {
+                        self.emptyEventList.isHidden = false
+                    } else {
+                        self.emptyEventList.isHidden = true
+                    }
+                    self.tableView.reloadData()
+                    self.refreshControl.endRefreshing()
 
+                }
+            }
+            
+        })
+    }
+    
+    func getEventSuggestions() {
+        activityService.getSuggestions(token: token!, completion: { response , error in
+            if error != nil {
+                print ("homeviewcontroller error:", error!)
+            } else {
+                self.events = response
+                DispatchQueue.main.async{
+                    self.indicator.stopAnimating()
+                    
                     if self.events.isEmpty {
                         self.emptyEventList.isHidden = false
                     } else {

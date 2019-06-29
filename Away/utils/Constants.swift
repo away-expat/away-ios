@@ -22,12 +22,15 @@ class Constants {
     static let TAGS_OF_CONNECTED_USER = BASE_URL + "/tags/ofUser"
     static let LIKE_TAG = BASE_URL + "/tags/like"
     static let DISLIKE_TAG = BASE_URL + "/tags/dislike"
+    static let TAGS_SUGGESTION = BASE_URL + "/tags/suggestion/"
     
     static let EVENTS_BY_ACTIVITY_ROUTE = BASE_URL + "/events/getEventsByActivity"
     static let EVENTS_SUGGESTION = BASE_URL + "/activities/suggestion"
     static let CREATE_EVENT = BASE_URL + "/events"
+    static let EVENT_DETAILS = BASE_URL + "/events/getEventWithDetails/"
     static let GET_CONNECTED_USER = BASE_URL + "/users/userInfo"
     static let GET_USER_EVENTS = BASE_URL + "/events/getUserEvents"
+    static let GET_USER_BY_ID = BASE_URL + "/users/"
     
     static let SEARCH_TAGS = BASE_URL + "/tags/recherche/"
     static let SEARCH_ACTIVITIES = BASE_URL + "/activities/recherche/"

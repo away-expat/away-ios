@@ -41,7 +41,7 @@ class TagService {
     
     func getTags(token: String, search: String, completion: @escaping ([Tag], ErrorType?) -> ()) {
         
-        let urlString = Constants.TAGS_SEARCH_ROUTE + "/" + search
+        let urlString = Constants.SEARCH_TAGS + search
         let url = URL(string: urlString)
         if url == nil { completion([], ErrorType.badUrl) }
         var request = URLRequest(url: url!)
@@ -203,5 +203,39 @@ class TagService {
             }.resume()
     }
     
+    func getTagSuggestions(token: String, completion: @escaping ([Tag], ErrorType?) -> ()) {
+        
+        let urlString = Constants.TAGS_SUGGESTION
+        let url = URL(string: urlString)
+        if url == nil { completion([], ErrorType.badUrl) }
+        var request = URLRequest(url: url!)
+        request.httpMethod = "GET"
+        let token = token
+        request.setValue(token, forHTTPHeaderField: "Authorization")
+        print(request)
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
+            guard let data = data else {return}
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                print("error \(httpResponse.statusCode)")
+                if (httpResponse.statusCode == 401) {
+                    completion([], ErrorType.unauthorized)
+                }
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let response = try decoder.decode([Tag].self, from: data)
+                completion(response, nil)
+            } catch let errorJson {
+                completion([], ErrorType.serverError)
+                print(errorJson)
+                return
+            }
+            
+            }.resume()
+    }
 }
 

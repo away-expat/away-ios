@@ -7,3 +7,10 @@
 //
 
 import Foundation
+struct EventDetailsResponse: Codable{
+    var creator: Creator
+    var event: EventItem
+    var activity: Activity
+    var participant: [UserList]
+    var tag: [Tag]
+}

@@ -1,20 +1,17 @@
 //
-//  Event.swift
+//  EventItem.swift
 //  Away
 //
-//  Created by Candice Guitton on 06/06/2019.
+//  Created by Candice Guitton on 30/06/2019.
 //  Copyright © 2019 Candice Guitton. All rights reserved.
 //
 
 import Foundation
-
-struct Event : Codable {
+struct EventItem : Codable {
     var id: Int
     var title: String
-    var activityName: String
-    var activityId: Int
     var date: String
     var hour: String
     var description: String
-    var photo: String
+
 }

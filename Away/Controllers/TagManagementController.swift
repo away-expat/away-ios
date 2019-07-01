@@ -209,8 +209,12 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
         if collectionView == self.collectionViewV {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: tagsOfUserCellIdentifier, for: indexPath) as! CustomTagsOfUserCell
             cell.label.text = tagsOfUser[indexPath.row].name
-            cell.dislikeButton.tag =  tagsOfUser[indexPath.row].id
-            cell.dislikeButton.addTarget(self, action: #selector(triggerAlert(_:)), for: .touchUpInside)
+            if isConnectedUser {
+                cell.dislikeButton.tag =  tagsOfUser[indexPath.row].id
+                cell.dislikeButton.addTarget(self, action: #selector(triggerAlert(_:)), for: .touchUpInside)
+            }else {
+                cell.dislikeButton.isHidden = true
+            }
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: tagsSuggestionCellIdentifier, for: indexPath) as! TagSuggestionCell
@@ -221,68 +225,19 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
         }
     }
     func setupViews() {
-        view.addSubview(searchBar)
-        view.addSubview(suggestionTagCollectionView)
-        view.addSubview(userTagsCollectionView)
-        view.addSubview(tableView)
-        tableView.isHidden = true
-        view.addSubview(indicator)
-        view.addSubview(collectionViewH)
-        view.addSubview(collectionViewV)
-        view.addSubview(emptyTagCollectionView)
-        getTagsSuggestion()
+       
         getTagsOfUsers()
-        if isSubscriberController {
-            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-            searchBar.setValue("Valider", forKey: "cancelButtonText")
-            searchBar.setShowsCancelButton(true, animated: true)
-
-        } else {
-            searchBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        }
+        
         if tagsOfUser.isEmpty {
             emptyTagCollectionView.isHidden = false
         }
-
-        searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        searchBar.heightAnchor.constraint(equalToConstant: 50).isActive = true
-
-        suggestionTagCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor).isActive = true
-        suggestionTagCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8).isActive = true
-
-        userTagsCollectionView.topAnchor.constraint(equalTo: collectionViewH.bottomAnchor).isActive = true
-        userTagsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8).isActive = true
-
-        tableView.separatorStyle = UITableViewCellSeparatorStyle.none
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-
-        
-        indicator.translatesAutoresizingMaskIntoConstraints = false
-        indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        
-        
-        
-        collectionViewH.topAnchor.constraint(equalTo: suggestionTagCollectionView.bottomAnchor).isActive = true
-        collectionViewH.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        collectionViewH.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 3).isActive = true
-        collectionViewH.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        
-        collectionViewV.topAnchor.constraint(equalTo: userTagsCollectionView.bottomAnchor).isActive = true
-        collectionViewV.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -3).isActive = true
-        collectionViewV.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 3).isActive = true
-        collectionViewV.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        
-        emptyTagCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        emptyTagCollectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        
-        
+        if isConnectedUser {
+            userConnectedSetupViews()
+        }else {
+            profileSetupViews()
+        }
     }
+    
     @objc func triggerAlert(_ sender: UIButton) {
         let tagId = sender.tag
         let alert = UIAlertController(title: "Etes vous sur de vouloir supprimer ce tag?", message: "Vous pourrez l'ajouter de nouveau plus tard", preferredStyle: .alert)
@@ -382,5 +337,89 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
             }
             
         })
+    }
+    
+    func userConnectedSetupViews() {
+        
+        view.addSubview(searchBar)
+        view.addSubview(suggestionTagCollectionView)
+        view.addSubview(userTagsCollectionView)
+        view.addSubview(tableView)
+        tableView.isHidden = true
+        view.addSubview(indicator)
+        view.addSubview(collectionViewH)
+        view.addSubview(collectionViewV)
+        view.addSubview(emptyTagCollectionView)
+        
+        if isSubscriberController {
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+            searchBar.setValue("Valider", forKey: "cancelButtonText")
+            searchBar.setShowsCancelButton(true, animated: true)
+            
+        } else {
+            searchBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        }
+        
+        
+        searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        searchBar.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        suggestionTagCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor).isActive = true
+        suggestionTagCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8).isActive = true
+        
+        userTagsCollectionView.topAnchor.constraint(equalTo: collectionViewH.bottomAnchor).isActive = true
+        userTagsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8).isActive = true
+        
+        tableView.separatorStyle = UITableViewCellSeparatorStyle.none
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        
+        
+        
+        collectionViewH.topAnchor.constraint(equalTo: suggestionTagCollectionView.bottomAnchor).isActive = true
+        collectionViewH.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        collectionViewH.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 3).isActive = true
+        collectionViewH.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        
+        collectionViewV.topAnchor.constraint(equalTo: userTagsCollectionView.bottomAnchor).isActive = true
+        collectionViewV.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -3).isActive = true
+        collectionViewV.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 3).isActive = true
+        collectionViewV.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        emptyTagCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        emptyTagCollectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        
+        
+    }
+    
+    func profileSetupViews() {
+        view.addSubview(userTagsCollectionView)
+        view.addSubview(indicator)
+        userTagsCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 8).isActive = true
+        userTagsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8).isActive = true
+        
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        
+        view.addSubview(collectionViewV)
+        view.addSubview(emptyTagCollectionView)
+        collectionViewV.topAnchor.constraint(equalTo: userTagsCollectionView.bottomAnchor).isActive = true
+        collectionViewV.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -3).isActive = true
+        collectionViewV.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 3).isActive = true
+        collectionViewV.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        emptyTagCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        emptyTagCollectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        
     }
 }

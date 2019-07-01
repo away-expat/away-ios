@@ -136,9 +136,12 @@ class SelectActivityViewController: UIViewController, UISearchBarDelegate, UITab
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: activityTabCellIdentifier, for: indexPath) as! TabSearchCustomActivityCell
-        cell.label.text = filtered[indexPath.row].name
-        let url = URL(string: filtered[indexPath.row].photos!)
-        cell.avatarImageView.kf.setImage(with: url)
+        if indexPath.row < filtered.count {
+            cell.label.text = filtered[indexPath.row].name
+            let url = URL(string: filtered[indexPath.row].photos!)
+            cell.avatarImageView.kf.setImage(with: url)
+            return cell
+        }
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

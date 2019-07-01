@@ -1,5 +1,5 @@
 //
-//  GetUserByIdResponse.swift
+//  Profile.swift
 //  Away
 //
 //  Created by Candice Guitton on 28/06/2019.
@@ -8,12 +8,11 @@
 
 import Foundation
 
-struct GetUserByIdResponse : Codable{
-    let id: Int
+struct Profile : Codable{
+    var id: Int
     var firstname: String
     var lastname: String
     var country: String
     var birth: String
-    var at: City
     var avatar: String
 }

@@ -50,6 +50,7 @@ class EventDetailsController: UIViewController, UITableViewDelegate, UITableView
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.textColor = .black
         textView.font = UIFont.systemFont(ofSize: 18.0)
+        textView.isEditable = false
         return textView
     }()
     let activityImage: UIImageView = {
@@ -78,7 +79,7 @@ class EventDetailsController: UIViewController, UITableViewDelegate, UITableView
         return btn
     }()
     let avatar : UIImageView = {
-        let avatarImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        let avatarImageView = UIImageView()
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
         avatarImageView.layer.cornerRadius = 50
         avatarImageView.clipsToBounds = true
@@ -87,17 +88,19 @@ class EventDetailsController: UIViewController, UITableViewDelegate, UITableView
         return avatarImageView
     }()
     
-    let creatorLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .gray
-        label.font = UIFont(name: "AppleSDGothicNeo-Thin", size: 16.0)
-        return label
+    let creatorLabel: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.titleLabel!.adjustsFontSizeToFitWidth = true
+        button.setTitleColor(.black, for: .normal)
+        button.titleLabel!.font = UIFont.systemFont(ofSize: 16.0)
+        button.addTarget(self, action: #selector(presentCreator), for: .touchUpInside)
+        return button
     }()
     let dateTimeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .lightGray
+        label.textColor = .black
         label.font = UIFont(name: "AppleSDGothicNeo-Thin", size: 16.0)
         return label
     }()
@@ -117,6 +120,12 @@ class EventDetailsController: UIViewController, UITableViewDelegate, UITableView
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
+    let creatorStackView: UIStackView = {
+        let sv = UIStackView()
+        sv.axis = UILayoutConstraintAxis.vertical
+        sv.translatesAutoresizingMaskIntoConstraints = false
+        return sv
+    }()
     let placementAvatarStackView: UIStackView = {
         let sv = UIStackView()
         sv.axis = UILayoutConstraintAxis.horizontal
@@ -130,7 +139,11 @@ class EventDetailsController: UIViewController, UITableViewDelegate, UITableView
         
         
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        if let index = self.tableView.indexPathForSelectedRow{
+            self.tableView.deselectRow(at: index, animated: true)
+        }
+    }
     func setupViews() {
         let planetIcon = UIImage(named: "earth")
         let planetImageView = UIImageView()
@@ -143,8 +156,9 @@ class EventDetailsController: UIViewController, UITableViewDelegate, UITableView
         eventInfosStackView.addArrangedSubview(eventTitle)
         eventInfosStackView.addArrangedSubview(placementAvatarStackView)
         placementAvatarStackView.addArrangedSubview(eventDescription)
-        placementAvatarStackView.addArrangedSubview(avatar)
-        eventInfosStackView.addArrangedSubview(creatorLabel)
+        placementAvatarStackView.addArrangedSubview(creatorStackView)
+        creatorStackView.addArrangedSubview(avatar)
+        creatorStackView.addArrangedSubview(creatorLabel)
         view.addSubview(imageActivityLink)
         view.addSubview(activityLocationLink)
         view.addSubview(dateTimeLabel)
@@ -164,30 +178,23 @@ class EventDetailsController: UIViewController, UITableViewDelegate, UITableView
         tableView.dataSource = self
         tableView.separatorStyle = UITableViewCellSeparatorStyle.none
         tableView.register(TabSearchCustomUserCell.self, forCellReuseIdentifier: "cellId")
-        
+        tableView.backgroundColor = UIColor(named: "AppLightGrey")
         eventTitle.text = event?.event.title
         eventDescription.text = event?.event.description
         let urlAvatar = URL(string: (event!.creator.avatar))
         avatar.kf.setImage(with: urlAvatar)
-        creatorLabel.text = (event?.creator.firstname)! + " " + (event?.creator.lastname)!
+        creatorLabel.setTitle((event?.creator.firstname)! + " " + (event?.creator.lastname)!, for: .normal)
         activityLocationLink.setTitle(event?.activity.name, for: .normal)
         dateTimeLabel.text = (event?.event.date)! + " " + (event?.event.hour)!
-//        eventTitle.topAnchor.constraint(equalTo: activityImage.bottomAnchor, constant: 15).isActive = true
-//        eventTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15).isActive = true
-//        eventDescription.topAnchor.constraint(equalTo: eventTitle.bottomAnchor, constant: 10).isActive = true
-//        eventDescription.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15).isActive = true
-        
+
         activityImage.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         activityImage.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         activityImage.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         activityImage.heightAnchor.constraint(equalToConstant: 110).isActive = true
         
-        eventInfosStackView.topAnchor.constraint(equalTo: activityImage.bottomAnchor).isActive = true
-        eventInfosStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        eventInfosStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        //eventDescription.leadingAnchor.constraint(equalTo: placementAvatarStackView.leadingAnchor, constant: 5).isActive = true
-        //avatar.trailingAnchor.constraint(equalTo: placementAvatarStackView.trailingAnchor).isActive = true
-        creatorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        eventInfosStackView.topAnchor.constraint(equalTo: activityImage.bottomAnchor, constant: 10).isActive = true
+        eventInfosStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8).isActive = true
+        eventInfosStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8).isActive = true
         imageActivityLink.topAnchor.constraint(equalTo: eventInfosStackView.bottomAnchor, constant: 7).isActive = true
         imageActivityLink.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
         imageActivityLink.heightAnchor.constraint(equalToConstant: 20).isActive = true
@@ -195,7 +202,6 @@ class EventDetailsController: UIViewController, UITableViewDelegate, UITableView
         
         activityLocationLink.topAnchor.constraint(equalTo: eventInfosStackView.bottomAnchor, constant: 7).isActive = true
         activityLocationLink.leadingAnchor.constraint(equalTo: imageActivityLink.trailingAnchor, constant: 5).isActive = true
-        //activityLocationLink.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5).isActive = true
         activityLocationLink.heightAnchor.constraint(equalToConstant: 20).isActive = true
 
         dateTimeLabel.topAnchor.constraint(equalTo: imageActivityLink.bottomAnchor, constant: 4).isActive = true
@@ -206,18 +212,21 @@ class EventDetailsController: UIViewController, UITableViewDelegate, UITableView
         tableView.topAnchor.constraint(equalTo: tableViewLabel.bottomAnchor, constant: 15).isActive = true
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.heightAnchor.constraint(equalToConstant: 150).isActive = true
 
+        joinEvent.topAnchor.constraint(equalTo: view.bottomAnchor, constant: -55).isActive = true
         joinEvent.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -5).isActive = true
         joinEvent.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         joinEvent.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        
+        
         
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return participants.count
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+        return 100
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! TabSearchCustomUserCell
@@ -237,6 +246,11 @@ class EventDetailsController: UIViewController, UITableViewDelegate, UITableView
         let activityDetailsController = ActivityDetailsController()
         activityDetailsController.activity = event?.activity
         self.navigationController?.pushViewController(activityDetailsController, animated: true)
+    }
+    @objc func presentCreator() {
+        let userProfileViewController = UserProfileViewController()
+        userProfileViewController.userId = event?.creator.id
+        self.navigationController?.pushViewController(userProfileViewController, animated: true)
     }
     @objc func joinEventButton() {
         print("hello beauty")

@@ -8,6 +8,8 @@
 
 import UIKit
 import KeychainAccess
+import Kingfisher
+
 class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ChangeCitiesDelegate {
     var user : User?
     let userService = UserService()
@@ -38,10 +40,18 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         getConnectedUser()
         
     }
-
+    override func viewWillAppear(_ animated: Bool) {
+        if let index = self.tableView.indexPathForSelectedRow {
+            self.tableView.deselectRow(at: index, animated: true)
+        }
+    }
      func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! CustomEventCell
-        cell.label.text = events[indexPath.row].activityName
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! CustomHomeEventCell
+        cell.labelActivityTitle.text = events[indexPath.row].activityName
+        cell.labelEventDateTime.text = events[indexPath.row].date + "  " + events[indexPath.row].hour
+        cell.labelEventTitle.text = events[indexPath.row].title
+        let url = URL(string: events[indexPath.row].photo)
+        cell.cardImage.kf.setImage(with: url)
         return cell
     }
     
@@ -49,12 +59,10 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         return events.count
     }
     
-     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 160.0
-    }
      func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        self.navigationController?.pushViewController(EventDetailsController(), animated: true)
+        let eventDetailsController = EventDetailsController()
+        eventDetailsController.eventId = events[indexPath.row].id
+        self.navigationController?.pushViewController(eventDetailsController, animated: true)
         print("selected cell \(indexPath.row)")
     }
     
@@ -76,7 +84,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func onCitiesChanged(city: City) {
         navigationItem.title = city.name
-        self.user!.at = city
+        changeUserCity(cityId: city.id)
     }
     @objc func chooseCityToVisitButtonClicked() {
         let changeCitiesViewController = ChangeCitiesViewController()
@@ -107,7 +115,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         emptyEventList.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         
         tableView.separatorStyle = UITableViewCellSeparatorStyle.none
-        tableView.register(CustomEventCell.self, forCellReuseIdentifier: "cellId")
+        tableView.register(CustomHomeEventCell.self, forCellReuseIdentifier: "cellId")
         
         indicator.translatesAutoresizingMaskIntoConstraints = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -136,7 +144,6 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 self.events = response
                 DispatchQueue.main.async{
                     self.indicator.stopAnimating()
-                    
                     if self.events.isEmpty {
                         self.emptyEventList.isHidden = false
                     } else {
@@ -165,6 +172,21 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                     } else {
                         self.emptyEventList.isHidden = true
                     }
+                    self.tableView.reloadData()
+                }
+            }
+            
+        })
+    }
+    func changeUserCity(cityId: Int) {
+        userService.updateUserCity(token: token!, cityId: cityId, completion: { response , error in
+            if error != nil {
+                print ("homeviewcontroller change city error:", error!)
+            } else {
+                self.user?.at = response!
+                DispatchQueue.main.async{
+                    self.indicator.stopAnimating()
+                    self.getEventSuggestions()
                     self.tableView.reloadData()
                 }
             }

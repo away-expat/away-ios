@@ -68,7 +68,6 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseTim
     let descriptionTextField: UITextView = {
         let textView = UITextView(frame: CGRect(x: 0, y: 0, width: 0, height: 100))
         textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.font = UIFont.boldSystemFont(ofSize: 14)
         textView.isEditable = true
         return textView
     }()
@@ -259,12 +258,18 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseTim
             } else {
                 DispatchQueue.main.async{
                     let eventDetailsController = EventDetailsController()
-                    eventDetailsController.event = response
-                    self.present(eventDetailsController, animated: true)
+                    eventDetailsController.eventId = response?.event.id
+                    self.navigationController?.pushViewController(eventDetailsController, animated: true)
                 }
             }
             
         })
+        titleTextField.text = ""
+        descriptionTextField.text = ""
+        dateTextField.text = ""
+        timeTextField.text = ""
+        activity = nil
+        
     }
 }
 //extension CreateEventViewController: UITextViewDelegate{

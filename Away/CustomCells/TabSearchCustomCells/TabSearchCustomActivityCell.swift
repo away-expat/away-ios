@@ -23,7 +23,7 @@ class TabSearchCustomActivityCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
-        label.font = UIFont.init(name: "AmericanTypewriter", size: 20)
+        label.font = UIFont(name: "AmericanTypewriter", size: 20)
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
@@ -58,11 +58,12 @@ class TabSearchCustomActivityCell: UITableViewCell {
         cellView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
         
         avatarImageView.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
-        avatarImageView.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 20).isActive = true
+        avatarImageView.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 10).isActive = true
         
-        label.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 30).isActive = true
+        label.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 8).isActive = true
         label.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
-        
+        label.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -8).isActive = true
+
     }
     
 }

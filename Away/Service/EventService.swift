@@ -59,7 +59,7 @@ class EventService {
             }.resume()
     }
     
-    func getEventsByActivity(token: String, activityId: Int, completion: @escaping ([Event], ErrorType?) -> ()) {
+    func getEventsByActivity(token: String, activityId: Int, completion: @escaping ([EventItem], ErrorType?) -> ()) {
         
         let urlString = Constants.EVENTS_BY_ACTIVITY_ROUTE + "/" + activityId.description
         let url = URL(string: urlString)
@@ -67,7 +67,7 @@ class EventService {
         var request = URLRequest(url: url!)
         request.httpMethod = "GET"
         request.setValue(token, forHTTPHeaderField: "Authorization")
-
+        print(request)
         URLSession.shared.dataTask(with: request) { (data, response, error) in
          guard let data = data else {return}
         
@@ -80,7 +80,7 @@ class EventService {
         
         do {
             let decoder = JSONDecoder()
-            let response = try decoder.decode([Event].self, from: data)
+            let response = try decoder.decode([EventItem].self, from: data)
             completion(response, nil)
         } catch let errorJson {
             completion([], ErrorType.serverError)
@@ -93,7 +93,7 @@ class EventService {
     
     func getUserEvents(token: String, userId : Int, completion: @escaping ([Event], ErrorType?) -> ()) {
 
-        let urlString = Constants.GET_USER_EVENTS + "/" + userId.description
+        let urlString = Constants.GET_USER_EVENTS + userId.description
         let url = URL(string: urlString)
         if url == nil { completion([], ErrorType.badUrl) }
         var request = URLRequest(url: url!)
@@ -125,6 +125,42 @@ class EventService {
         
         }.resume()
     }
+    
+    func getUserCreatedEvents(token: String, userId : Int, completion: @escaping ([Event], ErrorType?) -> ()) {
+        
+        let urlString = Constants.GET_USER_CREATED_EVENTS + userId.description
+        let url = URL(string: urlString)
+        if url == nil { completion([], ErrorType.badUrl) }
+        var request = URLRequest(url: url!)
+        request.httpMethod = "GET"
+        request.setValue(token, forHTTPHeaderField: "Authorization")
+        
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            request.setValue(token, forHTTPHeaderField: "Authorization")
+            guard let data = data else {return}
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                print("error \(httpResponse.statusCode)")
+                if (httpResponse.statusCode == 401) {
+                    completion([], ErrorType.unauthorized)
+                    return
+                }
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let response = try decoder.decode([Event].self, from: data)
+                completion(response, nil)
+            } catch let errorJson {
+                completion([], ErrorType.serverError)
+                print(errorJson)
+                return
+            }
+            
+            }.resume()
+    }
+    
     
     func getEvents(token: String, search: String, completion: @escaping ([Event], ErrorType?) -> ()) {
         

@@ -29,13 +29,16 @@ class Constants {
     static let CREATE_EVENT = BASE_URL + "/events"
     static let EVENT_DETAILS = BASE_URL + "/events/getEventWithDetails/"
     static let GET_CONNECTED_USER = BASE_URL + "/users/userInfo"
-    static let GET_USER_EVENTS = BASE_URL + "/events/getUserEvents"
+    static let GET_USER_EVENTS = BASE_URL + "/events/getUserEvents/"
+    static let GET_USER_CREATED_EVENTS = BASE_URL + "/events/getUserEventsCreated/"
     static let GET_USER_BY_ID = BASE_URL + "/users/"
+    static let UPDATE_CITY_USER = BASE_URL + "/users/updateUserCity/"
     
     static let SEARCH_TAGS = BASE_URL + "/tags/recherche/"
     static let SEARCH_ACTIVITIES = BASE_URL + "/activities/recherche/"
     static let SEARCH_USERS = BASE_URL + "/users/recherche/"
     static let SEARCH_EVENTS = BASE_URL + "/events/recherche/"
 
-
+    static let GET_INFO_BY_ID = BASE_URL + "/infos/"
+    static let GET_INFOS = BASE_URL + "/infos"
 }

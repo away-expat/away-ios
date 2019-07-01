@@ -27,7 +27,7 @@ class TabBar: UITabBar {
         firstTabNavigationController = UINavigationController.init(rootViewController: HomeViewController())
         secondTabNavigationController = UINavigationController.init(rootViewController: SearchScreenViewController())
         thirdTabNavigationController = UINavigationController.init(rootViewController: CreateEventViewController())
-        fourthTabNavigationController = UINavigationController.init(rootViewController: ConvenientInformationController())
+        fourthTabNavigationController = UINavigationController.init(rootViewController: ListCountryInformationController())
         fifthTabNavigationController = UINavigationController.init(rootViewController: UserProfileViewController())
         
         tabBarController.viewControllers = [firstTabNavigationController, secondTabNavigationController, thirdTabNavigationController, fourthTabNavigationController, fifthTabNavigationController]

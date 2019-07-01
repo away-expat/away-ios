@@ -76,7 +76,7 @@ class UserService {
             }.resume()
     }
     
-    func getUserById(token: String, userId: Int, completion: @escaping (GetUserByIdResponse?, ErrorType?) -> ()) {
+    func getUserById(token: String, userId: Int, completion: @escaping (Profile?, ErrorType?) -> ()) {
         
         let urlString = Constants.GET_USER_BY_ID + userId.description
         let url = URL(string: urlString)
@@ -100,7 +100,7 @@ class UserService {
             
             do {
                 let decoder = JSONDecoder()
-                let response = try decoder.decode(GetUserByIdResponse.self, from: data)
+                let response = try decoder.decode(Profile.self, from: data)
                 completion(response, nil)
             } catch let errorJson {
                 completion(nil, ErrorType.serverError)
@@ -110,5 +110,42 @@ class UserService {
             
             }.resume()
     }
+    
+    func updateUserCity(token: String, cityId: Int, completion: @escaping (City?, ErrorType?) -> ()) {
+        
+        let urlString = Constants.UPDATE_CITY_USER + cityId.description
+        let url = URL(string: urlString)
+        if url == nil { completion(nil, ErrorType.badUrl) }
+        var request = URLRequest(url: url!)
+        request.httpMethod = "PUT"
+        let token = token
+        request.setValue(token, forHTTPHeaderField: "Authorization")
+        print(request)
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
+            guard let data = data else {return}
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                print("error \(httpResponse.statusCode)")
+                if (httpResponse.statusCode == 401) {
+                    completion(nil, ErrorType.unauthorized)
+                }
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let response = try decoder.decode(City.self, from: data)
+                completion(response, nil)
+            } catch let errorJson {
+                completion(nil, ErrorType.serverError)
+                print(errorJson)
+                return
+            }
+            
+            }.resume()
+    }
+
+    
 }
 

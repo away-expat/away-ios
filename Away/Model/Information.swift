@@ -1,5 +1,5 @@
 //
-//  UserList.swift
+//  Information.swift
 //  Away
 //
 //  Created by Candice Guitton on 30/06/2019.
@@ -7,9 +7,10 @@
 //
 
 import Foundation
-struct UserList : Codable{
+
+struct Information: Codable  {
     var id: Int
-    var firstname: String
-    var lastname: String
-    var avatar: String
+    var title: String
+    var content: String
+
 }

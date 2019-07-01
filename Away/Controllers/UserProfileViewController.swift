@@ -15,8 +15,10 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
     let topView = UIView()
     let bottomView = UIView()
     var user: User?
+    var profile: Profile?
     let userService = UserService()
-    var events: [Event] = []
+    var joinedEvents: [Event] = []
+    var createdEvents: [Event] = []
     let eventService = EventService()
     let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
     let tableView = UITableView()
@@ -33,49 +35,83 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
     }()
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.isTranslucent = false
         let connectedUserId = Int(App.keychain!["userId"]!)
         if userId == connectedUserId || userId == nil {
             getConnectedUser()
         } else {
             isConnectedUser = false
             getUserById(userId: userId!)
-            getUserEvents(userId: userId!)
+            getUserCreatedEvents(userId: userId!)
+            getUserJoinedEvents(userId: userId!)
 
         }
     
     }
-    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if section == 0 {
+            let label = UILabel()
+            label.text = "Participation"
+            label.backgroundColor = .lightGray
+            return label
+        }
+        let label = UILabel()
+        label.text = "Création"
+        label.backgroundColor = .lightGray
+        return label
+    }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.section == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! CustomEventListCell
+            cell.titleEvent.text = joinedEvents[indexPath.row].title
+            cell.dateEvent.text = joinedEvents[indexPath.row].date
+            cell.timeEvent.text = joinedEvents[indexPath.row].hour
+            return cell
+        }
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! CustomEventListCell
-        cell.titleEvent.text = events[indexPath.row].title
-        cell.dateEvent.text = events[indexPath.row].date
-        cell.timeEvent.text = events[indexPath.row].hour
+        cell.titleEvent.text = createdEvents[indexPath.row].title
+        cell.dateEvent.text = createdEvents[indexPath.row].date
+        cell.timeEvent.text = createdEvents[indexPath.row].hour
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return events.count
+        if section == 0 {
+            return joinedEvents.count
+        }
+        return createdEvents.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 40.0
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        self.navigationController?.pushViewController(EventDetailsController(), animated: true)
+        if indexPath.section == 0 {
+            let eventDetailsController = EventDetailsController()
+            eventDetailsController.eventId = joinedEvents[indexPath.row].id
+            self.navigationController?.pushViewController(eventDetailsController, animated: true)
+            print("selected cell \(indexPath.row)")
+        }
+        let eventDetailsController = EventDetailsController()
+        eventDetailsController.eventId = createdEvents[indexPath.row].id
+        self.navigationController?.pushViewController(eventDetailsController, animated: true)
         print("selected cell \(indexPath.row)")
     }
     
 
     func setupViews() {
         navigationController?.navigationBar.isTranslucent = false
-        navigationItem.title = self.user?.at.name
+        //navigationItem.title = self.user?.at.name
         let planetIcon = UIImage(named: "earth")
         let planetImageView = UIImageView()
         planetImageView.image = planetIcon?.withAlignmentRectInsets(UIEdgeInsets(top: 0, left: 0, bottom: -7, right: 0))
         let button = UIBarButtonItem(image: planetImageView.image, style: .plain, target: self, action: #selector(chooseCityToVisitButtonClicked))
         navigationItem.rightBarButtonItem = button
         navigationItem.rightBarButtonItem?.tintColor = .white
+        
         view.backgroundColor = .white
         view.addSubview(topView)
         view.addSubview(bottomView)
@@ -84,6 +120,7 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
         buildTopView(topView: topView)
         buildBottomView(bottomView: bottomView)
         setupConstraints()
+        
     }
     
     func setupConstraints() {
@@ -121,23 +158,26 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
         }()
         
         
-        let avatarImageView = UIImageView()
-        avatarImageView.translatesAutoresizingMaskIntoConstraints = false
-        avatarImageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        avatarImageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        avatarImageView.layer.cornerRadius = 50
-        let url = URL(string: user!.avatar)
-        avatarImageView.kf.setImage(with: url)
-        
-        avatarImageView.clipsToBounds = true
-        avatarImageView.layer.borderWidth = 3
-        avatarImageView.layer.borderColor = UIColor.white.cgColor
-        
+        let avatarImageView :UIImageView = {
+            let avatarImageView = UIImageView()
+            avatarImageView.translatesAutoresizingMaskIntoConstraints = false
+            avatarImageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
+            avatarImageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+            avatarImageView.layer.cornerRadius = 50
+            avatarImageView.clipsToBounds = true
+            avatarImageView.layer.borderWidth = 3
+            avatarImageView.layer.borderColor = UIColor.white.cgColor
+            let url = URL(string: (isConnectedUser ? user?.avatar : profile?.avatar)!)
+            avatarImageView.kf.setImage(with: url)
+            return avatarImageView
+        }()
+
         let userNameLabel: UILabel = {
             let label = UILabel()
             label.translatesAutoresizingMaskIntoConstraints = false
             label.font = UIFont.boldSystemFont(ofSize: 20)
-            label.text = user!.firstname + " " + user!.lastname
+            label.text = isConnectedUser ? user!.firstname + " " + user!.lastname : profile!.firstname + " " + profile!.lastname
+            
             return label
         }()
         
@@ -145,14 +185,14 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
             let label = UILabel()
             label.translatesAutoresizingMaskIntoConstraints = false
             label.font = UIFont.boldSystemFont(ofSize: 14)
-            label.text = user?.birth
+            label.text = isConnectedUser ? user?.birth : profile?.birth
             return label
         }()
         let country: UILabel = {
             let label = UILabel()
             label.translatesAutoresizingMaskIntoConstraints = false
             label.font = UIFont.boldSystemFont(ofSize: 14)
-            label.text = "France"
+            label.text = isConnectedUser ? user?.country : profile?.country
             return label
         }()
         let buttonView: UIView = {
@@ -279,14 +319,14 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
         self.navigationController?.pushViewController(tagManagementController, animated: true)
     }
     
-    func getUserEvents(userId : Int) {
-        eventService.getUserEvents(token: token!, userId: userId, completion: { response, error in
+    func getUserCreatedEvents(userId : Int) {
+        eventService.getUserCreatedEvents(token: token!, userId: userId, completion: { response, error in
             if error != nil {
-                print ("user profile get events error:", error!)
+                print ("user profile get created events error:", error!)
             } else {
-                self.events = response
+                self.createdEvents = response
                 DispatchQueue.main.async{
-                    if self.events.isEmpty {
+                    if self.createdEvents.isEmpty {
                         self.emptyEventList.isHidden = false
                         self.indicator.stopAnimating()
                     } else {
@@ -294,23 +334,39 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
                     }
                     self.tableView.reloadData()
                     self.indicator.stopAnimating()
-                    
+
                 }
             }
-            
+
         })
     }
-    
+    func getUserJoinedEvents(userId : Int) {
+        eventService.getUserEvents(token: token!, userId: userId, completion: { response, error in
+            if error != nil {
+                print ("user profile get joined events error:", error!)
+            } else {
+                self.joinedEvents = response
+                DispatchQueue.main.async{
+                    if self.joinedEvents.isEmpty {
+                        self.emptyEventList.isHidden = false
+                        self.indicator.stopAnimating()
+                    } else {
+                        self.emptyEventList.isHidden = true
+                    }
+                    self.tableView.reloadData()
+                    self.indicator.stopAnimating()
+
+                }
+            }
+
+        })
+    }
     func getUserById(userId: Int) {
         userService.getUserById(token: token!, userId: userId, completion: { response, error in
             if error != nil {
                 print ("user profile get user by id error:", error!)
             } else {
-                self.user?.avatar = response!.avatar
-                self.user?.firstname = response!.firstname
-                self.user?.lastname = response!.lastname
-                self.user?.country = response!.country
-                self.user?.birth = response!.birth
+                self.profile = response
                 DispatchQueue.main.async{
                     self.setupViews()
                 }
@@ -326,7 +382,7 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
                 self.user = response
                 DispatchQueue.main.async{
                     self.setupViews()
-                    self.getUserEvents(userId: self.user!.id)
+                    //self.getUserEvents(userId: self.user!.id)
 
                 }
             }

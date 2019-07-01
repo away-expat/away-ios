@@ -27,13 +27,7 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
         sb.backgroundImage = UIImage()
         return sb
     }()
-    
-    let layout: UICollectionViewFlowLayout = {
-       let l =  UICollectionViewFlowLayout()
-        l.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
-        l.itemSize = CGSize(width: 100, height: 80)
-        return l
-    }()
+
     let emptyList : UILabel = {
         let label = UILabel()
         label.text = "Choisissez une ville à visiter"

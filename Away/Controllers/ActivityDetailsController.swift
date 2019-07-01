@@ -15,7 +15,7 @@ class ActivityDetailsController: UIViewController, UITableViewDelegate, UITableV
     var tags: [String]?
     var activity: Activity?
     let activityService = ActivityService()
-    var events: [Event] = []
+    var events: [EventItem] = []
     let eventService = EventService()
     var user: User?
     let userService = UserService()
@@ -78,6 +78,12 @@ class ActivityDetailsController: UIViewController, UITableViewDelegate, UITableV
         view.backgroundColor = .white
         setupViews()
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if let index = self.tableView.indexPathForSelectedRow{
+            self.tableView.deselectRow(at: index, animated: true)
+        }
     }
     @objc func urlActivity(sender: UITapGestureRecognizer) {
         let url = activity?.url
@@ -178,6 +184,7 @@ class ActivityDetailsController: UIViewController, UITableViewDelegate, UITableV
         cell.titleEvent.text = events[indexPath.row].title
         cell.dateEvent.text = events[indexPath.row].date
         cell.timeEvent.text = events[indexPath.row].hour
+        
         return cell
     }
     
@@ -185,12 +192,11 @@ class ActivityDetailsController: UIViewController, UITableViewDelegate, UITableV
         return events.count
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 40.0
-    }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        self.navigationController?.pushViewController(EventDetailsController(), animated: true)
+        let eventDetailsController = EventDetailsController()
+        eventDetailsController.eventId = events[indexPath.row].id
+        self.navigationController?.pushViewController(eventDetailsController, animated: true)
         print("selected cell \(indexPath.row)")
     }
 

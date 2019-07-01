@@ -27,14 +27,14 @@ class ListCountryInformationController: UIViewController, UITableViewDelegate, U
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    let headerDescription : UILabel = {
-        let label = UILabel()
-        label.text = "Retrouvez par catégories les infos que nous avons recueillis sur votre pays d’accueil"
-        label.numberOfLines = 2
-        label.font = UIFont.italicSystemFont(ofSize: 20)
-        label.textColor = .darkGray
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    let headerDescription : UITextView = {
+        let tv = UITextView()
+        tv.text = "Retrouvez par catégories les infos que nous avons recueillis sur votre pays d’accueil"
+        tv.font = UIFont.italicSystemFont(ofSize: 20)
+        tv.textColor = .darkGray
+        tv.isEditable = false
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        return tv
     }()
     let tableView = UITableView()
     var infos :[Information] = []
@@ -72,13 +72,13 @@ class ListCountryInformationController: UIViewController, UITableViewDelegate, U
     func setConstraint() {
         headerTitle.topAnchor.constraint(equalTo: view.topAnchor, constant: 8).isActive =  true
         headerTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8).isActive =  true
-        headerTitle.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 8).isActive =  true
+        headerTitle.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8).isActive =  true
         headerTitle.heightAnchor.constraint(equalToConstant: 25).isActive =  true
 
         headerDescription.topAnchor.constraint(equalTo: headerTitle.bottomAnchor, constant: 8).isActive =  true
         headerDescription.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8).isActive =  true
-        headerDescription.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 8).isActive =  true
-        headerDescription.heightAnchor.constraint(equalToConstant: 30).isActive =  true
+        headerDescription.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8).isActive =  true
+        headerDescription.heightAnchor.constraint(equalToConstant: 80).isActive =  true
         
         tableView.separatorStyle = .none
         tableView.topAnchor.constraint(equalTo: headerDescription.bottomAnchor, constant: 20).isActive = true

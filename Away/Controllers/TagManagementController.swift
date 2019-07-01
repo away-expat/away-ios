@@ -120,7 +120,7 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
             collectionViewV.isHidden = true
             collectionViewH.isHidden = true
             self.tableView.isHidden = false
-            tagService.getTags(token: token!, search: searchText, completion: { response , error in
+            tagService.searchTags(token: token!, search: searchText, completion: { response , error in
                 if error != nil {
                     print ("add/remove tag error:", error!)
                 } else {
@@ -235,6 +235,7 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
             userConnectedSetupViews()
         }else {
             profileSetupViews()
+            
         }
     }
     
@@ -319,7 +320,7 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
     }
     
     func getTagsOfUsers() {
-        tagService.getTagsOfUser(token: token!, completion: { response , error in
+        tagService.getTagsOfUser(token: token!, userId: user!.id, completion: { response, error in
             if error != nil {
                 print ("get tag of user error:", error!)
             } else {
@@ -340,7 +341,7 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
     }
     
     func userConnectedSetupViews() {
-        
+        getTagsSuggestion()
         view.addSubview(searchBar)
         view.addSubview(suggestionTagCollectionView)
         view.addSubview(userTagsCollectionView)

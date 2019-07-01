@@ -20,15 +20,15 @@ class CustomActivityCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    let label: UILabel = {
+    let labelActivityTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 14)
         label.backgroundColor = .white
-        return label;
+        return label
     }()
     
-    let card: UIView = {
+    let cell: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -43,39 +43,28 @@ class CustomActivityCell: UITableViewCell {
     }()
     
     func setupViews() {
-        contentView.addSubview(card)
-        card.addSubview(cardImage)
-        cardImage.addSubview(label)
+        contentView.addSubview(cell)
+        cell.addSubview(labelActivityTitle)
+        cell.addSubview(cardImage)
+   
         
-        card.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8).isActive = true
-        card.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -8).isActive = true
-        card.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8).isActive = true
-        card.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
+        cell.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+        cell.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        cell.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+        cell.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
         
-        card.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
-        card.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
-        card.layer.shadowOpacity = 1.0
-        card.layer.shadowRadius = 2.0
+        cardImage.topAnchor.constraint(equalTo: cell.topAnchor, constant: 10).isActive = true
+        cardImage.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: 5).isActive = true
+        cardImage.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -5).isActive = true
+        cardImage.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
-        cardImage.leftAnchor.constraint(equalTo: card.leftAnchor).isActive = true
-        cardImage.rightAnchor.constraint(equalTo: card.rightAnchor).isActive = true
-        cardImage.topAnchor.constraint(equalTo: card.topAnchor).isActive = true
-        cardImage.bottomAnchor.constraint(equalTo: card.bottomAnchor).isActive = true
-
-        //label.topAnchor.constraint(equalTo: cardImage.topAnchor).isActive = true
-        label.bottomAnchor.constraint(equalTo: cardImage.bottomAnchor).isActive = true
-        label.leftAnchor.constraint(equalTo: cardImage.leftAnchor).isActive = true
-        label.rightAnchor.constraint(equalTo: cardImage.rightAnchor).isActive = true
-        label.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        
-        
-    }
     
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
+        labelActivityTitle.topAnchor.constraint(equalTo: cardImage.bottomAnchor, constant: 15).isActive = true
+        labelActivityTitle.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: 5).isActive = true
+        labelActivityTitle.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -5).isActive = true
+        labelActivityTitle.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+       
     }
-    func addEvent() -> Void {
-       // checkMark.image = UIImage(named: "check-mark")
-    }
+   
 }

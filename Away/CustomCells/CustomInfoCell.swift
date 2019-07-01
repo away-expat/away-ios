@@ -32,18 +32,28 @@ class CustomInfoCell: UITableViewCell {
         cellView.backgroundColor = .white
         return cellView
     }()
-    
+    let arrowImage: UIImageView = {
+        let image = UIImageView()
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.image = UIImage(named: "superieur")
+        return image
+    }()
     func addViews() {
         contentView.addSubview(cellView)
         cellView.addSubview(label)
+        cellView.addSubview(arrowImage)
         cellView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
         cellView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         cellView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
-        cellView.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        
+        cellView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+
         label.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 8).isActive = true
         label.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
-        
+        arrowImage.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -15).isActive = true
+        arrowImage.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
+        arrowImage.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        arrowImage.widthAnchor.constraint(equalToConstant: 20).isActive = true
+
     }
     
 }

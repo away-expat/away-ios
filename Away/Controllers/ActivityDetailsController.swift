@@ -75,6 +75,7 @@ class ActivityDetailsController: UIViewController, UITableViewDelegate, UITableV
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.isTranslucent = false
         view.backgroundColor = .white
         setupViews()
         

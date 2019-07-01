@@ -17,4 +17,5 @@ struct Event : Codable {
     var hour: String
     var description: String
     var photo: String
+    var promoted: Bool
 }

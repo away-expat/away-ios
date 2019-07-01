@@ -52,6 +52,9 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.labelEventTitle.text = events[indexPath.row].title
         let url = URL(string: events[indexPath.row].photo)
         cell.cardImage.kf.setImage(with: url)
+        if !events[indexPath.row].promoted {
+            cell.promoted.isHidden = true
+        }
         return cell
     }
     

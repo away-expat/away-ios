@@ -13,5 +13,6 @@ struct EventItem : Codable {
     var date: String
     var hour: String
     var description: String
+    var promoted: Bool
 
 }

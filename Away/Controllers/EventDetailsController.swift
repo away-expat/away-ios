@@ -23,6 +23,7 @@ class EventDetailsController: UIViewController, UITableViewDelegate, UITableView
     let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
     static var keychain: Keychain?
     let token = App.keychain!["token"]
+    let userId = App.keychain!["userId"]
     let tableViewLabel : UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -109,9 +110,13 @@ class EventDetailsController: UIViewController, UITableViewDelegate, UITableView
         let btn = UIButton()
         btn.titleLabel?.adjustsFontSizeToFitWidth = true
         btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setTitleColor(UIColor.black, for: .normal)
-        btn.setTitle("Rejoindre", for: .normal)
-        btn.addTarget(self, action: #selector(joinEventButton), for: .touchUpInside)
+        btn.backgroundColor = UIColor(named: "AppPeach")
+        btn.layer.cornerRadius = 15.0
+        btn.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        btn.titleLabel!.font = UIFont.systemFont(ofSize: 18.0)
+        btn.titleEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+        btn.setTitleColor(UIColor.white, for: .normal)
+        btn.addTarget(self, action: #selector(toggleParticipation), for: .touchUpInside)
         return btn
     }()
     let eventInfosStackView: UIStackView = {
@@ -134,23 +139,16 @@ class EventDetailsController: UIViewController, UITableViewDelegate, UITableView
     }()
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.isTranslucent = false
         view.backgroundColor = .white
-        getEventDetails()
-        
-        
     }
     override func viewWillAppear(_ animated: Bool) {
+        getEventDetails()
         if let index = self.tableView.indexPathForSelectedRow{
             self.tableView.deselectRow(at: index, animated: true)
         }
     }
     func setupViews() {
-        let planetIcon = UIImage(named: "earth")
-        let planetImageView = UIImageView()
-        planetImageView.image = planetIcon?.withAlignmentRectInsets(UIEdgeInsets(top: 0, left: 0, bottom: -7, right: 0))
-        let button = UIBarButtonItem(image: planetImageView.image, style: .plain, target: self, action: #selector(chooseCityToVisitButtonClicked))
-        navigationItem.rightBarButtonItem = button
-        navigationItem.rightBarButtonItem?.tintColor = .white
         view.addSubview(activityImage)
         view.addSubview(eventInfosStackView)
         eventInfosStackView.addArrangedSubview(eventTitle)
@@ -162,12 +160,12 @@ class EventDetailsController: UIViewController, UITableViewDelegate, UITableView
         view.addSubview(imageActivityLink)
         view.addSubview(activityLocationLink)
         view.addSubview(dateTimeLabel)
+        view.addSubview(joinEvent)
         view.addSubview(tableViewLabel)
         view.addSubview(tableView)
-        view.addSubview(joinEvent)
         let url = URL(string: (event!.activity.photos!))
         activityImage.kf.setImage(with: url)
-        
+        //view.addSubview(indicator)
         
         avatar.translatesAutoresizingMaskIntoConstraints = false
         avatar.widthAnchor.constraint(equalToConstant: 100).isActive = true
@@ -178,7 +176,7 @@ class EventDetailsController: UIViewController, UITableViewDelegate, UITableView
         tableView.dataSource = self
         tableView.separatorStyle = UITableViewCellSeparatorStyle.none
         tableView.register(TabSearchCustomUserCell.self, forCellReuseIdentifier: "cellId")
-        tableView.backgroundColor = UIColor(named: "AppLightGrey")
+        tableView.backgroundColor = .white
         eventTitle.text = event?.event.title
         eventDescription.text = event?.event.description
         let urlAvatar = URL(string: (event!.creator.avatar))
@@ -214,12 +212,16 @@ class EventDetailsController: UIViewController, UITableViewDelegate, UITableView
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tableView.heightAnchor.constraint(equalToConstant: 150).isActive = true
 
-        joinEvent.topAnchor.constraint(equalTo: view.bottomAnchor, constant: -55).isActive = true
-        joinEvent.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -5).isActive = true
-        joinEvent.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        joinEvent.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        
-        
+        joinEvent.topAnchor.constraint(equalTo: imageActivityLink.bottomAnchor, constant: 4).isActive = true
+        joinEvent.leadingAnchor.constraint(equalTo: dateTimeLabel.trailingAnchor).isActive = true
+        joinEvent.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8).isActive = true
+        joinEvent.bottomAnchor.constraint(equalTo: tableViewLabel.topAnchor, constant: -5).isActive = true
+
+        if participants.contains(where: {$0.id == Int(userId!)}) {
+            joinEvent.setTitle("Quitter", for: .normal)
+        } else {
+            joinEvent.setTitle("Rejoindre", for: .normal)
+        }
         
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -233,6 +235,10 @@ class EventDetailsController: UIViewController, UITableViewDelegate, UITableView
         cell.username.text = participants[indexPath.row].firstname + " " + participants[indexPath.row].lastname
         let url = URL(string: participants[indexPath.row].avatar)
         cell.avatarImageView.kf.setImage(with: url)
+        let separatorView = UIView()
+        separatorView.backgroundColor = UIColor(named: "AppPeach")
+        separatorView.frame = CGRect(x: 0, y: cell.contentView.frame.size.height - 1.0,  width:cell.contentView.frame.size.width, height: 1)
+        cell.contentView.addSubview(separatorView)
         return cell
     }
     
@@ -252,10 +258,41 @@ class EventDetailsController: UIViewController, UITableViewDelegate, UITableView
         userProfileViewController.userId = event?.creator.id
         self.navigationController?.pushViewController(userProfileViewController, animated: true)
     }
-    @objc func joinEventButton() {
-        print("hello beauty")
+    @objc func toggleParticipation() {
+        if participants.contains(where: {$0.id == Int(userId!)}) {
+            leave()
+        }else{
+            participate()
+        }
+    }
+    func participate() {
+        eventService.postParticipateAtEvent(token: token!, eventId: eventId!, completion: { response , error in
+            if error != nil {
+                print ("join events error:", error!)
+            } else {
+                DispatchQueue.main.async{
+                    self.getEventDetails()
+                }
+            }
+            
+        })
+    }
+    func leave() {
+        eventService.leaveEvent(token: token!, eventId: eventId!, completion: { response , error in
+            if error != nil {
+                print ("leave events error:", error!)
+            } else {
+                DispatchQueue.main.async{
+                    self.getEventDetails()
+                }
+            }
+            
+        })
     }
     func getEventDetails() {
+        indicator.startAnimating()
+        indicator.hidesWhenStopped = true
+        
         eventService.getEventDetails(token: token!, eventId: eventId!, completion: { response , error in
             if error != nil {
                 print ("get events details error:", error!)
@@ -277,7 +314,6 @@ class EventDetailsController: UIViewController, UITableViewDelegate, UITableView
             
         })
     }
-
     func onCitiesChanged(city: City) {
         navigationItem.title = city.name
         self.user!.at = city

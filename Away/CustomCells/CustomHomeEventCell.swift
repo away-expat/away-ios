@@ -55,13 +55,21 @@ class CustomHomeEventCell: UITableViewCell {
         imgView.clipsToBounds = true
         return imgView
     }()
-    
+    let promoted : UIImageView = {
+        let imgView = UIImageView()
+        imgView.translatesAutoresizingMaskIntoConstraints = false
+        imgView.image = UIImage(named: "promoted")
+        imgView.contentMode = .scaleAspectFill
+        imgView.clipsToBounds = true
+        return imgView
+    }()
     func setupViews() {
         contentView.addSubview(cell)
         cell.addSubview(labelActivityTitle)
         cell.addSubview(cardImage)
         cell.addSubview(labelEventTitle)
         cell.addSubview(labelEventDateTime)
+        cell.addSubview(promoted)
         
         cell.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
         cell.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
@@ -88,6 +96,12 @@ class CustomHomeEventCell: UITableViewCell {
         labelEventDateTime.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -5).isActive = true
         labelEventDateTime.heightAnchor.constraint(equalToConstant: 15).isActive = true
         labelEventDateTime.bottomAnchor.constraint(equalTo: cell.bottomAnchor, constant: -30).isActive = true
+        
+        
+        promoted.topAnchor.constraint(equalTo: cardImage.bottomAnchor, constant: 10).isActive = true
+        promoted.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -5).isActive = true
+        promoted.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        promoted.widthAnchor.constraint(equalToConstant: 30).isActive = true
 
     }
 }

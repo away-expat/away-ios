@@ -272,16 +272,3 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseTim
         
     }
 }
-//extension CreateEventViewController: UITextViewDelegate{
-//    func textViewDidChange(_ textView: UITextView) {
-//        let size = CGSize(width: view.frame.width, height: .infinity)
-//        let estimatedSize = textView.sizeThatFits(size)
-//
-//        textView.constraints.forEach {(constraint) in
-//            if constraint.firstAttribute == .height {
-//                constraint.constant = estimatedSize.height
-//            }
-//
-//        }
-//    }
-//}

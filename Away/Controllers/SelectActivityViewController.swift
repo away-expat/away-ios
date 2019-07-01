@@ -96,7 +96,7 @@ class SelectActivityViewController: UIViewController, UISearchBarDelegate, UITab
         if searchText.count > 2 {
             indicator.startAnimating()
             indicator.hidesWhenStopped = true
-            activityService.getActivities(token: token!, search: searchText, completion: { response , error in
+            activityService.getActivities(token: token!, search: searchText, completion: { response , loadMoreToken, error in
                 if error != nil {
                     print ("select activity error:", error!)
                 } else {

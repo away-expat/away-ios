@@ -10,5 +10,5 @@ import Foundation
 
 struct ActivityByTagResponse: Codable {
     let results: [Activity]
-    let token: String
+    let token: String?
 }

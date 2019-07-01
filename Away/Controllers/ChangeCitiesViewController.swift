@@ -34,9 +34,15 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    let citiesList : UILabel = {
+        let label = UILabel()
+        label.text = "Les villes les plus visitées"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     let tableView = UITableView()
-
-
+    let tableViewCitiesSuggestion = UITableView()
+    var citiesSuggestion : [City] = []
     var searchActive : Bool = false
     var filtered:[City] = []
     let cityCellIdentifier = "cityCellId"
@@ -50,35 +56,49 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
         searchBar.setShowsCancelButton(true, animated: true)
         
         view.addSubview(tableView)
+        view.addSubview(tableViewCitiesSuggestion)
+        view.addSubview(citiesList)
+        view.addSubview(indicator)
+        view.addSubview(emptyList)
+
+        tableViewCitiesSuggestion.separatorStyle = .none
+        tableViewCitiesSuggestion.translatesAutoresizingMaskIntoConstraints = false
+        tableViewCitiesSuggestion.topAnchor.constraint(equalTo: citiesList.bottomAnchor).isActive = true
+        tableViewCitiesSuggestion.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        tableViewCitiesSuggestion.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        tableViewCitiesSuggestion.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.separatorStyle = UITableViewCellSeparatorStyle.none
+        tableView.separatorStyle = .none
         tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
-        view.addSubview(indicator)
         indicator.translatesAutoresizingMaskIntoConstraints = false
         indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        view.addSubview(emptyList)
         emptyList.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         emptyList.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         
+        citiesList.topAnchor.constraint(equalTo: searchBar.bottomAnchor).isActive = true
+        citiesList.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        citiesList.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        navigationItem.title = "Japan"
 
         setupViews()
         tableView.delegate = self
         tableView.dataSource = self
+        tableViewCitiesSuggestion.delegate = self
+        tableViewCitiesSuggestion.dataSource = self
         searchBar.delegate = self
-        
+        tableViewCitiesSuggestion.register(CustomCityCell.self, forCellReuseIdentifier: cityCellIdentifier)
         tableView.register(CustomCityCell.self, forCellReuseIdentifier: cityCellIdentifier)
-
+        getCitiesSuggestion()
     }
     
 
@@ -90,6 +110,8 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
         if searchText.count > 2 {
             indicator.startAnimating()
             indicator.hidesWhenStopped = true
+            tableViewCitiesSuggestion.isHidden = true
+            citiesList.isHidden = true
             cityService.getCities(search: searchText, completion: { response , error in
                 if error != nil {
                     print ("change cities error:", error!)
@@ -100,6 +122,7 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
                         if self.filtered.isEmpty {
                             self.emptyList.isHidden = false
                         } else {
+                            self.tableView.isHidden = false
                             self.emptyList.isHidden = true
 
                         }
@@ -109,6 +132,10 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
                 }
                 
             })
+        } else {
+            tableView.isHidden = true
+            tableViewCitiesSuggestion.isHidden = false
+            citiesList.isHidden = false
         }
        
     }
@@ -124,17 +151,32 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if tableView == tableViewCitiesSuggestion {
+            return citiesSuggestion.count
+        }
         return filtered.count;
+
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cityCellIdentifier) as! CustomCityCell;
+        if tableView == tableViewCitiesSuggestion {
+            cell.textLabel?.text = citiesSuggestion[indexPath.row].name + " " + citiesSuggestion[indexPath.row].country
+        } else {
             cell.textLabel?.text = filtered[indexPath.row].name + " " + filtered[indexPath.row].country
+
+        }
         return cell;
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("selected cell \(indexPath.row)")
-            getCityNameInSearchBar(city: filtered[indexPath.row])
-            print("", filtered[indexPath.row])
+        if tableView == tableViewCitiesSuggestion {
+            if indexPath.row < citiesSuggestion.count {
+                getCityNameInSearchBar(city: citiesSuggestion[indexPath.row])
+            }
+        }else {
+            if indexPath.row < filtered.count {
+                getCityNameInSearchBar(city: filtered[indexPath.row])
+            }
+        }
     }
     func getCityNameInSearchBar(city: City) {
         searchBar.text = city.name
@@ -145,6 +187,28 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
         dismiss(animated: true, completion: nil)
         
     }
+    func getCitiesSuggestion() {
+        cityService.getCitiesSuggestion(completion: { response , error in
+            if error != nil {
+                print ("get cities suggestion error:", error!)
+            } else {
+                self.citiesSuggestion = response
+                
+                DispatchQueue.main.async{
+                    if self.citiesSuggestion.isEmpty {
+                        self.emptyList.isHidden = false
+                    } else {
+                        self.emptyList.isHidden = true
+                        
+                    }
+                    self.tableViewCitiesSuggestion.reloadData()
+                    self.indicator.stopAnimating()
+                }
+            }
+            
+        })
+    }
+    
 }
 
 protocol ChangeCitiesDelegate {

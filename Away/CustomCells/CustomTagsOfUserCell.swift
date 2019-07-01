@@ -25,7 +25,7 @@ class CustomTagsOfUserCell: UICollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
         label.font = UIFont(name: "Arial", size: 13.0)
-        label.sizeToFit()
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     

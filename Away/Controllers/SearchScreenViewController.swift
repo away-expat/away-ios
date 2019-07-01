@@ -73,7 +73,8 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
     static var keychain: Keychain?
     let token = App.keychain!["token"]
     var searchQuery:String?
-    
+    var codeSegmented :SegmentedControl?
+    var loadMoreToken: String?
     let searchBar: UISearchBar = {
         let sb = UISearchBar()
         if let textfield = sb.value(forKey: "searchField") as? UITextField {
@@ -93,12 +94,12 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
         return iv
     }()
     let tableView = UITableView()
-    
+    override func viewWillAppear(_ animated: Bool) {
+        codeSegmented?.setIndex(index: currentTab)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         getConnectedUser()
-        
-        
     }
     func startLoading() {
         tableView.isHidden = true
@@ -127,10 +128,10 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
         navigationItem.rightBarButtonItem?.tintColor = .white
         navigationItem.title = user?.at.name
 
-        let codeSegmented = SegmentedControl(frame: CGRect(x: 0, y: 40, width: self.view.frame.width, height: 40), buttonTitle: ["location", "event", "tag", "people"])
-        codeSegmented.backgroundColor = .clear
-        codeSegmented.segmentControlDelegate = self
-        view.addSubview(codeSegmented)
+        codeSegmented = SegmentedControl(frame: CGRect(x: 0, y: 40, width: self.view.frame.width, height: 40), buttonTitle: ["location", "event", "tag", "people"])
+        codeSegmented!.backgroundColor = .clear
+        codeSegmented!.segmentControlDelegate = self
+        view.addSubview(codeSegmented!)
         view.addSubview(searchBar)
         view.addSubview(indicator)
         view.addSubview(emptyCollectionView)
@@ -159,7 +160,7 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
         tableView.dataSource = self
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.separatorStyle = .none
-        tableView.topAnchor.constraint(equalTo: codeSegmented.bottomAnchor, constant: 10).isActive = true
+        tableView.topAnchor.constraint(equalTo: codeSegmented!.bottomAnchor, constant: 10).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
@@ -221,6 +222,9 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
                 cell.label.text = activities[indexPath.row].name
                 let url = URL(string: activities[indexPath.row].photos!)
                 cell.avatarImageView.kf.setImage(with: url)
+                if indexPath.row == activities.count - 1 {
+                    loadMore()
+                }
             }
             return cell
         case 1:
@@ -291,7 +295,6 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
             listActivityByTagController.tag = tags[indexPath.row]
             self.navigationController?.pushViewController(listActivityByTagController, animated: true)
             print("selected cell \(indexPath.row) in index \(currentTab)")
-            //like ou dislike
             break
         case 3:
             let userProfileController = UserProfileViewController()
@@ -336,11 +339,12 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
         })
     }
     func getActivities(search: String) {
-        activityService.getActivities(token: token!, search: search, completion: { response , error in
+        activityService.getActivities(token: token!, search: search, completion: { response, loadMoreToken, error in
             if error != nil {
                 print ("get activities error:", error!)
             } else {
                 self.activities = response
+                self.loadMoreToken = loadMoreToken
                 DispatchQueue.main.async{
                     if self.activities.isEmpty {
                         self.emptyCollectionView.isHidden = false
@@ -383,6 +387,27 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
                 self.events = response
                 DispatchQueue.main.async{
                     if self.events.isEmpty {
+                        self.emptyCollectionView.isHidden = false
+                    } else {
+                        self.emptyCollectionView.isHidden = true
+                        self.tableView.isHidden = false
+                    }
+                    self.indicator.stopAnimating()
+                    self.tableView.reloadData()
+                }
+            }
+            
+        })
+    }
+    func loadMore() {
+        activityService.loadMore(token: token!, loadMoreToken: loadMoreToken!,  completion: { response, loadMoreToken, error in
+            if error != nil {
+                print ("load more error:", error!)
+            } else {
+                self.activities += response
+                self.loadMoreToken = loadMoreToken
+                DispatchQueue.main.async{
+                    if self.activities.isEmpty {
                         self.emptyCollectionView.isHidden = false
                     } else {
                         self.emptyCollectionView.isHidden = true

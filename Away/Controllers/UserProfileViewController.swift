@@ -9,8 +9,9 @@
 import Foundation
 import UIKit
 import KeychainAccess
-
-class UserProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ChangeCitiesDelegate {
+import Kingfisher
+class UserProfileViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, ChangeCitiesDelegate {
+    
  
     let topView = UIView()
     let bottomView = UIView()
@@ -21,85 +22,114 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
     var createdEvents: [Event] = []
     let eventService = EventService()
     let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
-    let tableView = UITableView()
     static var keychain: Keychain?
     let token = App.keychain!["token"]
     var userId: Int?
     var isConnectedUser : Bool = true
-
-    let emptyEventList : UILabel = {
+    var eventsOfUserCellIdentifier = "eventsOfUserCellId"
+    let emptyJoinedEventList : UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Aucun évènement"
+        label.text = "Aucun évènement à venir"
         return label
     }()
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        navigationController?.navigationBar.isTranslucent = false
+    let emptyCreatedEventList : UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Aucun évènement créé"
+        return label
+    }()
+    let collectionViewCreateEvents: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 16
+        layout.scrollDirection = .horizontal
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.backgroundColor = .white
+        cv.translatesAutoresizingMaskIntoConstraints = false
+        return cv
+    }()
+    let collectionViewJoinedEvent: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 16
+        layout.scrollDirection = .horizontal
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.backgroundColor = .white
+        cv.translatesAutoresizingMaskIntoConstraints = false
+        return cv
+    }()
+    override func viewWillAppear(_ animated: Bool) {
         let connectedUserId = Int(App.keychain!["userId"]!)
         if userId == connectedUserId || userId == nil {
             getConnectedUser()
+            getUserCreatedEvents(userId: connectedUserId!)
+            getUserJoinedEvents(userId: connectedUserId!)
+            
         } else {
             isConnectedUser = false
             getUserById(userId: userId!)
             getUserCreatedEvents(userId: userId!)
             getUserJoinedEvents(userId: userId!)
-
         }
-    
     }
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
-    }
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
-            let label = UILabel()
-            label.text = "Participation"
-            label.backgroundColor = .lightGray
-            return label
-        }
-        let label = UILabel()
-        label.text = "Création"
-        label.backgroundColor = .lightGray
-        return label
-    }
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! CustomEventListCell
-            cell.titleEvent.text = joinedEvents[indexPath.row].title
-            cell.dateEvent.text = joinedEvents[indexPath.row].date
-            cell.timeEvent.text = joinedEvents[indexPath.row].hour
-            return cell
-        }
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! CustomEventListCell
-        cell.titleEvent.text = createdEvents[indexPath.row].title
-        cell.dateEvent.text = createdEvents[indexPath.row].date
-        cell.timeEvent.text = createdEvents[indexPath.row].hour
-        return cell
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationController?.navigationBar.isTranslucent = false
+        
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if collectionView == self.collectionViewCreateEvents {
+            return createdEvents.count
+        } else {
             return joinedEvents.count
         }
-        return createdEvents.count
     }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 40.0
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        if collectionView == self.collectionViewCreateEvents {
+            return 1
+        } else {
+            return 1
+        }
     }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 0 {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if collectionView == self.collectionViewCreateEvents {
+            return (CGSize(width: 180, height: 140))
+        } else {
+            return (CGSize(width: 180, height: 140))
+        }
+    }
+   
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if collectionView == self.collectionViewCreateEvents {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: eventsOfUserCellIdentifier, for: indexPath) as! CustomCellEventUser
+            cell.labelEventTitle.text = createdEvents[indexPath.row].title
+            let urlAvatar = URL(string: (createdEvents[indexPath.row].photo))
+            cell.cardImage.kf.setImage(with: urlAvatar)
+            cell.labelEventDateTime.text = createdEvents[indexPath.row].date + " " + createdEvents[indexPath.row].hour
+            return cell
+        } else {
+            
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: eventsOfUserCellIdentifier, for: indexPath) as! CustomCellEventUser
+            cell.labelEventTitle.text = joinedEvents[indexPath.row].title
+            let urlAvatar = URL(string: (joinedEvents[indexPath.row].photo))
+            cell.cardImage.kf.setImage(with: urlAvatar)
+            cell.labelEventDateTime.text = joinedEvents[indexPath.row].date + " " + joinedEvents[indexPath.row].hour
+            return cell
+        }
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.row < createdEvents.count {
+            let eventDetailsController = EventDetailsController()
+            eventDetailsController.eventId = createdEvents[indexPath.row].id
+            self.navigationController?.pushViewController(eventDetailsController, animated: true)
+        }
+        if indexPath.row < joinedEvents.count {
             let eventDetailsController = EventDetailsController()
             eventDetailsController.eventId = joinedEvents[indexPath.row].id
             self.navigationController?.pushViewController(eventDetailsController, animated: true)
-            print("selected cell \(indexPath.row)")
         }
-        let eventDetailsController = EventDetailsController()
-        eventDetailsController.eventId = createdEvents[indexPath.row].id
-        self.navigationController?.pushViewController(eventDetailsController, animated: true)
-        print("selected cell \(indexPath.row)")
     }
+   
     
 
     func setupViews() {
@@ -111,7 +141,13 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
         let button = UIBarButtonItem(image: planetImageView.image, style: .plain, target: self, action: #selector(chooseCityToVisitButtonClicked))
         navigationItem.rightBarButtonItem = button
         navigationItem.rightBarButtonItem?.tintColor = .white
-        
+        collectionViewCreateEvents.dataSource = self
+        collectionViewCreateEvents.delegate = self
+        collectionViewJoinedEvent.dataSource = self
+        collectionViewJoinedEvent.delegate = self
+        collectionViewCreateEvents.register(CustomCellEventUser.self, forCellWithReuseIdentifier: eventsOfUserCellIdentifier)
+        collectionViewJoinedEvent.register(CustomCellEventUser.self, forCellWithReuseIdentifier: eventsOfUserCellIdentifier)
+
         view.backgroundColor = .white
         view.addSubview(topView)
         view.addSubview(bottomView)
@@ -246,14 +282,20 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
     }
     func buildBottomView(bottomView: UIView){
         bottomView.backgroundColor = .white
-        let eventsListLabel: UILabel = {
+        let createdEventsListLabel: UILabel = {
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.font = UIFont.boldSystemFont(ofSize: 14)
+            label.text = "Vos évènements créés"
+            return label
+        }()
+        let joinedEventsListLabel: UILabel = {
             let label = UILabel()
             label.translatesAutoresizingMaskIntoConstraints = false
             label.font = UIFont.boldSystemFont(ofSize: 14)
             label.text = "Vos évènements à venir"
             return label
         }()
-        
         let lineView: UIView = {
             let view = UIView()
             view.translatesAutoresizingMaskIntoConstraints = false
@@ -284,30 +326,42 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
         userSettingsButton.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 5).isActive = true
         userSettingsButton.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -5).isActive = true
         userSettingsButton.isHidden = !isConnectedUser
-        bottomView.addSubview(tableView)
-        tableView.delegate = self
-        tableView.dataSource = self
-        bottomView.addSubview(eventsListLabel)
-        bottomView.addSubview(emptyEventList)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        bottomView.addSubview(createdEventsListLabel)
+        bottomView.addSubview(joinedEventsListLabel)
+
+        bottomView.addSubview(collectionViewCreateEvents)
+        bottomView.addSubview(collectionViewJoinedEvent)
+
+        bottomView.addSubview(emptyJoinedEventList)
+        bottomView.addSubview(emptyCreatedEventList)
+
         if !isConnectedUser {
-            eventsListLabel.topAnchor.constraint(equalTo: lineView.bottomAnchor, constant: 20).isActive = true
+            joinedEventsListLabel.topAnchor.constraint(equalTo: lineView.bottomAnchor, constant: 20).isActive = true
 
         } else {
-            eventsListLabel.topAnchor.constraint(equalTo: userSettingsButton.bottomAnchor, constant: 20).isActive = true
+            joinedEventsListLabel.topAnchor.constraint(equalTo: userSettingsButton.bottomAnchor, constant: 20).isActive = true
 
         }
-        eventsListLabel.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 15).isActive = true
+        joinedEventsListLabel.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 15).isActive = true
+        createdEventsListLabel.topAnchor.constraint(equalTo: collectionViewJoinedEvent.bottomAnchor, constant: 15).isActive = true
+        createdEventsListLabel.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 15).isActive = true
+
+
+        collectionViewJoinedEvent.topAnchor.constraint(equalTo: joinedEventsListLabel.bottomAnchor).isActive = true
+        collectionViewJoinedEvent.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor).isActive = true
+        collectionViewJoinedEvent.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor).isActive = true
+        collectionViewJoinedEvent.heightAnchor.constraint(equalToConstant: 150).isActive = true
         
-        tableView.separatorStyle = UITableViewCellSeparatorStyle.none
-        tableView.register(CustomEventListCell.self, forCellReuseIdentifier: "cellId")
-        tableView.topAnchor.constraint(equalTo: eventsListLabel.bottomAnchor, constant: 10).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 15).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -15).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: bottomView.bottomAnchor, constant: -15).isActive = true
-        emptyEventList.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
-        emptyEventList.centerYAnchor.constraint(equalTo: tableView.centerYAnchor).isActive = true
-        
+        collectionViewCreateEvents.topAnchor.constraint(equalTo: createdEventsListLabel.bottomAnchor).isActive = true
+        collectionViewCreateEvents.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor).isActive = true
+        collectionViewCreateEvents.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor).isActive = true
+        collectionViewCreateEvents.heightAnchor.constraint(equalToConstant: 150).isActive = true
+        emptyCreatedEventList.centerXAnchor.constraint(equalTo: collectionViewCreateEvents.centerXAnchor).isActive = true
+        emptyCreatedEventList.centerYAnchor.constraint(equalTo: collectionViewCreateEvents.centerYAnchor).isActive = true
+        emptyJoinedEventList.centerXAnchor.constraint(equalTo: collectionViewJoinedEvent.centerXAnchor).isActive = true
+        emptyJoinedEventList.centerYAnchor.constraint(equalTo: collectionViewJoinedEvent.centerYAnchor).isActive = true
+
     }
     @objc func userSettingsButtonClicked() {
         self.navigationController?.pushViewController(UserSettingsController(), animated: true)
@@ -327,12 +381,12 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
                 self.createdEvents = response
                 DispatchQueue.main.async{
                     if self.createdEvents.isEmpty {
-                        self.emptyEventList.isHidden = false
+                        self.emptyCreatedEventList.isHidden = false
                         self.indicator.stopAnimating()
                     } else {
-                        self.emptyEventList.isHidden = true
+                        self.emptyCreatedEventList.isHidden = true
                     }
-                    self.tableView.reloadData()
+                    self.collectionViewCreateEvents.reloadData()
                     self.indicator.stopAnimating()
 
                 }
@@ -348,12 +402,12 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
                 self.joinedEvents = response
                 DispatchQueue.main.async{
                     if self.joinedEvents.isEmpty {
-                        self.emptyEventList.isHidden = false
+                        self.emptyJoinedEventList.isHidden = false
                         self.indicator.stopAnimating()
                     } else {
-                        self.emptyEventList.isHidden = true
+                        self.emptyJoinedEventList.isHidden = true
                     }
-                    self.tableView.reloadData()
+                    self.collectionViewJoinedEvent.reloadData()
                     self.indicator.stopAnimating()
 
                 }

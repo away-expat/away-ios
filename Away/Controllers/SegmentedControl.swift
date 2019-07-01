@@ -15,7 +15,7 @@ class SegmentedControl: UIView {
     private var selectorView: UIView!
     
     var selectorViewColor = UIColor(named: "AppOrange")
-
+    var selectorPosition: CGFloat?
     
     convenience init(frame: CGRect, buttonTitle: [String]) {
         self.init(frame: frame)
@@ -24,6 +24,10 @@ class SegmentedControl: UIView {
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         updateViews()
+    }
+    
+    func setIndex(index: Int) {
+        self.selectorPosition = self.frame.width/CGFloat(self.buttonsTitle.count) * CGFloat(index)
     }
     
     private func configStackView() {
@@ -42,7 +46,9 @@ class SegmentedControl: UIView {
     private func configSelectorView() {
         let selectorWidth = frame.width / CGFloat(self.buttons.count)
         selectorView = UIView(frame: CGRect(x: 0, y: self.frame.height, width: selectorWidth, height: 2))
-        
+        if self.selectorPosition != nil {
+            selectorView.frame.origin.x = self.selectorPosition!
+        }
         selectorView.backgroundColor = selectorViewColor
         addSubview(selectorView)
     }
@@ -57,12 +63,10 @@ class SegmentedControl: UIView {
             button.addTarget(self, action: #selector(SegmentedControl.buttonAction(_:)), for: .touchUpInside)
             buttons.append(button)
         }
-        buttons[0].tintColor = .blue
         
     }
     @objc func buttonAction(_ sender: UIButton) {
         for (buttonIndex, btn) in  buttons.enumerated() {
-            btn.tintColor = .blue
             if btn == sender {
                 let selectorPosition = frame.width/CGFloat(buttonsTitle.count) * CGFloat(buttonIndex)
                 segmentControlDelegate?.changeTab(index: buttonIndex)

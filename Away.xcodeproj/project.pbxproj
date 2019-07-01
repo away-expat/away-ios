@@ -56,6 +56,7 @@
 		287A2B2C22C8D46300381E5C /* Information.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287A2B2B22C8D46300381E5C /* Information.swift */; };
 		287A2B2E22C8E3FD00381E5C /* CustomInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287A2B2D22C8E3FD00381E5C /* CustomInfoCell.swift */; };
 		287A2B3022C8FE8D00381E5C /* CountryInfoDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287A2B2F22C8FE8D00381E5C /* CountryInfoDetailsController.swift */; };
+		287A2B3322CA229900381E5C /* CustomCellEventUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287A2B3222CA229900381E5C /* CustomCellEventUser.swift */; };
 		287C3CBB22871F1300406834 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287C3CBA22871F1300406834 /* TabBar.swift */; };
 		2898663222887AB300CE97E8 /* CustomCityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2898663022887AB300CE97E8 /* CustomCityCell.swift */; };
 		28986635228DA5C300CE97E8 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28986634228DA5C300CE97E8 /* HomeViewController.swift */; };
@@ -146,6 +147,7 @@
 		287A2B2B22C8D46300381E5C /* Information.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Information.swift; sourceTree = "<group>"; };
 		287A2B2D22C8E3FD00381E5C /* CustomInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomInfoCell.swift; sourceTree = "<group>"; };
 		287A2B2F22C8FE8D00381E5C /* CountryInfoDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryInfoDetailsController.swift; sourceTree = "<group>"; };
+		287A2B3222CA229900381E5C /* CustomCellEventUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellEventUser.swift; sourceTree = "<group>"; };
 		287C3CBA22871F1300406834 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 		2898663022887AB300CE97E8 /* CustomCityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCityCell.swift; sourceTree = "<group>"; };
 		28986634228DA5C300CE97E8 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -289,6 +291,14 @@
 			path = TabSearchCustomCells;
 			sourceTree = "<group>";
 		};
+		287A2B3122CA21E000381E5C /* CustomCellEventUser */ = {
+			isa = PBXGroup;
+			children = (
+				287A2B3222CA229900381E5C /* CustomCellEventUser.swift */,
+			);
+			path = CustomCellEventUser;
+			sourceTree = "<group>";
+		};
 		287A7B10227A168D00CCD4B3 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -337,6 +347,7 @@
 		28D992D32294266700ACE00C /* CustomCells */ = {
 			isa = PBXGroup;
 			children = (
+				287A2B3122CA21E000381E5C /* CustomCellEventUser */,
 				287A2B1122C1726B00381E5C /* TabSearchCustomCells */,
 				28986639228DAE3300CE97E8 /* CustomActivityCell.swift */,
 				2898663022887AB300CE97E8 /* CustomCityCell.swift */,
@@ -651,6 +662,7 @@
 				287A2B2E22C8E3FD00381E5C /* CustomInfoCell.swift in Sources */,
 				28475FA522B6B95F0094C726 /* Token.swift in Sources */,
 				287A2B1922C3BB3700381E5C /* CustomTagsOfActivityCell.swift in Sources */,
+				287A2B3322CA229900381E5C /* CustomCellEventUser.swift in Sources */,
 				28475F9F22B2EE2E0094C726 /* TagService.swift in Sources */,
 				287A2B2C22C8D46300381E5C /* Information.swift in Sources */,
 				28475FAC22BA54B30094C726 /* UserService.swift in Sources */,

@@ -39,9 +39,10 @@ class TabSearchCustomUserCell: UITableViewCell {
     let avatarImageView : UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 60).isActive = true
         imageView.layer.cornerRadius = 50
+        imageView.contentMode = UIViewContentMode.scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.borderWidth = 3
         imageView.layer.borderColor = UIColor.white.cgColor
@@ -68,8 +69,8 @@ class TabSearchCustomUserCell: UITableViewCell {
         avatarImageView.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
         avatarImageView.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 20).isActive = true
         
+        username.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
         username.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 30).isActive = true
-        username.topAnchor.constraint(equalTo: cellView.topAnchor, constant: 10).isActive = true
         
         country.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 30).isActive = true
         country.topAnchor.constraint(equalTo: username.bottomAnchor).isActive = true

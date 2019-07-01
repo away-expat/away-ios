@@ -7,7 +7,8 @@
 //
 
 import Foundation
-struct EventDetailsResponse: Codable{
+
+struct EventDetailsResponse: Codable {
     var creator: Creator
     var event: EventItem
     var activity: Activity

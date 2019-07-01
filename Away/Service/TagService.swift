@@ -74,9 +74,9 @@ class TagService {
             }.resume()
     }
     
-    func getTagsOfUser(token: String, completion: @escaping ([Tag], ErrorType?) -> ()) {
+    func getTagsOfUser(token: String, userId: Int, completion: @escaping ([Tag], ErrorType?) -> ()) {
         
-        let urlString = Constants.TAGS_OF_CONNECTED_USER
+        let urlString = Constants.TAGS_OF_CONNECTED_USER + userId.description
         let url = URL(string: urlString)
         if url == nil { completion([], ErrorType.badUrl) }
         var request = URLRequest(url: url!)

@@ -15,11 +15,13 @@ class Constants {
     
     static let ACTIVITIES_BY_TAG_ROUTE_GOOGLE = BASE_URL + "/activities/googleByCity/"
     static let ACTIVITIES_BY_TAG_ROUTE = BASE_URL + "/activities/ByTag/:idTag"
+    static let LOAD_MORE = BASE_URL + "/activities/googleGetNextPage/"
     static let CITIES_ROUTE = BASE_URL + "/cities/autoCompleteCityName"
+    static let CITIES_SUGGESTION = BASE_URL + "/cities/suggestion"
     static let TAGS_ROUTE = BASE_URL + "/tags"
     
     static let TAGS_SEARCH_ROUTE = BASE_URL + "/tags/autocompleteNameTag"
-    static let TAGS_OF_CONNECTED_USER = BASE_URL + "/tags/ofUser"
+    static let TAGS_OF_CONNECTED_USER = BASE_URL + "/tags/ofUser/"
     static let LIKE_TAG = BASE_URL + "/tags/like"
     static let DISLIKE_TAG = BASE_URL + "/tags/dislike"
     static let TAGS_SUGGESTION = BASE_URL + "/tags/suggestion/"
@@ -28,6 +30,8 @@ class Constants {
     static let EVENTS_SUGGESTION = BASE_URL + "/activities/suggestion"
     static let CREATE_EVENT = BASE_URL + "/events"
     static let EVENT_DETAILS = BASE_URL + "/events/getEventWithDetails/"
+    static let JOIN_EVENT = BASE_URL + "/events/postParticipateAtEvent"
+    static let LEAVE_EVENT = BASE_URL + "/events/deleteParticipationAtEvent"
     static let GET_CONNECTED_USER = BASE_URL + "/users/userInfo"
     static let GET_USER_EVENTS = BASE_URL + "/events/getUserEvents/"
     static let GET_USER_CREATED_EVENTS = BASE_URL + "/events/getUserEventsCreated/"

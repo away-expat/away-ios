@@ -18,6 +18,9 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
         if let textfield = sb.value(forKey: "searchField") as? UITextField {
             textfield.backgroundColor = UIColor(named: "AppLightGrey")
             textfield.attributedPlaceholder = NSAttributedString(string: "Rechercher un tag", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
+            textfield.returnKeyType = .done
+            textfield.resignFirstResponder() // hides the keyboard.
+
         }
         sb.layer.cornerRadius = 20
         sb.translatesAutoresizingMaskIntoConstraints = false
@@ -27,7 +30,7 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
     }()
     let collectionViewV: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 16
+        layout.minimumLineSpacing = 20
         layout.scrollDirection = .vertical
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = .white
@@ -62,7 +65,7 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
     }()
     let userTagsCollectionView : UILabel = {
         let label = UILabel()
-        label.text = "Vos tags"
+        label.text = "Tags"
         label.font = UIFont.boldSystemFont(ofSize: 14)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -114,6 +117,9 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.count == 0 {
+            searchBar.resignFirstResponder() // hides the keyboard.
+        }
         if searchText.count > 2 {
             indicator.startAnimating()
             indicator.hidesWhenStopped = true
@@ -153,7 +159,9 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: tagSearchCellIdentifier) as! CustomTagSearchCell;
+        if indexPath.row < filtered.count {
             cell.textLabel?.text = filtered[indexPath.row].name
+        }
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -192,9 +200,9 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == self.collectionViewV {
-            return (CGSize(width: 100, height: 40))
+            return (CGSize(width: 150, height: 40))
         } else {
-            return (CGSize(width: 100, height: 40))
+            return (CGSize(width: 130, height: 40))
         }
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

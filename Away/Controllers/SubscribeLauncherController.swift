@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SubscribeLauncherController: UIViewController, UITextFieldDelegate, ChangeCitiesDelegate {
+class SubscribeLauncherController: UIViewController, UITextFieldDelegate, ChangeCitiesDelegate, ChooseDateDelegate {
    
     var selectedDate: String?
     let loginService = LoginService()
@@ -39,6 +39,7 @@ class SubscribeLauncherController: UIViewController, UITextFieldDelegate, Change
         let password = UITextField()
         password.translatesAutoresizingMaskIntoConstraints = false
         password.placeholder = "Password"
+        password.isSecureTextEntry = true
         return password
     }()
     
@@ -80,16 +81,14 @@ class SubscribeLauncherController: UIViewController, UITextFieldDelegate, Change
         birth.placeholder = "YY-MM-DD"
         return birth
     }()
-    let datePicker: UIDatePicker = {
-        let datePicker = UIDatePicker()
-        datePicker.datePickerMode = UIDatePicker.Mode.date
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-mm-dd"
-        let selectedDate = dateFormatter.string(from: datePicker.date)
-        datePicker.timeZone = NSTimeZone.local
-        datePicker.backgroundColor = .white
-        datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
-        return datePicker
+
+
+    let dateTextField: UITextField = {
+        let tf = UITextField()
+        tf.placeholder = "Date de naissance :"
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.addTarget(self, action: #selector(datePickerPopup(_:)), for: .allTouchEvents)
+        return tf
     }()
     let bottomBirthdayLine: UIView = {
         let line = UIView()
@@ -169,7 +168,7 @@ class SubscribeLauncherController: UIViewController, UITextFieldDelegate, Change
         stackView.addArrangedSubview(lastNameTextField)
         stackView.addArrangedSubview(bottomLastnameLine)
         
-        stackView.addArrangedSubview(birthday)
+        stackView.addArrangedSubview(dateTextField)
         stackView.addArrangedSubview(bottomBirthdayLine)
         
         stackView.addArrangedSubview(countryTextField)
@@ -183,7 +182,6 @@ class SubscribeLauncherController: UIViewController, UITextFieldDelegate, Change
         lastNameTextField.delegate = self
         firstNameTextField.delegate = self
         countryTextField.delegate = self
-        birthday.delegate = self
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -231,6 +229,14 @@ class SubscribeLauncherController: UIViewController, UITextFieldDelegate, Change
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
         
     }
+    @objc func datePickerPopup(_ sender: UITextField) {
+        let datePopupViewController = DatePopUpViewController()
+        datePopupViewController.dateDelegate = self
+        present(datePopupViewController, animated: true)
+    }
+    func saveDate(date: String) {
+        dateTextField.text = date
+    }
     func onCitiesChanged(city: City) {
         self.city = city
         chooseCityToVisitButton.setTitle(city.name, for: .normal)
@@ -255,7 +261,7 @@ class SubscribeLauncherController: UIViewController, UITextFieldDelegate, Change
         if passwordTextField.text == nil{
             print("phoque4")
         }
-        if birthday.text == nil
+        if dateTextField.text == nil
         {
             print("phoque5")
         }
@@ -265,7 +271,7 @@ class SubscribeLauncherController: UIViewController, UITextFieldDelegate, Change
         if city?.id == nil {
             print("phoque7")
         }
-        loginService.signUp(firstname: firstNameTextField.text!, lastname: lastNameTextField.text!, mail: emailTextField.text!, password: passwordTextField.text!, birth: birthday.text!, country: countryTextField.text!, idCity: city!.id, completion: { response , error in
+        loginService.signUp(firstname: firstNameTextField.text!, lastname: lastNameTextField.text!, mail: emailTextField.text!, password: passwordTextField.text!, birth: dateTextField.text!, country: countryTextField.text!, idCity: city!.id, completion: { response , error in
             if error != nil {
                 print ("login error:", error!)
             } else {

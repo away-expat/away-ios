@@ -146,7 +146,7 @@ class UserService {
             }.resume()
     }
 
-    func updateUser(token: String, firstname: String, lastname: String, mail: String, password: String, birth: String, country: String, completion: @escaping (User?, ErrorType?) -> ()) {
+    func updateUser(token: String, firstname: String, lastname: String, mail: String, password: String, birth: String, country: String, completion: @escaping (UserUpdateResponse?, ErrorType?) -> ()) {
         
         let urlString = Constants.UPDATE_USER
         let url = URL(string: urlString)
@@ -189,7 +189,7 @@ class UserService {
             
             do {
                 let json = JSONDecoder()
-                let response = try json.decode(User.self, from: data)
+                let response = try json.decode(UserUpdateResponse.self, from: data)
                 completion(response, nil)
             } catch let errorJson {
                 completion(nil, ErrorType.serverError)
@@ -201,12 +201,12 @@ class UserService {
     }
     
     
-    func deleteAccount(token: String, completion: @escaping (ErrorType?) -> ()) {
+    func deleteAccount(token: String, completion: @escaping (UserUpdateResponse?, ErrorType?) -> ()) {
         
        
         let urlString = Constants.DELETE_USER
         let url = URL(string: urlString)
-        if url == nil { completion(ErrorType.badUrl) }
+        if url == nil { completion(nil, ErrorType.badUrl) }
         var request = URLRequest(url: url!)
         request.httpMethod = "DELETE"
         let token = token
@@ -220,13 +220,20 @@ class UserService {
             if let httpResponse = response as? HTTPURLResponse {
                 print("error \(httpResponse.statusCode)")
                 if (httpResponse.statusCode == 401) {
-                    completion(ErrorType.unauthorized)
+                    completion(nil, ErrorType.unauthorized)
                 }
-                if httpResponse.statusCode == 200 {
-                    completion(ErrorType.ok)
-                }
+                
             }
            
+            do {
+                let json = JSONDecoder()
+                let response = try json.decode(UserUpdateResponse.self, from: data)
+                completion(response, nil)
+            } catch let errorJson {
+                completion(nil, ErrorType.serverError)
+                print(errorJson)
+                return
+            }
             
             }.resume()
     }

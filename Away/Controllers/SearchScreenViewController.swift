@@ -80,7 +80,12 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
         if let textfield = sb.value(forKey: "searchField") as? UITextField {
             textfield.backgroundColor = UIColor(named: "AppLightGrey")
             textfield.attributedPlaceholder = NSAttributedString(string: "Rechercher", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
+            textfield.returnKeyType = .done
+            textfield.resignFirstResponder() // hides the keyboard.
+
+
         }
+        
         sb.layer.cornerRadius = 20
         sb.translatesAutoresizingMaskIntoConstraints = false
         sb.barTintColor = .white
@@ -99,6 +104,7 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
         getConnectedUser()
     }
     func startLoading() {
@@ -170,9 +176,12 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
         tableView.register(TabSearchCustomTagCell.self, forCellReuseIdentifier: tagTabCellIdentifier)
         tableView.register(TabSearchCustomUserCell.self, forCellReuseIdentifier: userTabCellIdentifier)
 
+       
     }
-    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.count == 0 {
+            searchBar.resignFirstResponder() // hides the keyboard.
+        }
         searchQuery = searchText
         if searchText.count > 2 {
             indicator.startAnimating()
@@ -399,6 +408,13 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
             
         })
     }
+    
+    @objc func keyboardWillChange(notification: Notification) {
+        KeyboardUtils.WillChange(notification: notification, view: view)
+        
+    }
+    
+
     func loadMore() {
         activityService.loadMore(token: token!, loadMoreToken: loadMoreToken!,  completion: { response, loadMoreToken, error in
             if error != nil {

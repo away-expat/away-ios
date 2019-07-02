@@ -39,6 +39,21 @@ class UserProfileViewController: UIViewController, UICollectionViewDelegate, UIC
         label.text = "Aucun évènement créé"
         return label
     }()
+    let userNameLabel = UILabel()
+    let birthday = UILabel()
+    let country = UILabel()
+    let tagButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = UIColor(named: "AppPeach")
+        button.layer.cornerRadius = 15.0
+        button.layer.shadowOpacity = 1.0
+        button.layer.shadowColor = UIColor(named: "AppLightGrey")?.cgColor
+        button.setTitle("Tags", for: .normal)
+        button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+        button.addTarget(self, action: #selector(tagButtonClicked), for: .touchUpInside)
+        return button;
+    }()
     let collectionViewCreateEvents: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 16
@@ -57,6 +72,7 @@ class UserProfileViewController: UIViewController, UICollectionViewDelegate, UIC
         cv.translatesAutoresizingMaskIntoConstraints = false
         return cv
     }()
+    
     override func viewWillAppear(_ animated: Bool) {
         let connectedUserId = Int(App.keychain!["userId"]!)
         if userId == connectedUserId || userId == nil {
@@ -74,6 +90,7 @@ class UserProfileViewController: UIViewController, UICollectionViewDelegate, UIC
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isTranslucent = false
+        
         
     }
     
@@ -102,28 +119,30 @@ class UserProfileViewController: UIViewController, UICollectionViewDelegate, UIC
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == self.collectionViewCreateEvents {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: eventsOfUserCellIdentifier, for: indexPath) as! CustomCellEventUser
-            cell.labelEventTitle.text = createdEvents[indexPath.row].title
-            let urlAvatar = URL(string: (createdEvents[indexPath.row].photo))
-            cell.cardImage.kf.setImage(with: urlAvatar)
-            cell.labelEventDateTime.text = createdEvents[indexPath.row].date + " " + createdEvents[indexPath.row].hour
+            if indexPath.row < createdEvents.count {
+                cell.labelEventTitle.text = createdEvents[indexPath.row].title
+                let urlAvatar = URL(string: (createdEvents[indexPath.row].photo))
+                cell.cardImage.kf.setImage(with: urlAvatar)
+                cell.labelEventDateTime.text = createdEvents[indexPath.row].date + " " + createdEvents[indexPath.row].hour
+            }
             return cell
         } else {
-            
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: eventsOfUserCellIdentifier, for: indexPath) as! CustomCellEventUser
-            cell.labelEventTitle.text = joinedEvents[indexPath.row].title
-            let urlAvatar = URL(string: (joinedEvents[indexPath.row].photo))
-            cell.cardImage.kf.setImage(with: urlAvatar)
-            cell.labelEventDateTime.text = joinedEvents[indexPath.row].date + " " + joinedEvents[indexPath.row].hour
+            if indexPath.row < joinedEvents.count {
+                cell.labelEventTitle.text = joinedEvents[indexPath.row].title
+                let urlAvatar = URL(string: (joinedEvents[indexPath.row].photo))
+                cell.cardImage.kf.setImage(with: urlAvatar)
+                cell.labelEventDateTime.text = joinedEvents[indexPath.row].date + " " + joinedEvents[indexPath.row].hour
+            }
             return cell
         }
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row < createdEvents.count {
+        if collectionView == collectionViewCreateEvents {
             let eventDetailsController = EventDetailsController()
             eventDetailsController.eventId = createdEvents[indexPath.row].id
             self.navigationController?.pushViewController(eventDetailsController, animated: true)
-        }
-        if indexPath.row < joinedEvents.count {
+        } else {
             let eventDetailsController = EventDetailsController()
             eventDetailsController.eventId = joinedEvents[indexPath.row].id
             self.navigationController?.pushViewController(eventDetailsController, animated: true)
@@ -208,29 +227,14 @@ class UserProfileViewController: UIViewController, UICollectionViewDelegate, UIC
             return avatarImageView
         }()
 
-        let userNameLabel: UILabel = {
-            let label = UILabel()
-            label.translatesAutoresizingMaskIntoConstraints = false
-            label.font = UIFont.boldSystemFont(ofSize: 20)
-            label.text = isConnectedUser ? user!.firstname + " " + user!.lastname : profile!.firstname + " " + profile!.lastname
-            
-            return label
-        }()
         
-        let birthday: UILabel = {
-            let label = UILabel()
-            label.translatesAutoresizingMaskIntoConstraints = false
-            label.font = UIFont.boldSystemFont(ofSize: 14)
-            label.text = isConnectedUser ? user?.birth : profile?.birth
-            return label
-        }()
-        let country: UILabel = {
-            let label = UILabel()
-            label.translatesAutoresizingMaskIntoConstraints = false
-            label.font = UIFont.boldSystemFont(ofSize: 14)
-            label.text = isConnectedUser ? user?.country : profile?.country
-            return label
-        }()
+            birthday.translatesAutoresizingMaskIntoConstraints = false
+            birthday.font = UIFont.boldSystemFont(ofSize: 14)
+            birthday.text = isConnectedUser ? user?.birth : profile?.birth
+
+            country.translatesAutoresizingMaskIntoConstraints = false
+            country.font = UIFont.boldSystemFont(ofSize: 14)
+            country.text = isConnectedUser ? user?.country : profile?.country
         let buttonView: UIView = {
             let view = UIView()
             view.translatesAutoresizingMaskIntoConstraints = false
@@ -238,19 +242,10 @@ class UserProfileViewController: UIViewController, UICollectionViewDelegate, UIC
             return view
         }()
        
-        let tagButton: UIButton = {
-            let button = UIButton()
-            button.translatesAutoresizingMaskIntoConstraints = false
-            button.backgroundColor = UIColor(named: "AppPeach")
-            button.layer.cornerRadius = 15.0
-            button.layer.shadowOpacity = 1.0
-            button.layer.shadowColor = UIColor(named: "AppLightGrey")?.cgColor
-            button.setTitle("Tags", for: .normal)
-            button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
-            button.addTarget(self, action: #selector(tagButtonClicked), for: .touchUpInside)
-            return button;
-        }()
-        
+       
+        userNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        userNameLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        userNameLabel.text = isConnectedUser ? user!.firstname + " " + user!.lastname : profile!.firstname + " " + profile!.lastname
         
         topView.addSubview(topViewStackView)
         topViewStackView.addArrangedSubview(userInfosStackView)
@@ -278,6 +273,8 @@ class UserProfileViewController: UIViewController, UICollectionViewDelegate, UIC
         buttonView.leadingAnchor.constraint(equalTo: userInfosStackView.leadingAnchor).isActive = true
         buttonView.bottomAnchor.constraint(equalTo: userInfosStackView.bottomAnchor).isActive = true
         buttonView.widthAnchor.constraint(equalTo:userInfosStackView.widthAnchor).isActive = true
+        
+      
 
     }
     func buildBottomView(bottomView: UIView){
@@ -286,14 +283,14 @@ class UserProfileViewController: UIViewController, UICollectionViewDelegate, UIC
             let label = UILabel()
             label.translatesAutoresizingMaskIntoConstraints = false
             label.font = UIFont.boldSystemFont(ofSize: 14)
-            label.text = "Vos évènements créés"
+            label.text = "Évènements créés"
             return label
         }()
         let joinedEventsListLabel: UILabel = {
             let label = UILabel()
             label.translatesAutoresizingMaskIntoConstraints = false
             label.font = UIFont.boldSystemFont(ofSize: 14)
-            label.text = "Vos évènements à venir"
+            label.text = "Évènements à venir"
             return label
         }()
         let lineView: UIView = {

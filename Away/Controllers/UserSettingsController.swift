@@ -258,7 +258,6 @@ class UserSettingsController: UIViewController, ChooseDateDelegate {
             if error != nil {
                 print ("save usererror:", error!)
             } else {
-                self.user = response
             }
             
         })
@@ -272,7 +271,7 @@ class UserSettingsController: UIViewController, ChooseDateDelegate {
     }
     
     @objc func deleteAccountButtonClicked() {
-        userService.deleteAccount(token: token!, completion: { error in
+        userService.deleteAccount(token: token!, completion: { response, error in
             if error != nil {
                 print ("delete usererror:", error!)
             } else {
@@ -288,7 +287,7 @@ class UserSettingsController: UIViewController, ChooseDateDelegate {
         
         let dateFormatter: DateFormatter = DateFormatter()
         
-        dateFormatter.dateFormat = "yyyy/mm/dd"
+        dateFormatter.dateFormat = "yyyy-mm-dd"
         
         selectedDate = dateFormatter.string(from: sender.date)
     }

@@ -159,11 +159,13 @@ class ChangeCitiesViewController: UIViewController, UISearchBarDelegate, UITable
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cityCellIdentifier) as! CustomCityCell;
-        if tableView == tableViewCitiesSuggestion {
-            cell.textLabel?.text = citiesSuggestion[indexPath.row].name + " " + citiesSuggestion[indexPath.row].country
-        } else {
-            cell.textLabel?.text = filtered[indexPath.row].name + " " + filtered[indexPath.row].country
+        if indexPath.row < citiesSuggestion.count || indexPath.row < filtered.count {
+            if tableView == tableViewCitiesSuggestion {
+                cell.textLabel?.text = citiesSuggestion[indexPath.row].name + " " + citiesSuggestion[indexPath.row].country
+            } else {
+                cell.textLabel?.text = filtered[indexPath.row].name + " " + filtered[indexPath.row].country
 
+            }
         }
         return cell;
     }

@@ -138,13 +138,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
     }
     @objc func loginButtonClicked() {
-        print("login", loginTextField.text!)
-        print("password ",passwordTextField.text!)
+
         loginService.signIn(mail: loginTextField.text!, password: passwordTextField.text!, completion: { response , error in
             if error != nil {
                 print ("login error:", error!)
             } else {
-                print(response)
                 try! App.keychain?.set(response, key: "token")
                 self.navigationController?.pushViewController(HomeViewController(), animated: true)
                 DispatchQueue.main.async{

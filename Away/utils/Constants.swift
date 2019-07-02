@@ -37,6 +37,8 @@ class Constants {
     static let GET_USER_CREATED_EVENTS = BASE_URL + "/events/getUserEventsCreated/"
     static let GET_USER_BY_ID = BASE_URL + "/users/"
     static let UPDATE_CITY_USER = BASE_URL + "/users/updateUserCity/"
+    static let UPDATE_USER = BASE_URL + "/users/"
+    static let DELETE_USER = BASE_URL + "/users/"
     
     static let SEARCH_TAGS = BASE_URL + "/tags/recherche/"
     static let SEARCH_ACTIVITIES = BASE_URL + "/activities/recherche/"

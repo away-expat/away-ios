@@ -26,8 +26,6 @@ class DatePopUpViewController: UIViewController {
         let selectedDate = dateFormatter.string(from: datePicker.date)
         datePicker.timeZone = NSTimeZone.local
         datePicker.backgroundColor = .white
-        datePicker.minimumDate = Calendar.current.date(byAdding: .year, value: 0, to: Date())
-        datePicker.minimumDate = Calendar.current.date(byAdding: .day, value: +1, to: Date())
         datePicker.translatesAutoresizingMaskIntoConstraints = false
 
         return datePicker
@@ -82,7 +80,10 @@ class DatePopUpViewController: UIViewController {
         dismiss(animated: true)
     }
     
-    
+    func setMinimumDate(date: Date = Calendar.current.date(byAdding: .day, value: +1, to: Date())!) {
+        datePicker.minimumDate = date
+
+    }
 }
 protocol ChooseDateDelegate {
     func saveDate(date: String)

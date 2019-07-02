@@ -364,7 +364,9 @@ class UserProfileViewController: UIViewController, UICollectionViewDelegate, UIC
 
     }
     @objc func userSettingsButtonClicked() {
-        self.navigationController?.pushViewController(UserSettingsController(), animated: true)
+        let controller = UserSettingsController()
+        controller.user = self.user
+        self.navigationController?.pushViewController(controller, animated: true)
     }
     @objc func tagButtonClicked() {
         

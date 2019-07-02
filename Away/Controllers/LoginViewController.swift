@@ -35,6 +35,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         password.translatesAutoresizingMaskIntoConstraints = false
         password.backgroundColor = UIColor(named: "AppLightGrey")
         password.placeholder = "Password"
+        password.isSecureTextEntry = true
         return password
     }()
     

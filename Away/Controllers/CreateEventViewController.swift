@@ -141,6 +141,8 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseTim
         button.addTarget(self, action: #selector(saveEvent), for: .touchUpInside)
         return button
     }()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Create Event"
@@ -203,6 +205,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseTim
     
     @objc func datePickerPopup(_ sender: UITextField) {
         let datePopupViewController = DatePopUpViewController()
+        datePopupViewController.setMinimumDate()
         datePopupViewController.dateDelegate = self
         present(datePopupViewController, animated: true)
     }

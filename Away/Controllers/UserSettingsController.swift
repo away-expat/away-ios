@@ -12,49 +12,51 @@ import KeychainAccess
 
 class UserSettingsController: UIViewController, ChooseDateDelegate {
     var selectedDate: String?
-    
+    var user: User?
+    let userService = UserService()
+    static var keychain: Keychain?
+    let token = App.keychain!["token"]
+
     let stackView: UIStackView = {
         let sv = UIStackView()
         sv.axis = .vertical
+        sv.backgroundColor = .yellow
+        sv.spacing = 20
         sv.translatesAutoresizingMaskIntoConstraints = false
-        sv.distribution = .equalSpacing
         return sv
     }()
     
     let stackViewFirstname: UIStackView = {
         let sv = UIStackView()
         sv.axis = .horizontal
-        sv.spacing = 5
         sv.distribution = .fillEqually
-        sv.alignment = .leading
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
     let firstnameLabel : UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Titre : "
+        label.text = "Prénom : "
         return label
     }()
     let firstnameTextField: UITextField = {
         let tf = UITextField(frame: CGRect(x: 0, y: 0, width: 50, height: 40))
         tf.translatesAutoresizingMaskIntoConstraints = false
+        
         return tf
     }()
 
     let stackViewLastname: UIStackView = {
         let sv = UIStackView()
         sv.axis = .horizontal
-        sv.spacing = 5
         sv.distribution = .fillEqually
-        sv.alignment = .leading
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
     let lastnameLabel : UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Titre : "
+        label.text = "Nom : "
         return label
     }()
     let lastnameTextField: UITextField = {
@@ -67,16 +69,14 @@ class UserSettingsController: UIViewController, ChooseDateDelegate {
     let stackViewEmail: UIStackView = {
         let sv = UIStackView()
         sv.axis = .horizontal
-        sv.spacing = 5
         sv.distribution = .fillEqually
-        sv.alignment = .leading
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
     let emailLabel : UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Titre : "
+        label.text = "Email : "
         return label
     }()
     let emailTextField: UITextField = {
@@ -89,39 +89,35 @@ class UserSettingsController: UIViewController, ChooseDateDelegate {
     let stackViewPassword: UIStackView = {
         let sv = UIStackView()
         sv.axis = .horizontal
-        sv.spacing = 5
         sv.distribution = .fillEqually
-        sv.alignment = .leading
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
     let passwordLabel : UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Titre : "
+        label.text = "Password : "
+    
         return label
     }()
     let passwordTextField: UITextField = {
         let tf = UITextField(frame: CGRect(x: 0, y: 0, width: 50, height: 40))
+        tf.isSecureTextEntry = true
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
     
-    
-    
     let stackViewCountry: UIStackView = {
         let sv = UIStackView()
         sv.axis = .horizontal
-        sv.spacing = 5
         sv.distribution = .fillEqually
-        sv.alignment = .leading
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
     let countryLabel : UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Titre : "
+        label.text = "Pays d'origine : "
         return label
     }()
     let countryTextField: UITextField = {
@@ -134,18 +130,18 @@ class UserSettingsController: UIViewController, ChooseDateDelegate {
     let stackViewDatePicker: UIStackView = {
         let sv = UIStackView()
         sv.axis = .horizontal
+        sv.distribution = .fillEqually
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
     let dateLabel : UILabel = {
         let label = UILabel()
-        label.text = "Date : "
+        label.text = "Date de naissance : "
         return label
     }()
     let dateTextField: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = "de l'évènement"
         tf.addTarget(self, action: #selector(datePickerPopup(_:)), for: .allTouchEvents)
         return tf
     }()
@@ -156,8 +152,7 @@ class UserSettingsController: UIViewController, ChooseDateDelegate {
         button.layer.cornerRadius = 15.0
         button.layer.shadowOpacity = 1.0
         button.layer.shadowColor = UIColor(named: "AppLightGrey")?.cgColor
-        button.setTitle("Save", for: .normal)
-        button.titleEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+        button.setTitle("Sauvegarder", for: .normal)
         button.addTarget(self, action: #selector(updateUserButtonClicked), for: .touchUpInside)
         return button
     }()
@@ -170,7 +165,6 @@ class UserSettingsController: UIViewController, ChooseDateDelegate {
         button.layer.shadowOpacity = 1.0
         button.layer.shadowColor = UIColor(named: "AppLightGrey")?.cgColor
         button.setTitle("Déconnexion", for: .normal)
-        button.titleEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
         button.addTarget(self, action: #selector(signOutButtonClicked), for: .touchUpInside)
         return button
     }()
@@ -178,62 +172,78 @@ class UserSettingsController: UIViewController, ChooseDateDelegate {
     let deleteButton : UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = UIColor(named: "AppPeach")
-        button.layer.cornerRadius = 15.0
-        button.layer.shadowOpacity = 1.0
-        button.layer.shadowColor = UIColor(named: "AppLightGrey")?.cgColor
+        button.setTitleColor(.red, for: .normal)
         button.setTitle("Suppression", for: .normal)
-        button.titleEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
         button.addTarget(self, action: #selector(deleteAccountButtonClicked), for: .touchUpInside)
         return button
     }()
     
     override func viewDidLoad() {
-        super.viewDidLoad();
+        super.viewDidLoad()
         view.backgroundColor = .white
         navigationController?.navigationBar.isTranslucent = false
 
         view.addSubview(stackView)
-        stackView.addSubview(stackViewFirstname)
-        stackViewFirstname.addSubview(firstnameLabel)
-        stackViewFirstname.addSubview(firstnameTextField)
+        stackView.addArrangedSubview(stackViewFirstname)
+        stackViewFirstname.addArrangedSubview(firstnameLabel)
+        stackViewFirstname.addArrangedSubview(firstnameTextField)
         
-        stackView.addSubview(stackViewLastname)
-        stackViewLastname.addSubview(lastnameLabel)
-        stackViewLastname.addSubview(lastnameTextField)
+        stackView.addArrangedSubview(stackViewLastname)
+        stackViewLastname.addArrangedSubview(lastnameLabel)
+        stackViewLastname.addArrangedSubview(lastnameTextField)
         
-        stackView.addSubview(stackViewEmail)
-        stackViewEmail.addSubview(emailLabel)
-        stackViewEmail.addSubview(emailTextField)
+        stackView.addArrangedSubview(stackViewEmail)
+        stackViewEmail.addArrangedSubview(emailLabel)
+        stackViewEmail.addArrangedSubview(emailTextField)
         
-        stackView.addSubview(stackViewPassword)
-        stackViewPassword.addSubview(passwordLabel)
-        stackViewPassword.addSubview(passwordTextField)
+        stackView.addArrangedSubview(stackViewPassword)
+        stackViewPassword.addArrangedSubview(passwordLabel)
+        stackViewPassword.addArrangedSubview(passwordTextField)
         
-        stackView.addSubview(stackViewDatePicker)
-        stackViewDatePicker.addSubview(dateLabel)
-        stackViewDatePicker.addSubview(dateTextField)
+        stackView.addArrangedSubview(stackViewDatePicker)
+        stackViewDatePicker.addArrangedSubview(dateLabel)
+        stackViewDatePicker.addArrangedSubview(dateTextField)
         
         
-        stackView.addSubview(stackViewCountry)
-
+        stackView.addArrangedSubview(stackViewCountry)
+        stackViewCountry.addArrangedSubview(countryLabel)
+        stackViewCountry.addArrangedSubview(countryTextField)
+        
+        view.addSubview(updateUserButton)
         view.addSubview(logOutButton)
         view.addSubview(deleteButton)
-        view.addSubview(updateUserButton)
 
-        stackView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: updateUserButton.topAnchor, constant: -3).isActive = true
+        stackView.topAnchor.constraint(equalTo: view.topAnchor, constant : 20).isActive = true
+        stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8).isActive = true
+        stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant : 8).isActive = true
 
+        updateUserButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        updateUserButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant : 80).isActive = true
+        updateUserButton.widthAnchor.constraint(equalToConstant: 130).isActive = true
+        updateUserButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
-        
-        logOutButton.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        logOutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        deleteButton.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        deleteButton.widthAnchor.constraint(equalToConstant: 130).isActive = true
+        deleteButton.topAnchor.constraint(equalTo: logOutButton.bottomAnchor, constant : 10).isActive = true
+        deleteButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         deleteButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
 
+
+        logOutButton.widthAnchor.constraint(equalToConstant: 130).isActive = true
+        logOutButton.topAnchor.constraint(equalTo: updateUserButton.bottomAnchor, constant : 10).isActive = true
+        logOutButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        logOutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+    
+        setupViews()
     }
+    
+    func setupViews() {
+        firstnameTextField.text = user?.firstname
+        lastnameTextField.text = user?.lastname
+        emailTextField.text = user?.mail
+        dateTextField.text = user?.birth
+        countryTextField.text = user?.country
+    }
+    
     @objc func datePickerPopup(_ sender: UITextField) {
         let datePopupViewController = DatePopUpViewController()
         datePopupViewController.dateDelegate = self
@@ -244,7 +254,15 @@ class UserSettingsController: UIViewController, ChooseDateDelegate {
     }
     
     @objc func updateUserButtonClicked() {
-        //save user
+        userService.updateUser(token: token!, firstname: firstnameTextField.text!, lastname: lastnameTextField.text!, mail: emailTextField.text!, password: passwordTextField.text!, birth: dateTextField.text!, country: countryTextField.text!, completion: { response, error in
+            if error != nil {
+                print ("save usererror:", error!)
+            } else {
+                self.user = response
+            }
+            
+        })
+        
     }
     
     
@@ -254,8 +272,16 @@ class UserSettingsController: UIViewController, ChooseDateDelegate {
     }
     
     @objc func deleteAccountButtonClicked() {
-        //users/delete (DELETE) -> []
-        UIApplication.setRootView(LoginViewController())
+        userService.deleteAccount(token: token!, completion: { error in
+            if error != nil {
+                print ("delete usererror:", error!)
+            } else {
+                DispatchQueue.main.async {
+                    UIApplication.setRootView(LoginViewController())
+                }
+            }
+            
+        })
 
     }
     @objc func datePickerValueChanged(_ sender: UIDatePicker){

@@ -10,4 +10,5 @@ enum ErrorType {
     case unauthorized
     case badUrl
     case serverError
+    case ok
 }

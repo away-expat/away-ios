@@ -82,8 +82,6 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
             textfield.attributedPlaceholder = NSAttributedString(string: "Rechercher", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
             textfield.returnKeyType = .done
             textfield.resignFirstResponder() // hides the keyboard.
-
-
         }
         
         sb.layer.cornerRadius = 20
@@ -436,5 +434,8 @@ class SearchScreenViewController: UIViewController, UISearchBarDelegate, UITable
             
         })
     }
-    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar)
+    {
+        self.searchBar.endEditing(true)
+    }
 }

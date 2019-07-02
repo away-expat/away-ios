@@ -431,4 +431,8 @@ class TagManagementController: UIViewController, UISearchBarDelegate, UITableVie
         emptyTagCollectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         
     }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar)
+    {
+        self.searchBar.endEditing(true)
+    }
 }

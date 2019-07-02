@@ -161,8 +161,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @objc func keyboardWillChange(notification: Notification) {
         KeyboardUtils.WillChange(notification: notification, view: view)
-        
     }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool{
         print("Return pressed")
         KeyboardUtils.hide(textField: textField)
